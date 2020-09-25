@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.AccountLoginRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.AccountRegistrationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.AccountUserRegistrationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.Account;
@@ -26,7 +26,7 @@ import java.io.IOException;
 public class AccountService implements UserDetailsService {
 
     @Autowired
-    private AccountRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -39,8 +39,8 @@ public class AccountService implements UserDetailsService {
     private BCryptPasswordEncoder encoder;
 
 
-    public AuthenticationResponse register(AccountRegistrationRequest request) throws IOException {
-        if (userRepository.existsByLogin(request.getLogin())) {
+    public AuthenticationResponse register(AccountUserRegistrationRequest request) throws IOException {
+        if (accountRepository.existsByLogin(request.getLogin())) {
             throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
         }
         Account account = new Account();
@@ -48,7 +48,7 @@ public class AccountService implements UserDetailsService {
         account.setUserRole(UserRole.ROLE_USER);
         account.setPassword(encoder.encode(request.getPassword()));
         account.setUsername(request.getUsername());
-        userRepository.save(account);
+        accountRepository.save(account);
         return login(registrationToLogin(request));
     }
 
@@ -68,16 +68,16 @@ public class AccountService implements UserDetailsService {
         return new JwtUser(account.getLogin(), account.getUserRole(), account.getPassword());
     }
 
-    public Account findByLogin(String username)  {
-        return userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User with login " + username + " not exists"));
+    public Account findByLogin(String login)  {
+        return accountRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User with login " + login + " not exists"));
     }
 
     public Account findById(Long id)  {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not exists"));
+        return accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not exists"));
     }
 
 
-    private AccountLoginRequest registrationToLogin(AccountRegistrationRequest registrationRequest){
+    private AccountLoginRequest registrationToLogin(AccountUserRegistrationRequest registrationRequest){
         AccountLoginRequest loginRequest = new AccountLoginRequest();
         loginRequest.setLogin(registrationRequest.getLogin());
         loginRequest.setPassword(registrationRequest.getPassword());

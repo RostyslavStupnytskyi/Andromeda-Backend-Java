@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.request;
+package rostyk.stupnytskiy.andromeda.dto.request.account;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class AccountRegistrationRequest {
+public class AccountUserRegistrationRequest {
     @NotBlank
     @NotNull
     private String login;
@@ -20,4 +20,11 @@ public class AccountRegistrationRequest {
     @NotBlank
     @NotNull
     private String username;
+
+    @NotBlank
+    @NotNull
+    private String email;
+
+    @NotBlank
+    private String avatar;
 }

@@ -13,12 +13,12 @@ import java.util.UUID;
 public class FileTool {
 
     public static final String PROJECT_DIR =
-            System.getProperty("user.home.andromeda") + File.separator;
+            System.getProperty("user.home")+ File.separator + "andromeda" + File.separator;
 
     public static final String CATEGORY_DIR =
-            System.getProperty("user.home.andromeda.category") + File.separator;
-
-
+            System.getProperty("user.home") + File.separator
+                    + "andromeda" + File.separator +
+                    "category" + File.separator;
 
     public String saveCategoryImage(String img) throws IOException {
        return saveImage(img,CATEGORY_DIR);
