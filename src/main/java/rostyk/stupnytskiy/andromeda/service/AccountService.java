@@ -14,10 +14,13 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.AccountUserRegistrationR
 import rostyk.stupnytskiy.andromeda.dto.response.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.Account;
+import rostyk.stupnytskiy.andromeda.entity.Seller;
+import rostyk.stupnytskiy.andromeda.entity.User;
 import rostyk.stupnytskiy.andromeda.entity.UserRole;
 import rostyk.stupnytskiy.andromeda.repository.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
+import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
 
@@ -34,32 +37,31 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private JwtTokenTool jwtTokenTool;
 
-
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    private FileTool fileTool;
 
-    public AuthenticationResponse register(AccountUserRegistrationRequest request) throws IOException {
-        if (accountRepository.existsByLogin(request.getLogin())) {
-            throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
-        }
-        Account account = new Account();
-        account.setLogin(request.getLogin());
-        account.setUserRole(UserRole.ROLE_USER);
-        account.setPassword(encoder.encode(request.getPassword()));
-        account.setUsername(request.getUsername());
-        accountRepository.save(account);
-        return login(registrationToLogin(request));
+    public AuthenticationResponse registerUser(AccountUserRegistrationRequest request) throws IOException {
+        return register(request, UserRole.ROLE_USER);
+    }
+
+    public AuthenticationResponse registerSeller(AccountUserRegistrationRequest request) throws IOException {
+        return register(request, UserRole.ROLE_ADMIN);
     }
 
     public AuthenticationResponse login(AccountLoginRequest request) {
         String login = request.getLogin();
         Account account = findByLogin(login);
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, request.getPassword()));
         String token = jwtTokenTool.createToken(login, account.getUserRole());
+
         String name = account.getUsername();
         Long id = account.getId();
-        return new AuthenticationResponse(name,token,id);
+
+        return new AuthenticationResponse(name, token, id);
     }
 
     @Override
@@ -68,23 +70,44 @@ public class AccountService implements UserDetailsService {
         return new JwtUser(account.getLogin(), account.getUserRole(), account.getPassword());
     }
 
-    public Account findByLogin(String login)  {
+    public Account findByLogin(String login) {
         return accountRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User with login " + login + " not exists"));
     }
 
-    public Account findById(Long id)  {
+    public Account findById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not exists"));
-    }
-
-
-    private AccountLoginRequest registrationToLogin(AccountUserRegistrationRequest registrationRequest){
-        AccountLoginRequest loginRequest = new AccountLoginRequest();
-        loginRequest.setLogin(registrationRequest.getLogin());
-        loginRequest.setPassword(registrationRequest.getPassword());
-        return loginRequest;
     }
 
     public AccountResponse getUserById(Long id) {
         return new AccountResponse(findById(id));
+    }
+
+    private AuthenticationResponse register(AccountUserRegistrationRequest request, UserRole userRole) throws IOException {
+        if (accountRepository.existsByLogin(request.getLogin())) {
+            throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
+        }
+        Account account = new Account();
+        account.setLogin(request.getLogin());
+        account.setPassword(encoder.encode(request.getPassword()));
+        account.setUsername(request.getUsername());
+
+        account.setUserRole(userRole);
+        if (userRole == UserRole.ROLE_USER) account.setUser(new User());
+        else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
+
+        if (request.getAvatar() != null) {
+            account.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), "user_" + request.getLogin()));
+        }
+
+        accountRepository.save(account);
+        return login(registrationToLogin(request));
+    }
+
+
+    private AccountLoginRequest registrationToLogin(AccountUserRegistrationRequest registrationRequest) {
+        AccountLoginRequest loginRequest = new AccountLoginRequest();
+        loginRequest.setLogin(registrationRequest.getLogin());
+        loginRequest.setPassword(registrationRequest.getPassword());
+        return loginRequest;
     }
 }

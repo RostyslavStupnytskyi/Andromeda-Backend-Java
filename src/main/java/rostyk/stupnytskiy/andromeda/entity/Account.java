@@ -35,6 +35,8 @@ public class Account {
 
     private String email;
 
+    private String avatar;
+
     @OneToOne(mappedBy = "account")
     private Seller seller;
 
