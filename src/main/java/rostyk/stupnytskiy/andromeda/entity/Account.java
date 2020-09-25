@@ -11,6 +11,11 @@ import javax.persistence.*;
 @Builder
 
 @Entity
+/*
+Entity Account is used to store information about the account of the user, administrator, moderator or seller
+Account has a password, login, e-mail, photo username,
+and the entity that contains the user (and administrator or moderator) or seller
+*/
 public class Account {
 
     @Id
