@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class AccountLoginRequest {
+
     @NotBlank
     private String login;
 
