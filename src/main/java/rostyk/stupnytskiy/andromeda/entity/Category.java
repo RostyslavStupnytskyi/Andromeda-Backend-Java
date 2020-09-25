@@ -20,9 +20,7 @@ public class Category {
 
     private String image;
 
-    private String title_ukr;
-
-    private String title_eng;
+    private String title;
 
     @OneToMany(mappedBy = "category")
     private List<Subcategory> subcategories;
