@@ -4,21 +4,24 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
-public class User {
+public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Account account;
+    @ManyToOne
+    private Advertisement advertisement;
 
-    @OneToOne(mappedBy = "user")
+    private Integer count;
+
+    @ManyToOne
     private Cart cart;
 }

@@ -43,4 +43,7 @@ public class Advertisement {
 
     @ManyToOne
     private Seller seller;
+
+    @OneToMany(mappedBy = "advertisement")
+    private List<CartItem> cartItems;
 }

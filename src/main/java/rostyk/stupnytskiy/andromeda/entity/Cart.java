@@ -3,22 +3,24 @@ package rostyk.stupnytskiy.andromeda.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
-public class User {
+public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    private Account account;
+    private User user;
 
-    @OneToOne(mappedBy = "user")
-    private Cart cart;
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 }
