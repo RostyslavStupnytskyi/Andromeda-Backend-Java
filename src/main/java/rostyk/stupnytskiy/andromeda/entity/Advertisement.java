@@ -34,9 +34,9 @@ public class Advertisement {
 
     private Integer price;
 
-    private Integer allViews;
+    private Long allViews;
 
-    private Integer userViews;
+    private Long userViews;
 
     @OneToMany(mappedBy = "advertisement")
     private List<Property> properties;

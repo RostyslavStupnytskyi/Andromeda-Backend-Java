@@ -8,4 +8,5 @@ import lombok.Setter;
 public class PropertyRequest {
     private String name;
     private String value;
+    private Long advertisementId;
 }

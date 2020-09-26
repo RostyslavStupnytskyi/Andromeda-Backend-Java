@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.account.AccountUserRegistrationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.AccountRegistrationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.Account;
@@ -43,12 +43,12 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private FileTool fileTool;
 
-    public AuthenticationResponse registerUser(AccountUserRegistrationRequest request) throws IOException {
+    public AuthenticationResponse registerUser(AccountRegistrationRequest request) throws IOException {
         return register(request, UserRole.ROLE_USER);
     }
 
-    public AuthenticationResponse registerSeller(AccountUserRegistrationRequest request) throws IOException {
-        return register(request, UserRole.ROLE_ADMIN);
+    public AuthenticationResponse registerSeller(AccountRegistrationRequest request) throws IOException {
+        return register(request, UserRole.ROLE_SELLER);
     }
 
     public AuthenticationResponse login(AccountLoginRequest request) {
@@ -82,7 +82,7 @@ public class AccountService implements UserDetailsService {
         return new AccountResponse(findById(id));
     }
 
-    private AuthenticationResponse register(AccountUserRegistrationRequest request, UserRole userRole) throws IOException {
+    private AuthenticationResponse register(AccountRegistrationRequest request, UserRole userRole) throws IOException {
         if (accountRepository.existsByLogin(request.getLogin())) {
             throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
         }
@@ -90,13 +90,13 @@ public class AccountService implements UserDetailsService {
         account.setLogin(request.getLogin());
         account.setPassword(encoder.encode(request.getPassword()));
         account.setUsername(request.getUsername());
-
+        account.setEmail(request.getEmail());
         account.setUserRole(userRole);
         if (userRole == UserRole.ROLE_USER) account.setUser(new User());
         else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
 
         if (request.getAvatar() != null) {
-            account.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), "user_" + request.getLogin()));
+            account.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), request.getLogin()));
         }
 
         accountRepository.save(account);
@@ -104,7 +104,7 @@ public class AccountService implements UserDetailsService {
     }
 
 
-    private AccountLoginRequest registrationToLogin(AccountUserRegistrationRequest registrationRequest) {
+    private AccountLoginRequest registrationToLogin(AccountRegistrationRequest registrationRequest) {
         AccountLoginRequest loginRequest = new AccountLoginRequest();
         loginRequest.setLogin(registrationRequest.getLogin());
         loginRequest.setPassword(registrationRequest.getPassword());

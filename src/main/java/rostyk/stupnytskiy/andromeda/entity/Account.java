@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -37,10 +38,10 @@ public class Account {
 
     private String avatar;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL)
     private Seller seller;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 }
 

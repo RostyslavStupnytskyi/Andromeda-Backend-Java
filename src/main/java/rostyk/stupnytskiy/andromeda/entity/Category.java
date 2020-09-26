@@ -20,6 +20,7 @@ public class Category {
 
     private String image;
 
+    @Column(unique = true)
     private String title;
 
     @OneToMany(mappedBy = "category")

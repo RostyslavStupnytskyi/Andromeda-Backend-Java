@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.request;
+package rostyk.stupnytskiy.andromeda.dto.request.advertisement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 public class AdvertisementRequest {
-
 
     private String title;
 

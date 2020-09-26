@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class AccountUserRegistrationRequest {
+public class AccountRegistrationRequest {
     @NotBlank
     @NotNull
     private String login;
@@ -25,6 +25,6 @@ public class AccountUserRegistrationRequest {
     @NotNull
     private String email;
 
-    @NotBlank
+//    @NotBlank
     private String avatar;
 }

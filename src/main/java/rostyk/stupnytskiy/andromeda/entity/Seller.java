@@ -18,7 +18,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "seller")
     private Account account;
 
     @OneToMany(mappedBy = "seller")
