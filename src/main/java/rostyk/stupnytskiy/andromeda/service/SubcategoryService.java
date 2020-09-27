@@ -1,9 +1,14 @@
 package rostyk.stupnytskiy.andromeda.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.SubcategoryRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.SubcategoryResponse;
+import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.repository.SubcategoryRepository;
 
@@ -31,6 +36,21 @@ public class SubcategoryService {
                 .stream()
                 .map(SubcategoryResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<SubcategoryResponse> findAllByCategoryId(Long id){
+        return subcategoryRepository.findAllByCategoryId(id)
+                .stream()
+                .map(SubcategoryResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public PageResponse<SubcategoryResponse> findPageByCategoryId(Long id, PaginationRequest request){
+        final Page<Subcategory> page = subcategoryRepository.findAllByCategoryId(id, request.mapToPageable());
+        return new PageResponse<>(page.getContent().stream().map(SubcategoryResponse::new).collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     public void delete (Long id){

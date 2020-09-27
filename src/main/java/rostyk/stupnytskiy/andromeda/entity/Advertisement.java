@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -37,6 +38,8 @@ public class Advertisement {
     private Long allViews;
 
     private Long userViews;
+
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "advertisement")
     private List<Property> properties;

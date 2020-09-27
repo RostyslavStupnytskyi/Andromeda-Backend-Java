@@ -2,7 +2,9 @@ package rostyk.stupnytskiy.andromeda.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.SubcategoryRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.SubcategoryResponse;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 
@@ -27,9 +29,19 @@ public class SubcategoryController {
         subcategoryService.update(request, id);
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public List<SubcategoryResponse> findAll() {
         return subcategoryService.findAll();
+    }
+
+    @GetMapping()
+    public List<SubcategoryResponse> findAllByCategoryId(Long id) {
+        return subcategoryService.findAllByCategoryId(id);
+    }
+
+    @GetMapping("/page")
+    public PageResponse<SubcategoryResponse> findPageByCategoryId(Long id, PaginationRequest request) {
+        return subcategoryService.findPageByCategoryId(id,request);
     }
 
     @DeleteMapping

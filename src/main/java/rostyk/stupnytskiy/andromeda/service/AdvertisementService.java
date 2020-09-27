@@ -1,15 +1,23 @@
 package rostyk.stupnytskiy.andromeda.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.AdvertisementRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
 import rostyk.stupnytskiy.andromeda.entity.Account;
 import rostyk.stupnytskiy.andromeda.entity.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.Property;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Service
 public class AdvertisementService {
@@ -41,9 +49,18 @@ public class AdvertisementService {
         return advertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Advertisement with id " + id + " does not exists"));
     }
 
+    public PageResponse<AdvertisementResponse> findPage(PaginationRequest request){
+        final Page<Advertisement> page = advertisementRepository.findAll(request.mapToPageable());
+        return new PageResponse<>(page.getContent().stream().map(AdvertisementResponse::new).collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
     private Advertisement advertisementRequestToAdvertisement(AdvertisementRequest request, Advertisement advertisement) throws IOException {
         if (advertisement == null) {
             advertisement = new Advertisement();
+            advertisement.setCreationDate(LocalDateTime.now());
         }
 
         Account account = accountService.findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());

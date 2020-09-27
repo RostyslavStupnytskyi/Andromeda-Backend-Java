@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.request;
+package rostyk.stupnytskiy.andromeda.dto.request.advertisement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,5 +8,4 @@ import lombok.Setter;
 public class PropertyRequest {
     private String name;
     private String value;
-    private Long advertisementId;
 }

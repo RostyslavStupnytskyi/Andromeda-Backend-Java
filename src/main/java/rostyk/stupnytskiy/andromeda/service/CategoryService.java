@@ -1,9 +1,12 @@
 package rostyk.stupnytskiy.andromeda.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.CategoryRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.repository.CategoryRepository;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
@@ -37,6 +40,14 @@ public class CategoryService {
 
     public Category findById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Category with id " + id + " not exist"));
+    }
+
+    public PageResponse<CategoryResponse> findCategoryPage(PaginationRequest request){
+        final Page<Category> page = categoryRepository.findAll(request.mapToPageable());
+        return new PageResponse<>(page.getContent().stream().map(CategoryResponse::new).collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     public void delete(Long id) {
