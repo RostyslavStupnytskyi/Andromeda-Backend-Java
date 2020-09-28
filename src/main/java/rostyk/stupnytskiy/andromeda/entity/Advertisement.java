@@ -39,6 +39,8 @@ public class Advertisement {
 
     private Long userViews;
 
+    private Boolean confirmed;
+
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "advertisement")
