@@ -24,10 +24,10 @@ public class MailController {
         mailService.save(request);
     }
 
-    @ResponseBody
-    @RequestMapping("/send")
-    public String sendEmail() {
-        mailService.testSend();
-        return "Email Sent!";
+//    @ResponseBody
+    @GetMapping("/send")
+    public String sendEmail(String target) {
+        mailService.registerMain(target);
+        return "Ярік всьо працює";
     }
 }

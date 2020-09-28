@@ -1,6 +1,8 @@
 package rostyk.stupnytskiy.andromeda.mail;
 
+import org.apache.catalina.SessionIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.mail.MailRequest;
 
@@ -16,14 +18,10 @@ public class MailService {
     @Autowired
     private MailDataRepository mailDataRepository;
 
-    private Session session;
-
-    public MailService(){
-        MailData mailData = getMainMail();
-        session = mailConfig(mailData.getEmail(),mailData.getPassword());
+    public void registerMain(String target){
+        Session session = mailConfig(getMainMail());
+        sendEmail(session,target,"Диплом працює", "Сервіс та контроллер для надсилання повідомлень прцаює!");
     }
-
-//    sendEmail(session, toEmail, "TLSEmail Testing Subject", "TLSEmail Testing Body");
 
     public void saveMain(MailRequest request) {
         MailData mailData = mailRequestToMailData(request);
@@ -48,7 +46,7 @@ public class MailService {
         return mailData;
     }
 
-    private Session mailConfig(String email, String password) {
+    private Session mailConfig(MailData mailData) {
         System.out.println("TLSEmail Start");
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
@@ -60,14 +58,15 @@ public class MailService {
         Authenticator auth = new Authenticator() {
             @Override //override the getPasswordAuthentication method
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(email, password);
+                return new PasswordAuthentication(mailData.getEmail(), mailData.getPassword());
             }
         };
         Session session = Session.getInstance(props, auth);
         return session;
     }
 
-    private void sendEmail(String target, String subject, String body) {
+    private void sendEmail(Session session, String target, String subject, String body) {
+        MailData mailData = getMainMail();
         try {
             MimeMessage msg = new MimeMessage(session);
             //set message headers
@@ -75,8 +74,8 @@ public class MailService {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress("no_reply@example.com", "NoReply-JD"));
-            msg.setReplyTo(InternetAddress.parse("no_reply@example.com", false));
+            msg.setFrom(new InternetAddress(mailData.getEmail(), "Andromeda"));
+            msg.setReplyTo(InternetAddress.parse(mailData.getEmail(), false));
             msg.setSubject(subject, "UTF-8");
             msg.setText(body, "UTF-8");
             msg.setSentDate(new Date());
