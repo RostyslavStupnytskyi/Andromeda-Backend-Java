@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.mail.MailRequest;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
 
 @CrossOrigin
-@Controller
+@RestController
 @RequestMapping("/mail")
 public class MailController {
 
@@ -24,7 +24,7 @@ public class MailController {
         mailService.save(request);
     }
 
-//    @ResponseBody
+    @ResponseBody
     @GetMapping("/send")
     public String sendEmail(String target) {
         mailService.registerMain(target);
