@@ -1,13 +1,10 @@
-package rostyk.stupnytskiy.andromeda.mail;
+package rostyk.stupnytskiy.andromeda.tools;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import rostyk.stupnytskiy.andromeda.constants.MailMessageConstants;
 
 @Component
-public class MailMessageService {
-
-//    @Autowired
-//    private MailMessageConstants constants;
+public class MailMessageTool {
 
     public String getConfirmMessage(String confirmCode) {
         return String.format(MailMessageConstants.CONFIRM_MESSAGE, confirmCode);

@@ -1,12 +1,11 @@
 package rostyk.stupnytskiy.andromeda.mail;
 
-import org.apache.catalina.SessionIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.mail.MailRequest;
+import rostyk.stupnytskiy.andromeda.tools.ConfirmationCodeGenerator;
+import rostyk.stupnytskiy.andromeda.tools.MailMessageTool;
 
-import javax.activation.DataHandler;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -22,12 +21,12 @@ public class MailService {
     private MailDataRepository mailDataRepository;
 
     @Autowired
-    private MailMessageService mailMessageService;
+    private MailMessageTool mailMessageService;
 
     private Session session;
 
-    public void registerMain(String target){
-        sendEmail(target,"Диплом працює", mailMessageService.getConfirmMessage("69845"));
+    public void registerMain(String target, String code){
+        sendEmail(target,"Диплом працює", mailMessageService.getConfirmMessage(code));
     }
 
     public void saveMain(MailRequest request) {

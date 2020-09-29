@@ -1,7 +1,6 @@
 package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -37,6 +36,10 @@ public class Account {
     private String email;
 
     private String avatar;
+
+    private String confirmationCode;
+
+    private Boolean isConfirmed;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Seller seller;
