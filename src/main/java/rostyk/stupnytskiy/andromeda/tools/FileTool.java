@@ -16,9 +16,7 @@ public class FileTool {
             System.getProperty("user.home")+ File.separator + "andromeda" + File.separator;
 
     public static final String CATEGORY_DIR =
-            System.getProperty("user.home") + File.separator
-                    + "andromeda" + File.separator +
-                    "category" + File.separator;
+            PROJECT_DIR + "category" + File.separator;
 
     public String saveCategoryImage(String img) throws IOException {
        return saveImage(img,CATEGORY_DIR);
