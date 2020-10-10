@@ -20,6 +20,8 @@ public class Order {
     @ManyToOne
     private Seller seller;
 
+    private Boolean finished;
+
     @ManyToOne
     private User customer;
 }
