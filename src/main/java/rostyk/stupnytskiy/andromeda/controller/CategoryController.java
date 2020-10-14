@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.CategoryRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
 
 import javax.validation.Valid;
@@ -28,9 +29,14 @@ public class CategoryController {
         categoryService.update(request,id);
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public List<CategoryResponse> findAll(){
         return categoryService.findAll();
+    }
+
+    @GetMapping()
+    public PageResponse<CategoryResponse> findPage(PaginationRequest request){
+        return categoryService.findCategoryPage(request);
     }
 
     @DeleteMapping

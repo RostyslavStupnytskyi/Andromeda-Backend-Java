@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Builder
 
 @Entity
+@Table(name = "_order")
 public class Order {
 
     @Id
