@@ -29,7 +29,7 @@ public class CategoryController {
         categoryService.update(request,id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all")//test
     public List<CategoryResponse> findAll(){
         return categoryService.findAll();
     }
