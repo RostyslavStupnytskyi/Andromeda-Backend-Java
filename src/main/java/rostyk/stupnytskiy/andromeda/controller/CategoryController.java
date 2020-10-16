@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.CategoryRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryImageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -29,7 +29,7 @@ public class CategoryController {
         categoryService.update(request,id);
     }
 
-    @GetMapping("/all")//test
+    @GetMapping("/all")
     public List<CategoryResponse> findAll(){
         return categoryService.findAll();
     }
@@ -38,6 +38,12 @@ public class CategoryController {
     public PageResponse<CategoryResponse> findPage(PaginationRequest request){
         return categoryService.findCategoryPage(request);
     }
+
+    @GetMapping("img")
+    public CategoryImageResponse getImage(Long id){
+        return categoryService.getImageByCategoryId(id);
+    }
+
 
     @DeleteMapping
     public void delete(Long id){

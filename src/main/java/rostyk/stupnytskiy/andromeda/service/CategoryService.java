@@ -5,7 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.CategoryRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryImageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.repository.CategoryRepository;
@@ -52,6 +53,11 @@ public class CategoryService {
 
     public void delete(Long id) {
         categoryRepository.delete(findById(id));
+    }
+
+
+    public CategoryImageResponse getImageByCategoryId(Long id) {
+        return new CategoryImageResponse(findById(id).getImage());
     }
 
     private Category categoryRequestToCategory(CategoryRequest categoryRequest, Category category) {
