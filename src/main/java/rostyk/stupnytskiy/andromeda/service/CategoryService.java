@@ -31,8 +31,8 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public void save(CategoryRequest categoryRequest) {
-        categoryRepository.save(categoryRequestToCategory(categoryRequest, null));
+    public Long save(CategoryRequest categoryRequest) {
+        return categoryRepository.save(categoryRequestToCategory(categoryRequest, null)).getId();
     }
 
     public void update(CategoryRequest categoryRequest, Long id) {

@@ -20,8 +20,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping()
-    public void save(@RequestBody CategoryRequest request){
-        categoryService.save(request);
+    public Long save(@RequestBody CategoryRequest request){
+        return categoryService.save(request);
     }
 
     @PutMapping()
@@ -37,6 +37,11 @@ public class CategoryController {
     @GetMapping()
     public PageResponse<CategoryResponse> findPage(PaginationRequest request){
         return categoryService.findCategoryPage(request);
+    }
+
+    @GetMapping("/one")
+    public CategoryResponse getOne(Long id){
+        return new CategoryResponse(categoryService.findById(id));
     }
 
     @GetMapping("img")
