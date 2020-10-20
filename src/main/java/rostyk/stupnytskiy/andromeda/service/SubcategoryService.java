@@ -22,28 +22,37 @@ public class SubcategoryService {
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
-    public void save(SubcategoryRequest request){
-        subcategoryRepository.save(subcategoryRequestToSubcategory(request,null));
-    }
-    public void update(SubcategoryRequest request, Long id){
-        subcategoryRepository.save(subcategoryRequestToSubcategory(request,findOneById(id)));
+    public void save(SubcategoryRequest request) {
+        subcategoryRepository.save(subcategoryRequestToSubcategory(request, null));
     }
 
-    public List<SubcategoryResponse> findAll(){
+    public void update(SubcategoryRequest request, Long id) {
+        subcategoryRepository.save(subcategoryRequestToSubcategory(request, findOneById(id)));
+    }
+
+    public List<SubcategoryResponse> findAll() {
         return subcategoryRepository.findAll()
                 .stream()
                 .map(SubcategoryResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public List<SubcategoryResponse> findAllByCategoryId(Long id){
+    public PageResponse<SubcategoryResponse> findPage(PaginationRequest request) {
+        final Page<Subcategory> page = subcategoryRepository.findAll(request.mapToPageable());
+        return new PageResponse<>(page.getContent().stream().map(SubcategoryResponse::new).collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+    public List<SubcategoryResponse> findAllByCategoryId(Long id) {
         return subcategoryRepository.findAllByCategoryId(id)
                 .stream()
                 .map(SubcategoryResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public PageResponse<SubcategoryResponse> findPageByCategoryId(Long id, PaginationRequest request){
+    public PageResponse<SubcategoryResponse> findPageByCategoryId(Long id, PaginationRequest request) {
         final Page<Subcategory> page = subcategoryRepository.findAllByCategoryId(id, request.mapToPageable());
         return new PageResponse<>(page.getContent().stream().map(SubcategoryResponse::new).collect(Collectors.toList()),
                 page.getTotalElements(),
@@ -51,11 +60,11 @@ public class SubcategoryService {
         );
     }
 
-    public void delete (Long id){
+    public void delete(Long id) {
         subcategoryRepository.delete(findOneById(id));
     }
 
-    public Subcategory findOneById(Long id){
+    public Subcategory findOneById(Long id) {
         return subcategoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Subcategory with id " + id + " not exist"));
     }
 
@@ -67,4 +76,6 @@ public class SubcategoryService {
         subcategory.setTitle(request.getTitle());
         return subcategory;
     }
+
+
 }
