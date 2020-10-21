@@ -21,10 +21,6 @@ public class AccountRegistrationRequest {
     @NotNull
     private String username;
 
-    @NotBlank
-    @NotNull
-    private String email;
-
 //    @NotBlank
     private String avatar;
 }

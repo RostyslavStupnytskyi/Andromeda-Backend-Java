@@ -33,8 +33,6 @@ public class Account {
     @Column(nullable = false)
     private UserRole userRole;
 
-    private String email;
-
     private String avatar;
 
     private String confirmationCode;
