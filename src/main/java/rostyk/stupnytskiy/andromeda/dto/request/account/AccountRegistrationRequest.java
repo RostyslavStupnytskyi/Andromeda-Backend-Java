@@ -16,11 +16,4 @@ public class AccountRegistrationRequest {
 
     @Size(min = 3, max = 30)
     private String password;
-
-    @NotBlank
-    @NotNull
-    private String username;
-
-//    @NotBlank
-    private String avatar;
 }

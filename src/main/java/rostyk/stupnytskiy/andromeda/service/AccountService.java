@@ -108,16 +108,12 @@ public class AccountService implements UserDetailsService {
         Account account = new Account();
         account.setLogin(request.getLogin());
         account.setPassword(encoder.encode(request.getPassword()));
-        account.setUsername(request.getUsername());
+        account.setUsername(request.getLogin());
         account.setUserRole(userRole);
         account.setConfirmationCode(confirmationCodeGenerator.createCode());
         mailService.registerMain(request.getLogin(), account.getConfirmationCode());
         if (userRole == UserRole.ROLE_USER) account.setUser(new User());
         else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
-
-        if (request.getAvatar() != null) {
-            account.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), request.getLogin()));
-        }
 
         accountRepository.save(account);
         return login(registrationToLogin(request));
