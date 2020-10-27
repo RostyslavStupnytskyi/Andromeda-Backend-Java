@@ -18,6 +18,10 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String taxpayerNumber;
+
+    private String shopName;
+
     @OneToOne(mappedBy = "seller")
     private Account account;
 
