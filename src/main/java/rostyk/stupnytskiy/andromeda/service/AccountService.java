@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountRegistrationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.SellerRegistrationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.Account;
@@ -53,11 +54,25 @@ public class AccountService implements UserDetailsService {
     private MailService mailService;
 
     public AuthenticationResponse registerUser(AccountRegistrationRequest request) throws IOException {
-        return register(request, UserRole.ROLE_USER);
+        register(request, UserRole.ROLE_USER);
+        return firstLogin(registrationToLogin(request));
     }
 
-    public AuthenticationResponse registerSeller(AccountRegistrationRequest request) throws IOException {
-        return register(request, UserRole.ROLE_SELLER);
+    public AuthenticationResponse registerSeller(SellerRegistrationRequest request) throws IOException {
+        Account account = register(request.getRegistrationRequest(), UserRole.ROLE_SELLER);
+        account.getSeller().setShopName(request.getShopName());
+        account.getSeller().setTaxpayerNumber(request.getTaxpayerNumber());
+        accountRepository.save(account);
+        return firstLogin(registrationToLogin(request.getRegistrationRequest()));
+    }
+
+    public Boolean confirmAccountCode(String code, Long id){
+        Account account = accountRepository.getOne(id);
+        if (account.getConfirmationCode().equals(code)){
+            account.setIsConfirmed(true);
+            accountRepository.save(account);
+        }
+        return account.getIsConfirmed();
     }
 
     public Boolean checkoutConfirmationCode(String code) {
@@ -70,7 +85,7 @@ public class AccountService implements UserDetailsService {
         } else return false;
     }
 
-    public AuthenticationResponse login(AccountLoginRequest request) {
+    private AuthenticationResponse login(AccountLoginRequest request) {
         String login = request.getLogin();
         Account account = findByLogin(login);
 
@@ -81,6 +96,20 @@ public class AccountService implements UserDetailsService {
         Long id = account.getId();
 
         return new AuthenticationResponse(name, token, id);
+    }
+
+    public AuthenticationResponse confirmedLogin(AccountLoginRequest request){
+        String login = request.getLogin();
+        Account account = findByLogin(login);
+        if (account.getIsConfirmed()) {
+            return  login(request);
+        } else {
+            throw new IllegalArgumentException("Account " + login + " is not confirmed");
+        }
+    }
+
+    public AuthenticationResponse firstLogin(AccountLoginRequest request) {
+        return login(request);
     }
 
     @Override
@@ -101,22 +130,21 @@ public class AccountService implements UserDetailsService {
         return new AccountResponse(findById(id));
     }
 
-    private AuthenticationResponse register(AccountRegistrationRequest request, UserRole userRole) throws IOException {
+    private Account register(AccountRegistrationRequest request, UserRole userRole) throws IOException {
         if (accountRepository.existsByLogin(request.getLogin())) {
             throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
         }
         Account account = new Account();
         account.setLogin(request.getLogin());
         account.setPassword(encoder.encode(request.getPassword()));
-        account.setUsername(request.getLogin());
+        account.setUsername(createDefaultUserName(request.getLogin()));
         account.setUserRole(userRole);
         account.setConfirmationCode(confirmationCodeGenerator.createCode());
         mailService.registerMain(request.getLogin(), account.getConfirmationCode());
         if (userRole == UserRole.ROLE_USER) account.setUser(new User());
         else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
 
-        accountRepository.save(account);
-        return login(registrationToLogin(request));
+        return accountRepository.save(account);
     }
 
 
@@ -125,5 +153,9 @@ public class AccountService implements UserDetailsService {
         loginRequest.setLogin(registrationRequest.getLogin());
         loginRequest.setPassword(registrationRequest.getPassword());
         return loginRequest;
+    }
+
+    private String createDefaultUserName(String login){
+        return login.substring(0,login.indexOf('@'));
     }
 }

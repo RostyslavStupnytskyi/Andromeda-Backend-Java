@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountRegistrationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.SellerRegistrationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.service.AccountService;
 
@@ -20,7 +21,7 @@ public class AccountController {
 
     @PostMapping("/login")
     public AuthenticationResponse login(@Valid @RequestBody AccountLoginRequest request) {
-        return accountService.login(request);
+        return accountService.confirmedLogin(request);
     }
 
     @PostMapping("/register-user")
@@ -29,8 +30,13 @@ public class AccountController {
     }
 
     @PostMapping("/register-seller")
-    public AuthenticationResponse registerSeller(@Valid @RequestBody AccountRegistrationRequest request) throws IOException {
+    public AuthenticationResponse registerSeller(@Valid @RequestBody SellerRegistrationRequest request) throws IOException {
         return accountService.registerSeller(request);
+    }
+
+    @PutMapping()
+    public Boolean confirmCode(String code, Long id){
+        return accountService.confirmAccountCode(code, id);
     }
 
     @GetMapping("/checkToken")
