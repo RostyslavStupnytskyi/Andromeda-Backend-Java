@@ -95,7 +95,7 @@ public class AccountService implements UserDetailsService {
         String name = account.getUsername();
         Long id = account.getId();
 
-        return new AuthenticationResponse(name, token, id);
+        return new AuthenticationResponse(name, token, id,account.getUserRole());
     }
 
     public AuthenticationResponse confirmedLogin(AccountLoginRequest request){
