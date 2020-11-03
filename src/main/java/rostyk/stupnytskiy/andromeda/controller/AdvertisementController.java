@@ -17,8 +17,8 @@ public class AdvertisementController {
     private AdvertisementService advertisementService;
 
     @PostMapping()
-    public void save(@RequestBody AdvertisementRequest request) throws IOException {
-        advertisementService.save(request);
+    public Long save(@RequestBody AdvertisementRequest request) throws IOException {
+        return advertisementService.save(request);
     }
 
     @PutMapping()

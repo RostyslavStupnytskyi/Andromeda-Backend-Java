@@ -33,8 +33,8 @@ public class AdvertisementService {
     @Autowired
     private FileTool fileTool;
 
-    public void save(AdvertisementRequest request) throws IOException {
-        advertisementRepository.save(advertisementRequestToAdvertisement(request,null));
+    public Long save(AdvertisementRequest request) throws IOException {
+        return advertisementRepository.save(advertisementRequestToAdvertisement(request,null)).getId();
     }
 
     public void update(AdvertisementRequest request, Long id) throws IOException {
