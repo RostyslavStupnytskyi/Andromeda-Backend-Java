@@ -34,6 +34,11 @@ public class SubcategoryController {
         return subcategoryService.findAll();
     }
 
+    @GetMapping("/category")
+    public List<SubcategoryResponse> findAllByCategoryId(Long id) {
+        return subcategoryService.findAllByCategoryId(id);
+    }
+
     @GetMapping()
     public PageResponse<SubcategoryResponse> findPage(PaginationRequest request) {
         return subcategoryService.findPage(request);
