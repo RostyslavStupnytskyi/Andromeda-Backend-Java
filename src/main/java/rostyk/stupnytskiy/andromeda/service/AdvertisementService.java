@@ -17,6 +17,8 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,14 +36,17 @@ public class AdvertisementService {
     private FileTool fileTool;
 
     public Long save(AdvertisementRequest request) throws IOException {
-        return advertisementRepository.save(advertisementRequestToAdvertisement(request,null)).getId();
+//        System.out.println(request.print());
+        Long id = advertisementRepository.save(advertisementRequestToAdvertisement(request, null)).getId();
+        saveAdvertisementImages(request, id);
+        return id;
     }
 
     public void update(AdvertisementRequest request, Long id) throws IOException {
-        advertisementRepository.save(advertisementRequestToAdvertisement(request,findById(id)));
+        advertisementRepository.save(advertisementRequestToAdvertisement(request, findById(id)));
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         advertisementRepository.delete(findById(id));
     }
 
@@ -49,7 +54,7 @@ public class AdvertisementService {
         return advertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Advertisement with id " + id + " does not exists"));
     }
 
-    public PageResponse<AdvertisementResponse> findPage(PaginationRequest request){
+    public PageResponse<AdvertisementResponse> findPage(PaginationRequest request) {
         final Page<Advertisement> page = advertisementRepository.findAll(request.mapToPageable());
         return new PageResponse<>(page.getContent().stream().map(AdvertisementResponse::new).collect(Collectors.toList()),
                 page.getTotalElements(),
@@ -57,7 +62,7 @@ public class AdvertisementService {
         );
     }
 
-    private Advertisement advertisementRequestToAdvertisement(AdvertisementRequest request, Advertisement advertisement) throws IOException {
+    private Advertisement advertisementRequestToAdvertisement(AdvertisementRequest request, Advertisement advertisement) {
         if (advertisement == null) {
             advertisement = new Advertisement();
             advertisement.setCreationDate(LocalDateTime.now());
@@ -69,11 +74,22 @@ public class AdvertisementService {
         advertisement.setDescription(request.getDescription());
         advertisement.setSeller(account.getSeller());
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
-
-        if (request.getMainImage() != null) {
-            advertisement.setMainImage(fileTool.savePublicationImage(request.getMainImage(), account.getLogin()));
-        }
+        advertisement.setImages(new ArrayList<>());
 
         return advertisement;
+    }
+
+    private void saveAdvertisementImages(AdvertisementRequest request, Long id) throws IOException {
+        Advertisement advertisement = findById(id);
+        Account account = accountService.findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if (request.getMainImage() != null) {
+            advertisement.setMainImage(fileTool.savePublicationImage(request.getMainImage(), account.getLogin(), id));
+        }
+        List<String> images = new ArrayList<>();
+        for (String image : request.getImages()) {
+            images.add(fileTool.savePublicationImage(image, account.getLogin(), id));
+        }
+        advertisement.setImages(images);
+        advertisementRepository.save(advertisement);
     }
 }

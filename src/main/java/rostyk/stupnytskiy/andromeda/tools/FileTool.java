@@ -27,8 +27,8 @@ public class FileTool {
         return saveImage(img,userDir);
     }
 
-    public String savePublicationImage(String img, String userLogin) throws IOException {
-        String userDir = PROJECT_DIR + "user_" + userLogin + File.separator + "advertisements" + File.separator;
+    public String savePublicationImage(String img, String userLogin, Long id) throws IOException {
+        String userDir = PROJECT_DIR + "user_" + userLogin + File.separator + "advertisements" + File.separator + "id_" + id + File.separator;
         return saveImage(img,userDir);
     }
 

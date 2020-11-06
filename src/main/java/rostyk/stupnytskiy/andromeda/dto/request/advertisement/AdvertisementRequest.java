@@ -20,4 +20,21 @@ public class AdvertisementRequest {
     private Long subcategoryId;
 
     private Integer price;
+
+    @Override
+    public String toString() {
+        return "AdvertisementRequest{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", mainImage='" + mainImage + '\'' +
+                ", images=" + images +
+                ", subcategoryId=" + subcategoryId +
+                ", price=" + price +
+                '}';
+    }
+
+    public String print() {
+        images.forEach(i -> i = i.substring(0, 50));
+        return "Images array = [" + images + "]";
+    }
 }
