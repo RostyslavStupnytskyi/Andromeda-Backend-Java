@@ -3,7 +3,7 @@ package rostyk.stupnytskiy.andromeda.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rostyk.stupnytskiy.andromeda.entity.UserRole;
+import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 
 import java.util.Collection;
 import java.util.Collections;

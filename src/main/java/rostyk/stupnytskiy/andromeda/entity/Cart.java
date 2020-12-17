@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.account.User;
 
 import javax.persistence.*;
 import java.util.List;

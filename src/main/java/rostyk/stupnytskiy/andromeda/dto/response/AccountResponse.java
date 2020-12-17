@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.Account;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
 
 @Getter
 @Setter
@@ -10,6 +10,6 @@ public class AccountResponse {
     private String username;
 
     public AccountResponse(Account account) {
-        this.username = account.getUsername();
+//        this.username = account.getUsername();
     }
 }

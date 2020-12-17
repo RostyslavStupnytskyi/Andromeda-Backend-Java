@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 
 import java.util.List;
 
@@ -21,16 +21,13 @@ public class AdvertisementResponse {
     private Long userViews;
     private Long sellerId;
 
-    public AdvertisementResponse(Advertisement advertisement) {
+    public AdvertisementResponse(Advertisement advertisement) { // TODO
         this.id = advertisement.getId();
         this.title = advertisement.getTitle();
         this.description = advertisement.getDescription();
         this.mainImage = advertisement.getMainImage();
         this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
-        this.rating = advertisement.getRating();
-        this.price = advertisement.getPrice();
-        this.allViews = advertisement.getAllViews();
-        this.userViews = advertisement.getUserViews();
+//        this.price = advertisement.getPrice();
         this.sellerId = advertisement.getSeller().getId();
         this.images = advertisement.getImages();
     }

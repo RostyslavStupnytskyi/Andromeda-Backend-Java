@@ -30,6 +30,10 @@ public class SubcategoryService {
         subcategoryRepository.save(subcategoryRequestToSubcategory(request, findOneById(id)));
     }
 
+    public void delete(Long id) {
+        subcategoryRepository.delete(findOneById(id));
+    }
+
     public List<SubcategoryResponse> findAll() {
         return subcategoryRepository.findAll()
                 .stream()
@@ -58,10 +62,6 @@ public class SubcategoryService {
                 page.getTotalElements(),
                 page.getTotalPages()
         );
-    }
-
-    public void delete(Long id) {
-        subcategoryRepository.delete(findOneById(id));
     }
 
     public Subcategory findOneById(Long id) {

@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.Property;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Property;
 
 @Getter
 @Setter

@@ -5,8 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SellerRegistrationRequest {
-    private AccountRegistrationRequest registrationRequest;
-    private String shopName;
+public class SellerDataRequest {
+
     private String taxpayerNumber;
+
+    private String shopName;
+
+    private Long countryApiId;
+
+    private String countryCode;
 }

@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.UserRole;
+import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 
 @Getter
 @Setter

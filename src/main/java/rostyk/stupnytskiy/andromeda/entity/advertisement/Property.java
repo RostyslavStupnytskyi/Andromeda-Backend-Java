@@ -1,6 +1,7 @@
-package rostyk.stupnytskiy.andromeda.entity;
+package rostyk.stupnytskiy.andromeda.entity.advertisement;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 
 import javax.persistence.*;
 

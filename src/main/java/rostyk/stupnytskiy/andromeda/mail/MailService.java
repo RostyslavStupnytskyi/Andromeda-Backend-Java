@@ -25,8 +25,8 @@ public class MailService {
 
     private Session session;
 
-    public void registerMain(String target, String code){
-        sendEmail(target,"Диплом працює", mailMessageService.getConfirmMessage(code));
+    public void sendConfirmationCodeMail(String target, String code){
+        sendEmail(target,"Andromeda registration", mailMessageService.getConfirmMessage(code));
     }
 
     public void saveMain(MailRequest request) {
@@ -66,8 +66,8 @@ public class MailService {
                 return new PasswordAuthentication(mailData.getEmail(), mailData.getPassword());
             }
         };
-        Session session = Session.getInstance(props, auth);
-        return session;
+
+        return Session.getInstance(props, auth);
     }
 
     private void checkoutSession(){

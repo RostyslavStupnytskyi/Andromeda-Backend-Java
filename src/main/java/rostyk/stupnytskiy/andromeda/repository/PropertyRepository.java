@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import rostyk.stupnytskiy.andromeda.entity.Property;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Property;
 
 import java.util.List;
 

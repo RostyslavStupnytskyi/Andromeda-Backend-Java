@@ -1,8 +1,11 @@
-package rostyk.stupnytskiy.andromeda.entity;
+package rostyk.stupnytskiy.andromeda.entity.account;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.Address;
+import rostyk.stupnytskiy.andromeda.entity.statistics.AccountStatistics;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,9 +28,6 @@ public class Account {
     @Column(nullable = false, unique = true)
     private String login;
 
-    @Column(nullable = false)
-    private String username;
-
     private String password;
 
     @Column(nullable = false)
@@ -35,14 +35,16 @@ public class Account {
 
     private String avatar;
 
-    private String confirmationCode;
-
-    private Boolean isConfirmed;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Seller seller;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
+
+    @OneToMany(mappedBy = "account")
+    private List<Address> addresses;
+
+    @OneToOne(cascade =  CascadeType.ALL)
+    private AccountStatistics statistics;
 }
 

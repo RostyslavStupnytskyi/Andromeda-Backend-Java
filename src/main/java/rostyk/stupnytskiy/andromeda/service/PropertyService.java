@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.*;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
-import rostyk.stupnytskiy.andromeda.entity.Property;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Property;
 import rostyk.stupnytskiy.andromeda.repository.PropertyRepository;
 
 import java.util.List;

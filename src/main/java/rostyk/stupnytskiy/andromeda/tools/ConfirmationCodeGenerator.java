@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+@SuppressWarnings("UnnecessaryLocalVariable")
 @Component
 public class ConfirmationCodeGenerator {
 
@@ -26,7 +27,6 @@ public class ConfirmationCodeGenerator {
 
     private char getCodeNumber(){
         Random random = new Random();
-        char randomChar = (char) ('0' + random.nextInt(9));
-        return randomChar;
+        return (char)('0' + random.nextInt(9));
     }
 }

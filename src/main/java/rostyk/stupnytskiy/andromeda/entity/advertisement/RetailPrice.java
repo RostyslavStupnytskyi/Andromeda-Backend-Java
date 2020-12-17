@@ -1,10 +1,9 @@
-package rostyk.stupnytskiy.andromeda.entity;
+package rostyk.stupnytskiy.andromeda.entity.advertisement;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.account.Account;
-import rostyk.stupnytskiy.andromeda.entity.account.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -13,12 +12,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-public class Address {
-
+public class RetailPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDateTime dateTime;
+
+    private Double price;
+
     @ManyToOne
-    private Account account;
+    private Advertisement advertisement;
 }

@@ -8,15 +8,12 @@ import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.AdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
-import rostyk.stupnytskiy.andromeda.entity.Account;
-import rostyk.stupnytskiy.andromeda.entity.Advertisement;
-import rostyk.stupnytskiy.andromeda.entity.Property;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,12 +62,11 @@ public class AdvertisementService {
     private Advertisement advertisementRequestToAdvertisement(AdvertisementRequest request, Advertisement advertisement) {
         if (advertisement == null) {
             advertisement = new Advertisement();
-            advertisement.setCreationDate(LocalDateTime.now());
+       //   advertisement.setCreationDate(LocalDateTime.now()); TODO
         }
 
         Account account = accountService.findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         advertisement.setTitle(request.getTitle());
-        advertisement.setPrice(request.getPrice());
         advertisement.setDescription(request.getDescription());
         advertisement.setSeller(account.getSeller());
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
