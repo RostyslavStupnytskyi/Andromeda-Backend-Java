@@ -3,7 +3,6 @@ package rostyk.stupnytskiy.andromeda.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.PropertiesRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.PropertyRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
@@ -19,14 +18,14 @@ public class PropertyController {
     @Autowired
     private PropertyService propertyService;
 
-    @PostMapping
-    public void save(@RequestBody PropertiesRequest request) {
-        propertyService.save(request);
-    }
+//    @PostMapping
+//    public void save(@RequestBody PropertiesRequest request) {
+//        propertyService.save(request);
+//    }
 
     @PutMapping
     public void update(Long id, @RequestBody PropertyRequest request) {
-        propertyService.update(request,id);
+//        propertyService.update(request,id);
     }
 
     @GetMapping

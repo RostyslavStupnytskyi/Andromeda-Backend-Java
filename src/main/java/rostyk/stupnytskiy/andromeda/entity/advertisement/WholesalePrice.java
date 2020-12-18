@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.advertisement;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.statistics.AdvertisementStatistics;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,6 +24,9 @@ public class WholesalePrice {
     @OneToMany(mappedBy = "wholesalePrice")
     private List<WholesalePriceUnit> priceUnits;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "wholesalePrice")
     private Advertisement advertisement;
+
+    @ManyToOne
+    private AdvertisementStatistics statistics;
 }

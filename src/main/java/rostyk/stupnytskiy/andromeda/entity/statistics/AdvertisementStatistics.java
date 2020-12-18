@@ -2,9 +2,12 @@ package rostyk.stupnytskiy.andromeda.entity.statistics;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.RetailPrice;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.WholesalePrice;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,4 +34,10 @@ public class AdvertisementStatistics {
 
     @OneToOne(mappedBy = "statistics")
     private Advertisement advertisement;
+
+    @OneToMany(mappedBy = "statistics")
+    private Set<RetailPrice> retailPrices;
+
+    @OneToMany(mappedBy = "statistics")
+    private Set<WholesalePrice> wholesalePrices;
 }

@@ -22,16 +22,6 @@ public class PropertyService {
     @Autowired
     private PropertyRepository propertyRepository;
 
-
-    public void save(PropertiesRequest propertiesRequest) {
-        for (PropertyRequest request : propertiesRequest.getProperties())
-            propertyRepository.save(propertyRequestToProperty(request, null,propertiesRequest.getAdvertisementId()));
-    }
-
-    public void update(PropertyRequest request, Long id) {
-        propertyRepository.save(propertyRequestToProperty(request, findById(id),null));
-    }
-
     public void delete(Long id) {
         propertyRepository.delete(findById(id));
     }
@@ -55,14 +45,10 @@ public class PropertyService {
         return propertyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Property with id " + id + " not exist"));
     }
 
-    private Property propertyRequestToProperty(PropertyRequest request, Property property, Long advertisementId) {
-        if (property == null) {
-            property = new Property();
-        }
+    public Property propertyRequestToProperty(PropertyRequest request) {
+        Property property = new Property();
         property.setName(request.getName());
         property.setValue(request.getValue());
-        if (advertisementId != null)
-            property.setAdvertisement(advertisementService.findById(advertisementId));
         return property;
     }
 }

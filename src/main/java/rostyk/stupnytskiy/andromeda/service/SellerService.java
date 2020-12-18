@@ -50,9 +50,9 @@ public class SellerService {
     public void updateSellerCountryCodes(SellerCountriesRequest request){
         Seller seller = getSellerBySecurityContextHolder();
         if (request.getCountriesId() != null){
-            seller.setCountries(countryService.getCountriesSetByIds(request.getCountriesId()));
+            seller.setCountriesWithStorage(countryService.getCountriesSetByIds(request.getCountriesId()));
         } else if (request.getCountryCodes() != null){
-            seller.setCountries(countryService.getCountriesSetByCodes(request.getCountryCodes()));
+            seller.setCountriesWithStorage(countryService.getCountriesSetByCodes(request.getCountryCodes()));
         }
         sellerRepository.save(seller);
     }

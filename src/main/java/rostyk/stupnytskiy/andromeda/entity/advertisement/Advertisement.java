@@ -29,6 +29,8 @@ public class Advertisement {
 
     private Boolean onlySellerCountry;
 
+    private Boolean isRetail;
+
     @ElementCollection
     private List<String> images;
 
@@ -50,9 +52,9 @@ public class Advertisement {
     @OneToOne(cascade =  CascadeType.ALL)
     private AdvertisementStatistics statistics;
 
-    @OneToMany(mappedBy = "advertisement")
-    private List<RetailPrice> retailPrices;
+    @OneToOne
+    private RetailPrice retailPrice;
 
-    @OneToMany(mappedBy = "advertisement")
-    private List<WholesalePrice> wholesalePrices;
+    @OneToOne
+    private WholesalePrice wholesalePrice;
 }

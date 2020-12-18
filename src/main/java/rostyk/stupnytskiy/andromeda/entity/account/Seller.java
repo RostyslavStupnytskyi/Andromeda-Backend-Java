@@ -39,7 +39,7 @@ public class Seller {
     private SellerStatistics statistics;
 
     @ManyToMany
-    private Set<Country> countries;
+    private Set<Country> countriesWithStorage;
 
     @ManyToMany
     private Set<DeliveryType> deliveryTypes;

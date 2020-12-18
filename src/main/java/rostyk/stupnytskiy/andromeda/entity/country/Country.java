@@ -4,7 +4,6 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.Seller;
 import rostyk.stupnytskiy.andromeda.entity.statistics.AccountStatistics;
-import rostyk.stupnytskiy.andromeda.entity.statistics.SellerStatistics;
 
 import javax.persistence.*;
 import java.util.List;
@@ -39,7 +38,7 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private List<AccountStatistics> accountStatistics;
 
-    @ManyToMany(mappedBy = "countries")
+    @ManyToMany(mappedBy = "countriesWithStorage")
     private Set<Seller> sellers;
 
     @OneToMany(mappedBy = "country")
