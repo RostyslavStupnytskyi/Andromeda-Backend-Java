@@ -22,9 +22,9 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(mappedBy = "user")
     private Account account;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
     private Cart cart;
 }

@@ -28,6 +28,8 @@ public class AdvertisementCreationRequest {
 
     private WholesalePriceRequest wholesalePriceRequest;
 
+    private Long currencyId;
+
     @Override
     public String toString() {
         return "AdvertisementCreationRequest{" +

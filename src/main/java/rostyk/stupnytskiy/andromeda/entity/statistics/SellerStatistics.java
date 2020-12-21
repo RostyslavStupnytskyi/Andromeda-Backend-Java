@@ -20,7 +20,6 @@ public class SellerStatistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @OneToOne(mappedBy = "statistics")
     private Seller seller;
 }

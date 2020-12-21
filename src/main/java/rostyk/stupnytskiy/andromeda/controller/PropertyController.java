@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.PropertyRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.PropertyResponse;
 import rostyk.stupnytskiy.andromeda.service.PropertyService;
 
 import java.util.List;

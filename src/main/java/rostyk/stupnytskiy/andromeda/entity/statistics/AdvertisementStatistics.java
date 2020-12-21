@@ -22,22 +22,16 @@ public class AdvertisementStatistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long allViews;
+    private Long allViews = 0L;
 
-    private Long userViews;
+    private Long userViews = 0L;
 
-    private Boolean confirmed;
+    private Boolean confirmed = false;
 
     private LocalDateTime creationDate;
 
     private Double rating;
 
-    @OneToOne(mappedBy = "statistics")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "statistics")
     private Advertisement advertisement;
-
-    @OneToMany(mappedBy = "statistics")
-    private Set<RetailPrice> retailPrices;
-
-    @OneToMany(mappedBy = "statistics")
-    private Set<WholesalePrice> wholesalePrices;
 }

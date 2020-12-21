@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.SubcategoryRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.SubcategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.SubcategoryResponse;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.repository.SubcategoryRepository;
 

@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.*;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.PropertyResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.PropertyResponse;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Property;
 import rostyk.stupnytskiy.andromeda.repository.PropertyRepository;
 
@@ -24,6 +25,10 @@ public class PropertyService {
 
     public void delete(Long id) {
         propertyRepository.delete(findById(id));
+    }
+
+    public void save(PropertyRequest request, Advertisement advertisement){
+        propertyRepository.save(propertyRequestToProperty(request, advertisement));
     }
 
     public List<PropertyResponse> findAllByAdvertisementId(Long id) {
@@ -49,6 +54,14 @@ public class PropertyService {
         Property property = new Property();
         property.setName(request.getName());
         property.setValue(request.getValue());
+        return property;
+    }
+
+    public Property propertyRequestToProperty(PropertyRequest request, Advertisement advertisement) {
+        Property property = new Property();
+        property.setName(request.getName());
+        property.setValue(request.getValue());
+        property.setAdvertisement(advertisement);
         return property;
     }
 }

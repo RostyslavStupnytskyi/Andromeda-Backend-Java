@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.SubcategoryRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.SubcategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.SubcategoryResponse;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 
 

@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.AdvertisementChangePriceRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.AdvertisementCreationRequest;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.RetailPrice;
@@ -10,7 +11,10 @@ import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Service
 public class AdvertisementService {
@@ -36,54 +40,54 @@ public class AdvertisementService {
     private WholesalePriceService wholesalePriceService;
 
     @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private AdvertisementStatisticsService advertisementStatisticsService;
+
+    @Autowired
     private FileTool fileTool;
 
 
-    private void save(AdvertisementCreationRequest request){
-        Advertisement advertisement;
+    public void createAdvertisement(AdvertisementCreationRequest request) {
+//        Advertisement advertisement = advertisementRepository.save(advertisementCreationRequestToAdvertisement(request));
+//        advertisementStatisticsService.addRetailPriceToAdvertisementStatisticsFromAdvertisement(advertisement);
+        Advertisement advertisement = advertisementCreationRequestToAdvertisement(request);
+
+        request.getProperties().forEach((p) -> propertyService.save(p, advertisement));
+
+        if (request.getIsRetail()) retailPriceService.save(request.getRetailPriceRequest(), advertisement);
+        else wholesalePriceService.save(request.getWholesalePriceRequest(), advertisement);
     }
 
-    private Advertisement createAdvertisement(AdvertisementCreationRequest request){
+    private Advertisement advertisementCreationRequestToAdvertisement(AdvertisementCreationRequest request) {
 
         Advertisement advertisement = new Advertisement();
 
         advertisement.setTitle(request.getTitle());
         advertisement.setDescription(request.getDescription());
 
-        if (request.getCategoryId() != null) advertisement.setCategory(categoryService.findById(request.getCategoryId()));
+        if (request.getCategoryId() != null)
+            advertisement.setCategory(categoryService.findById(request.getCategoryId()));
         else advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
 
         advertisement.setIsRetail(request.getIsRetail());
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
 
-        advertisement.setProperties(new ArrayList<>());
-        request.getProperties().forEach((p) -> advertisement.getProperties().add(propertyService.propertyRequestToProperty(p)));
+        advertisement.setStatistics(AdvertisementStatistics.builder().creationDate(LocalDateTime.now()).build());
+
+        advertisement.setCurrency(currencyService.findById(request.getCurrencyId()));
 
         // TODO add seller adding to advertisement
-        if (request.getIsRetail()) advertisement.setRetailPrice(retailPriceService.retailPriceRequestToRetailPrice(request.getRetailPriceRequest()));
-        else advertisement.setWholesalePrice(wholesalePriceService.wholesalePriceRequestToWholesalePrice(request.getWholesalePriceRequest()));
 
-        advertisement.setStatistics(new AdvertisementStatistics());
-//        advertisement.getRetailPrices().add();
-//        advertisement
-        return advertisement;
+        return advertisementRepository.save(advertisementCreationRequestToAdvertisement(request));
     }
 
-    private void addRetailPriceToAdvertisementStatistics(Long advertisementId){
-        Advertisement advertisement = findById(advertisementId);
-        AdvertisementStatistics statistics = advertisement.getStatistics();
-        statistics.getRetailPrices().add(advertisement.getRetailPrice());
-
-    }
-
-//    private Advertisement advertisementRequestToAdvertisement(AdvertisementRequest request, Advertisement advertisement) {
-//
-//    }
-
-    public Advertisement findById(Long id){
+    public Advertisement findById(Long id) {
         return advertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
     }
 
+    //TODO
     private void saveAdvertisementImages(AdvertisementCreationRequest request, Long id) throws IOException {
 //        Advertisement advertisement = findById(id);
 //        Account account = accountService.findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -96,5 +100,12 @@ public class AdvertisementService {
 //        }
 //        advertisement.setImages(images);
 //        advertisementRepository.save(advertisement);
+    }
+
+    public void changeAdvertisementPrice(AdvertisementChangePriceRequest request, Long id) {
+        Advertisement advertisement = findById(id);
+
+        if (advertisement.getIsRetail()) retailPriceService.save(request.getRetailPriceRequest(), advertisement);
+        else wholesalePriceService.save(request.getWholesalePriceRequest(), advertisement);
     }
 }

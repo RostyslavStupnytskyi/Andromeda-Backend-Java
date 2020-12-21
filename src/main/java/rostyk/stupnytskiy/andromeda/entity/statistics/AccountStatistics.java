@@ -25,7 +25,7 @@ public class AccountStatistics {
 
     private String confirmationCode;
 
-    private Boolean isConfirmed;
+    private Boolean isConfirmed = false;
 
     @ManyToOne
     private Country country;

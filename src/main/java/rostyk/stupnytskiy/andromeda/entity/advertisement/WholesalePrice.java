@@ -21,12 +21,10 @@ public class WholesalePrice {
 
     private LocalDateTime dateTime;
 
-    @OneToMany(mappedBy = "wholesalePrice")
+    @OneToMany(mappedBy = "wholesalePrice", cascade = CascadeType.ALL)
     private List<WholesalePriceUnit> priceUnits;
 
-    @OneToOne(mappedBy = "wholesalePrice")
+    @ManyToOne
     private Advertisement advertisement;
 
-    @ManyToOne
-    private AdvertisementStatistics statistics;
 }

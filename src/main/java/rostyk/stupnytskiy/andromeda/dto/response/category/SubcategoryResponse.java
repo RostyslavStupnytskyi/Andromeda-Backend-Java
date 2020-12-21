@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.response;
+package rostyk.stupnytskiy.andromeda.dto.response.category;
 
 import lombok.Getter;
 import lombok.Setter;

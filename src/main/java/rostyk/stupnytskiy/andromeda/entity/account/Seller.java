@@ -29,7 +29,7 @@ public class Seller {
 
     private Boolean onlySellerCountry;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "seller")
+    @OneToOne(mappedBy = "seller")
     private Account account;
 
     @OneToMany(mappedBy = "seller")

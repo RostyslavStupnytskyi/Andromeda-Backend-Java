@@ -22,9 +22,7 @@ public class RetailPrice {
 
     private Double price;
 
-    @OneToOne(mappedBy = "retailPrice")
+    @ManyToOne()
     private Advertisement advertisement;
 
-    @ManyToOne
-    private AdvertisementStatistics statistics;
 }

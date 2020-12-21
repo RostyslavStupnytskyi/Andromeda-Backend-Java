@@ -107,12 +107,16 @@ public class AccountService implements UserDetailsService {
         String confirmationCode = confirmationCodeGenerator.createCode();
         statistics.setConfirmationCode(confirmationCode);
 
-        mailService.sendConfirmationCodeMail(request.getLogin(),confirmationCode); // send confirmation code to email
+//        mailService.sendConfirmationCodeMail(request.getLogin(),confirmationCode); // send confirmation code to email
 
         account.setStatistics(statistics);
 
         if (userRole == UserRole.ROLE_USER) account.setUser(new User());
-        else if (userRole == UserRole.ROLE_SELLER) account.setSeller(Seller.builder().statistics(new SellerStatistics()).build());
+        else if (userRole == UserRole.ROLE_SELLER) {
+            account.setSeller(new Seller());
+            account.getSeller().setStatistics(new SellerStatistics());
+//            account.setSeller(Seller.builder().statistics(new SellerStatistics()).build());
+        }
 //        else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
 
         return accountRepository.save(account);
