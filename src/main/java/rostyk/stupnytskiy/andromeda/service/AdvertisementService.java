@@ -80,7 +80,7 @@ public class AdvertisementService {
 
         // TODO add seller adding to advertisement
 
-        return advertisementRepository.save(advertisementCreationRequestToAdvertisement(request));
+        return advertisementRepository.save(advertisement);
     }
 
     public Advertisement findById(Long id) {
