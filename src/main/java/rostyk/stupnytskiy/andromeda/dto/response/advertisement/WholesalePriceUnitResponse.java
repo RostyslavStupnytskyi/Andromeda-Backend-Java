@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response.advertisement;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.WholesalePriceUnit;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePriceUnit;
 
 
 @Getter

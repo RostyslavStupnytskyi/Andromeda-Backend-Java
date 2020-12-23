@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
 
@@ -19,7 +20,7 @@ public class CartItem {
     private Long id;
 
     @ManyToOne
-    private Advertisement advertisement;
+    private GoodsAdvertisement advertisement;
 
     private Integer count;
 

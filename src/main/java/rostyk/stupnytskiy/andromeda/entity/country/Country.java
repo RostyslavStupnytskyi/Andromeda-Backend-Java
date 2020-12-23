@@ -2,8 +2,9 @@ package rostyk.stupnytskiy.andromeda.entity.country;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
-import rostyk.stupnytskiy.andromeda.entity.account.Seller;
-import rostyk.stupnytskiy.andromeda.entity.statistics.AccountStatistics;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,14 +36,14 @@ public class Country {
     @Column(name = "english_name")
     private String englishName; // назва країни англійською
 
-    @OneToMany(mappedBy = "country")
-    private List<AccountStatistics> accountStatistics;
-
-    @ManyToMany(mappedBy = "countriesWithStorage")
-    private Set<Seller> sellers;
+    @ManyToMany(mappedBy = "countriesOfDelivery")
+    private Set<GoodsSellerAccount> goodsSellers;
 
     @OneToMany(mappedBy = "country")
     private List<DeliveryType> deliveryTypes;
+
+    @OneToMany(mappedBy = "country")
+    private List<Account> accounts;
 
 }
 

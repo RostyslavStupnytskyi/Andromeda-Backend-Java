@@ -1,10 +1,7 @@
-package rostyk.stupnytskiy.andromeda.dto.request.advertisement;
+package rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.WholesalePrice;
-
-import javax.persistence.ManyToOne;
 
 @Getter
 @Setter

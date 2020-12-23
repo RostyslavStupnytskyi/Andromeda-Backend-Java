@@ -27,23 +27,23 @@ public class AdvertisementResponse {
     private CategoryResponse category;
 
 
-    public AdvertisementResponse(Advertisement advertisement) { // TODO
-        this.id = advertisement.getId();
-
-        if (advertisement.getIsRetail())
-            this.retailPrice = new RetailPriceResponse(advertisement.getCurrentRetailPrice());
-        else this.wholesalePrice = new WholesalePriceResponse(advertisement.getCurrentWholeSalePrice());
-
-        this.currency = new CurrencyResponse(advertisement.getCurrency());
-        this.title = advertisement.getTitle();
-        this.description = advertisement.getDescription();
-        this.mainImage = advertisement.getMainImage();
-        this.images = advertisement.getImages();
-
-        if(advertisement.getCategory() != null) this.category = new CategoryResponse(advertisement.getCategory());
-        else this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
+//    public AdvertisementResponse(Advertisement advertisement) { // TODO
+//        this.id = advertisement.getId();
+//
+//        if (advertisement.getIsRetail())
+//            this.retailPrice = new RetailPriceResponse(advertisement.getCurrentRetailPrice());
+//        else this.wholesalePrice = new WholesalePriceResponse(advertisement.getCurrentWholeSalePrice());
+//
+//        this.currency = new CurrencyResponse(advertisement.getCurrency());
+//        this.title = advertisement.getTitle();
+//        this.description = advertisement.getDescription();
+//        this.mainImage = advertisement.getMainImage();
+//        this.images = advertisement.getImages();
+//
+//        if(advertisement.getCategory() != null) this.category = new CategoryResponse(advertisement.getCategory());
+//        else this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
         
 //        this.sellerId = advertisement.getSeller().getId();
 //        this.images = advertisement.getImages();
-    }
+//    }
 }

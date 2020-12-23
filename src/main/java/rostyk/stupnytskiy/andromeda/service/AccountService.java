@@ -12,14 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountRegistrationRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
-import rostyk.stupnytskiy.andromeda.entity.account.Seller;
-import rostyk.stupnytskiy.andromeda.entity.account.User;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
-import rostyk.stupnytskiy.andromeda.entity.statistics.AccountStatistics;
-import rostyk.stupnytskiy.andromeda.entity.statistics.SellerStatistics;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
 import rostyk.stupnytskiy.andromeda.repository.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
@@ -56,13 +53,13 @@ public class AccountService implements UserDetailsService {
 
     // Register User
     public AuthenticationResponse registerUser(AccountRegistrationRequest request) throws IOException {
-        register(request, UserRole.ROLE_USER);
+//        register(request, UserRole.ROLE_USER);
         return login(registrationToLogin(request));
     }
 
     //Register Seller
     public AuthenticationResponse registerSeller(AccountRegistrationRequest request) throws IOException {
-        register(request, UserRole.ROLE_SELLER);
+//        register(request, UserRole.ROLE_SELLER);
         return login(registrationToLogin(request));
     }
 
@@ -73,7 +70,7 @@ public class AccountService implements UserDetailsService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, request.getPassword()));
         String token = jwtTokenTool.createToken(login, account.getUserRole());
 
-        String name = account.getUser() != null ? account.getUser().getUsername() : account.getSeller().getShopName();
+        String name = "aaa";
         Long id = account.getId();
 
         return new AuthenticationResponse(name, token, id,account.getUserRole());
@@ -93,34 +90,34 @@ public class AccountService implements UserDetailsService {
         return accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not exists"));
     }
 
-    private Account register(AccountRegistrationRequest request, UserRole userRole) throws IOException {
-        if (accountRepository.existsByLogin(request.getLogin())) {
-            throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
-        }
-        Account account = new Account();
-        account.setLogin(request.getLogin());
-        account.setPassword(encoder.encode(request.getPassword()));
-        account.setUserRole(userRole);
+//    private Account register(AccountRegistrationRequest request, UserRole userRole) throws IOException {
+//        if (accountRepository.existsByLogin(request.getLogin())) {
+//            throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
+//        }
+//        Account account = new Account();
+//        account.setLogin(request.getLogin());
+//        account.setPassword(encoder.encode(request.getPassword()));
+//        account.setUserRole(userRole);
 
         //create Account Statistics entity
-        AccountStatistics statistics = new AccountStatistics();
-        String confirmationCode = confirmationCodeGenerator.createCode();
-        statistics.setConfirmationCode(confirmationCode);
+//        AccountStatistics statistics = new AccountStatistics();
+//        String confirmationCode = confirmationCodeGenerator.createCode();
+//        statistics.setConfirmationCode(confirmationCode);
 
 //        mailService.sendConfirmationCodeMail(request.getLogin(),confirmationCode); // send confirmation code to email
 
-        account.setStatistics(statistics);
+//        account.setStatistics(statistics);
 
-        if (userRole == UserRole.ROLE_USER) account.setUser(new User());
-        else if (userRole == UserRole.ROLE_SELLER) {
-            account.setSeller(new Seller());
-            account.getSeller().setStatistics(new SellerStatistics());
+//        if (userRole == UserRole.ROLE_USER) account.setUser(new UserAccount());
+//        else if (userRole == UserRole.ROLE_SELLER) {
+//            account.setSeller(new GoodsSellerAccount());
+//            account.getSeller().setStatistics(new SellerStatistics());
 //            account.setSeller(Seller.builder().statistics(new SellerStatistics()).build());
-        }
+//        }
 //        else if (userRole == UserRole.ROLE_SELLER) account.setSeller(new Seller());
 
-        return accountRepository.save(account);
-    }
+//        return accountRepository.save(account);
+//    }
 
     public Account getAccountBySecurityContextHolder(){
         return findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());

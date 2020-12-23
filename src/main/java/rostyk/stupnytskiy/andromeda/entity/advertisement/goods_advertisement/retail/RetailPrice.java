@@ -1,7 +1,6 @@
-package rostyk.stupnytskiy.andromeda.entity.advertisement;
+package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.statistics.AdvertisementStatistics;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +21,7 @@ public class RetailPrice {
 
     private Double price;
 
-    @ManyToOne()
-    private Advertisement advertisement;
+    @ManyToOne
+    private RetailGoodsAdvertisement advertisement;
 
 }

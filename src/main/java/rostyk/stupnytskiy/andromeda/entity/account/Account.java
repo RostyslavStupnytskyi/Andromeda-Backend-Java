@@ -1,11 +1,9 @@
 package rostyk.stupnytskiy.andromeda.entity.account;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.Address;
-import rostyk.stupnytskiy.andromeda.entity.statistics.AccountStatistics;
+import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +17,9 @@ Entity Account is used to store information about the account of the user, admin
 Account has a password, login, e-mail, photo username,
 and the entity that contains the user (and administrator or moderator) or seller
 */
+
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "account_type")
 public class Account {
 
     @Id
@@ -30,21 +31,12 @@ public class Account {
 
     private String password;
 
+    private String avatar;
+
     @Column(nullable = false)
     private UserRole userRole;
 
-    private String avatar;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Seller seller;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
-
-    @OneToMany(mappedBy = "account")
-    private List<Address> addresses;
-
-    @OneToOne(cascade =  CascadeType.ALL)
-    private AccountStatistics statistics;
+    @ManyToOne
+    private Country country;
 }
 

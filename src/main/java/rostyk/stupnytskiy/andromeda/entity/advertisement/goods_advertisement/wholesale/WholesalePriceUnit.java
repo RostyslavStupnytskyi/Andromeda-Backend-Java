@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.entity.advertisement;
+package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale;
 
 import lombok.*;
 

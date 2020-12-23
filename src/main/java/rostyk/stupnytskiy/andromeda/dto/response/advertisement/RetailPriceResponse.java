@@ -2,13 +2,8 @@ package rostyk.stupnytskiy.andromeda.dto.response.advertisement;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.RetailPrice;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailPrice;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Getter

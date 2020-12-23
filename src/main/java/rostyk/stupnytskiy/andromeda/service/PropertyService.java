@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.*;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.PropertyRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.PropertyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.Property;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 import rostyk.stupnytskiy.andromeda.repository.PropertyRepository;
 
 import java.util.List;
@@ -61,7 +61,7 @@ public class PropertyService {
         Property property = new Property();
         property.setName(request.getName());
         property.setValue(request.getValue());
-        property.setAdvertisement(advertisement);
+//        property.setAdvertisement(advertisement);
         return property;
     }
 }

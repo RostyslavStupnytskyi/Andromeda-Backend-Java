@@ -1,8 +1,8 @@
 package rostyk.stupnytskiy.andromeda.entity.order;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.account.Seller;
-import rostyk.stupnytskiy.andromeda.entity.account.User;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 
 import javax.persistence.*;
 
@@ -21,10 +21,10 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    private Seller seller;
+    private GoodsSellerAccount seller;
 
     private Boolean finished;
 
     @ManyToOne
-    private User customer;
+    private UserAccount customer;
 }

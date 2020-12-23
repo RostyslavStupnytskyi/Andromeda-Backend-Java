@@ -1,11 +1,10 @@
 package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.account.Seller;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -29,5 +28,5 @@ public class DeliveryType {
     private Country country;
 
     @ManyToMany(mappedBy = "deliveryTypes")
-    private Set<Seller> sellerList;
+    private Set<GoodsSellerAccount> sellerList;
 }

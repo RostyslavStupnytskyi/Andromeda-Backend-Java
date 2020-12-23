@@ -1,8 +1,9 @@
-package rostyk.stupnytskiy.andromeda.entity.account;
+package rostyk.stupnytskiy.andromeda.entity.account.user_account;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.Address;
 import rostyk.stupnytskiy.andromeda.entity.Cart;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,19 +12,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 
 @Entity
-public class User {
+public class UserAccount extends Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String username;
-
-    @OneToOne(mappedBy = "user")
-    private Account account;
 
     @OneToOne
     private Cart cart;

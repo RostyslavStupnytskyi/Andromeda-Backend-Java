@@ -1,7 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.account.User;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Cart {
     private Long id;
 
     @OneToOne(mappedBy = "cart")
-    private User user;
+    private UserAccount user;
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItems;

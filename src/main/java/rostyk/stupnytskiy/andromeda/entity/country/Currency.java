@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity.country;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,5 +27,5 @@ public class Currency {
     private String symbol;
 
     @OneToMany(mappedBy = "currency")
-    private List<Advertisement> advertisements;
+    private List<GoodsAdvertisement> advertisements;
 }

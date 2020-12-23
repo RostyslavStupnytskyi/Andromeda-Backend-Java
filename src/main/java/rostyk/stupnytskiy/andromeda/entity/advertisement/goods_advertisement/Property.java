@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.entity.advertisement;
+package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
@@ -23,5 +23,5 @@ public class Property {
     private String value;
 
     @ManyToOne
-    private Advertisement advertisement;
+    private GoodsAdvertisement advertisement;
 }
