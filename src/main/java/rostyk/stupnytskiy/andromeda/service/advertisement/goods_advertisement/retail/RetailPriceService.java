@@ -30,7 +30,7 @@ public class RetailPriceService {
 
     public RetailPrice retailPriceRequestToRetailPrice(RetailPriceRequest request, RetailGoodsAdvertisement advertisement){
         RetailPrice retailPrice = new RetailPrice();
-//        retailPrice.setAdvertisement(advertisement);
+        retailPrice.setAdvertisement(advertisement);
         retailPrice.setDateTime(LocalDateTime.now());
         retailPrice.setPrice(request.getPrice());
         return retailPrice;
