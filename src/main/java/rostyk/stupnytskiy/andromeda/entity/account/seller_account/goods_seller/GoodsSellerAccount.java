@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;

@@ -12,7 +12,6 @@ public class GoodsAdvertisementRequest extends AdvertisementRequest {
 
     private Boolean onlySellerCountry;
 
-    private Long categoryId;
     private Long subcategoryId;
     private Long currencyId;
 

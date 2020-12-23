@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @Setter
 public class RetailGoodsAdvertisementRequest extends GoodsAdvertisementRequest {
-    private List<RetailPriceRequest> price;
+    private RetailPriceRequest price;
 }

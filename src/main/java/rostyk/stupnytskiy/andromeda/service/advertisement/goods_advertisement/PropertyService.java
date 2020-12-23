@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.service;
+package rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,8 +8,10 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.PropertyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 import rostyk.stupnytskiy.andromeda.repository.PropertyRepository;
+import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ public class PropertyService {
         propertyRepository.delete(findById(id));
     }
 
-    public void save(PropertyRequest request, Advertisement advertisement){
+    public void save(PropertyRequest request, GoodsAdvertisement advertisement){
         propertyRepository.save(propertyRequestToProperty(request, advertisement));
     }
 
@@ -57,11 +59,11 @@ public class PropertyService {
         return property;
     }
 
-    public Property propertyRequestToProperty(PropertyRequest request, Advertisement advertisement) {
+    public Property propertyRequestToProperty(PropertyRequest request, GoodsAdvertisement advertisement) {
         Property property = new Property();
         property.setName(request.getName());
         property.setValue(request.getValue());
-//        property.setAdvertisement(advertisement);
+        property.setAdvertisement(advertisement);
         return property;
     }
 }

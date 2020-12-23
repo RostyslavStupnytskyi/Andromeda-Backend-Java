@@ -25,9 +25,6 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
     private Boolean onlySellerCountry;
 
     @ManyToOne
-    private Category category;
-
-    @ManyToOne
     private Subcategory subcategory;
 
     @ElementCollection

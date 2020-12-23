@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.service;
+package rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

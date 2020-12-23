@@ -5,13 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SellerDataRequest {
-
-    private String taxpayerNumber;
-
-    private String shopName;
-
-    private Long countryApiId;
-
+public class AccountDataRequest {
     private String countryCode;
+
+    private Long countryId;
 }

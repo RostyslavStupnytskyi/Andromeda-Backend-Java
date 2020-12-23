@@ -79,6 +79,5 @@ public class JwtTokenTool {
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-
     }
 }

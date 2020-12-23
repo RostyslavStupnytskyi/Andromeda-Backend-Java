@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.service;
+package rostyk.stupnytskiy.andromeda.service.advertisement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,9 +6,14 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.service.AccountService;
+import rostyk.stupnytskiy.andromeda.service.CategoryService;
+import rostyk.stupnytskiy.andromeda.service.CurrencyService;
+import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailPriceService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesalePriceService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
-
-import java.io.IOException;
 
 @Service
 public class AdvertisementService {

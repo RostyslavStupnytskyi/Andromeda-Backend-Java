@@ -1,9 +1,9 @@
-package rostyk.stupnytskiy.andromeda.controller;
+package rostyk.stupnytskiy.andromeda.controller.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.account.AccountRegistrationRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.service.AccountService;
 import rostyk.stupnytskiy.andromeda.service.AccountStatisticsService;
@@ -28,13 +28,18 @@ public class AccountController {
     }
 
     @PostMapping("/register/user")
-    public AuthenticationResponse registerUser(@Valid @RequestBody AccountRegistrationRequest request) throws IOException {
+    public AuthenticationResponse registerUser(@Valid @RequestBody AccountLoginRequest request) throws IOException {
         return accountService.registerUser(request);
     }
 
-    @PostMapping("/register/seller")
-    public AuthenticationResponse registerSeller(@Valid @RequestBody AccountRegistrationRequest request) throws IOException {
-        return accountService.registerSeller(request);
+    @PostMapping("/register/goods-seller")
+    public AuthenticationResponse registerSeller(@Valid @RequestBody AccountLoginRequest request) throws IOException {
+        return accountService.registerGoodsSeller(request);
+    }
+
+    @PutMapping("/update")
+    public void updateAccountData(@Valid @RequestBody AccountDataRequest request){
+        accountService.updateAccountData(request);
     }
 
     @PutMapping("/confirm")

@@ -26,8 +26,5 @@ public class Category {
     private String title;
 
     @OneToMany(mappedBy = "category")
-    private List<GoodsAdvertisement> advertisements;
-
-    @OneToMany(mappedBy = "category")
     private List<Subcategory> subcategories;
 }
