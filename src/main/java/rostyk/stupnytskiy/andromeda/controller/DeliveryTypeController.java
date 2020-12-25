@@ -26,8 +26,13 @@ public class DeliveryTypeController {
         deliveryTypeService.update(request, id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     private List<DeliveryTypeResponse> getAll(){
          return deliveryTypeService.getAll();
+    }
+
+    @GetMapping()
+    private List<DeliveryTypeResponse> getByCountry(String code){
+        return deliveryTypeService.getAllByCountryCode(code);
     }
 }

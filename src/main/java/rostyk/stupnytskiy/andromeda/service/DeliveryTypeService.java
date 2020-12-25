@@ -55,4 +55,11 @@ public class DeliveryTypeService {
                 .map(DeliveryTypeResponse::new)
                 .collect(Collectors.toList());
     }
+
+    public List<DeliveryTypeResponse> getAllByCountryCode(String code) {
+        return deliveryTypeRepository.getAllByCountryCountryCode(code)
+                .stream()
+                .map(DeliveryTypeResponse::new)
+                .collect(Collectors.toList());
+    }
 }

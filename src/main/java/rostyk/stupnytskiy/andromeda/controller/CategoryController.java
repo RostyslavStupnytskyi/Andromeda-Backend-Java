@@ -44,11 +44,6 @@ public class CategoryController {
         return new CategoryResponse(categoryService.findById(id));
     }
 
-    @GetMapping("img")
-    public CategoryImageResponse getImage(Long id){
-        return categoryService.getImageByCategoryId(id);
-    }
-
 
     @DeleteMapping
     public void delete(Long id){
