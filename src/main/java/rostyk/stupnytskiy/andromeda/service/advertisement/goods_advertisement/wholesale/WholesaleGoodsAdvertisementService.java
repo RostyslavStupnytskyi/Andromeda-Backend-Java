@@ -1,34 +1,34 @@
-package rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail;
+package rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale;
 
 import com.sun.nio.sctp.IllegalReceiveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailPriceRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesalePriceRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailPriceService;
 import rostyk.stupnytskiy.andromeda.service.seller.GoodsSellerAccountService;
 
 @Service
-public class RetailGoodsAdvertisementService {
-
+public class WholesaleGoodsAdvertisementService {
     @Autowired
     private AdvertisementRepository advertisementRepository;
 
     @Autowired
-    private RetailGoodsAdvertisementRepository retailGoodsAdvertisementRepository;
+    private WholesaleGoodsAdvertisementRepository wholesaleGoodsAdvertisementRepository;
 
     @Autowired
-    private RetailPriceService retailPriceService;
+    private WholesalePriceService wholesalePriceService;
 
     @Autowired
     private SubcategoryService subcategoryService;
@@ -42,15 +42,16 @@ public class RetailGoodsAdvertisementService {
     @Autowired
     private PropertyService propertyService;
 
-    public void createAdvertisement(RetailGoodsAdvertisementRequest request){
-
-        RetailGoodsAdvertisement advertisement = saveRetailGoodsAdvertisementRequest(request);
+    public void createAdvertisement(WholesaleGoodsAdvertisementRequest request){
+        wholesalePriceService.validWholesaleUnit(request.getPrice());
+        WholesaleGoodsAdvertisement advertisement = saveWholesaleGoodsAdvertisementRequest(request);
         request.getProperties().forEach(p -> propertyService.save(p, advertisement));
-        retailPriceService.save(request.getPrice(), advertisement);
+        wholesalePriceService.save(request.getPrice(),advertisement);
+//        retailPriceService.save(request.getPrice(), advertisement);
     }
 
-    public RetailGoodsAdvertisement saveRetailGoodsAdvertisementRequest(RetailGoodsAdvertisementRequest request){
-        RetailGoodsAdvertisement advertisement = new RetailGoodsAdvertisement();
+    public WholesaleGoodsAdvertisement saveWholesaleGoodsAdvertisementRequest(WholesaleGoodsAdvertisementRequest request){
+        WholesaleGoodsAdvertisement advertisement = new WholesaleGoodsAdvertisement();
         advertisement.setTitle(request.getTitle());
         advertisement.setDescription(request.getDescription());
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
@@ -60,13 +61,12 @@ public class RetailGoodsAdvertisementService {
         return advertisementRepository.save(advertisement);
     }
 
-    public void addNewWRetailPriceToRetailGoodsAdvertisement(RetailPriceRequest request, Long id){
-        retailPriceService.save(request,findById(id));
+    public void addNewWholesalePriceToWholesaleGoodsAdvertisement(WholesalePriceRequest request, Long id){
+        wholesalePriceService.validWholesaleUnit(request);
+        wholesalePriceService.save(request,findById(id));
     }
 
-    public RetailGoodsAdvertisement findById(Long id){
-        return retailGoodsAdvertisementRepository.findById(id).orElseThrow(IllegalReceiveException::new);
+    public WholesaleGoodsAdvertisement findById(Long id){
+        return wholesaleGoodsAdvertisementRepository.findById(id).orElseThrow(IllegalReceiveException::new);
     }
-
-
 }

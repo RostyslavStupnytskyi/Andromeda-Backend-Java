@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.response.advertisement;
+package rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -5,12 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -27,7 +30,7 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
 
     @Override
     public <T extends AdvertisementResponse> AdvertisementResponse mapToResponse() {
-        return null;
+        return new RetailGoodsAdvertisementResponse(this);
     }
 
     @Override
@@ -35,5 +38,10 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
         return "RetailGoodsAdvertisement{"
                 + '\'' +" is only seller " + super.getOnlySellerCountry() +
                 '}';
+    }
+
+    public RetailPrice getCurrentPrice(){
+        retailPrices.sort(Comparator.comparing(RetailPrice::getDateTime));
+        return retailPrices.get(retailPrices.size() - 1);
     }
 }

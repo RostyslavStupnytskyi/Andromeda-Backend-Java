@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.CartItem;
 import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
@@ -44,7 +45,7 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     @Override
     public <T extends AdvertisementResponse> AdvertisementResponse mapToResponse() {
-        return super.mapToResponse();
+        return new GoodsAdvertisementResponse(this);
     }
 
 

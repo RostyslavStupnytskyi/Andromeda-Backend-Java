@@ -11,4 +11,12 @@ public class WholesalePriceUnitRequest {
     private Integer max;
     private Double price;
 
+    @Override
+    public String toString() {
+        return "WholesalePriceUnitRequest{" +
+                "min=" + min +
+                ", max=" + max +
+                ", price=" + price +
+                '}';
+    }
 }

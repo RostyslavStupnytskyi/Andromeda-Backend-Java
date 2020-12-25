@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class WholesaleGoodsAdvertisementRequest extends GoodsAdvertisementRequest {
 
-    private List<WholesalePriceRequest> price;
+    private WholesalePriceRequest price;
 }

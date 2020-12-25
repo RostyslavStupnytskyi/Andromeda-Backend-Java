@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesalePriceRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesalePriceUnitRequest;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePriceUnit;
 import rostyk.stupnytskiy.andromeda.repository.WholesalePriceRepository;
 import rostyk.stupnytskiy.andromeda.repository.WholesalePriceUnitRepository;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class WholesalePriceService {
@@ -22,29 +26,27 @@ public class WholesalePriceService {
     private WholesalePriceUnitRepository wholesalePriceUnitRepository;
 
 
-    public void save(WholesalePriceRequest request, Advertisement advertisement){
-        WholesalePrice wholesalePrice = wholesalePriceRepository.save(wholesalePriceRequestToWholesalePrice(request, advertisement));
+    public void save(WholesalePriceRequest request, WholesaleGoodsAdvertisement advertisement) {
+        WholesalePrice wholesalePrice = wholesalePriceRepository.save(wholesalePriceRequestToWholesalePrice(advertisement));
         request.getPriceUnits().forEach(
-                (priceUnit) ->  wholesalePriceUnitRepository.save(wholesalePriceUnitRequestToWholesalePriceUnit(priceUnit,wholesalePrice))
+                (priceUnit) -> wholesalePriceUnitRepository.save(wholesalePriceUnitRequestToWholesalePriceUnit(priceUnit, wholesalePrice))
         );
     }
 
-
-
-    public WholesalePrice wholesalePriceRequestToWholesalePrice(WholesalePriceRequest request, Advertisement advertisement){
+    public WholesalePrice wholesalePriceRequestToWholesalePrice(WholesaleGoodsAdvertisement advertisement) {
         WholesalePrice wholesalePrice = new WholesalePrice();
         wholesalePrice.setDateTime(LocalDateTime.now());
-//        wholesalePrice.setAdvertisement(advertisement);
+        wholesalePrice.setAdvertisement(advertisement);
         return wholesalePrice;
     }
 
-    public WholesalePrice wholesalePriceRequestToWholesalePrice(WholesalePriceRequest request){
+    public WholesalePrice wholesalePriceRequestToWholesalePrice(WholesalePriceRequest request) {
         WholesalePrice wholesalePrice = new WholesalePrice();
         wholesalePrice.setDateTime(LocalDateTime.now());
         return wholesalePrice;
     }
 
-    public WholesalePriceUnit wholesalePriceUnitRequestToWholesalePriceUnit(WholesalePriceUnitRequest request, WholesalePrice wholesalePrice){
+    public WholesalePriceUnit wholesalePriceUnitRequestToWholesalePriceUnit(WholesalePriceUnitRequest request, WholesalePrice wholesalePrice) {
         WholesalePriceUnit wholesalePriceUnit = new WholesalePriceUnit();
         wholesalePriceUnit.setMax(request.getMax());
         wholesalePriceUnit.setMin(request.getMin());
@@ -53,6 +55,21 @@ public class WholesalePriceService {
         return wholesalePriceUnit;
     }
 
+    public void validWholesaleUnit(WholesalePriceRequest request) {
+
+        List<WholesalePriceUnitRequest> priceUnits = request.getPriceUnits();
+
+        priceUnits.forEach(p -> {
+            if (p.getMax() <= p.getMin()) throw new IllegalArgumentException("WholesalePrice has unexpected values");
+        });
+
+        for (int i = 1; i < priceUnits.size(); i++) {
+            WholesalePriceUnitRequest previousPrice = priceUnits.get(i - 1);
+            WholesalePriceUnitRequest currentPrice = priceUnits.get(i);
+            if (currentPrice.getMin() <= previousPrice.getMax())
+                throw new IllegalArgumentException("WholesalePrice has unexpected values");
+        }
+    }
 
 
 }

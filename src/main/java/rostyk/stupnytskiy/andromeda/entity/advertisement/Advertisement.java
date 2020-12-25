@@ -28,7 +28,7 @@ public class Advertisement implements AdvertisementEntity{
 
     @Override
     public <T extends AdvertisementResponse> AdvertisementResponse mapToResponse() {
-        return null;
+        return new AdvertisementResponse(this);
     }
 
     @Override
