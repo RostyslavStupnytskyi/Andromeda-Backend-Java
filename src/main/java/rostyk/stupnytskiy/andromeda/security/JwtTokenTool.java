@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
-import rostyk.stupnytskiy.andromeda.service.AccountService;
+import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

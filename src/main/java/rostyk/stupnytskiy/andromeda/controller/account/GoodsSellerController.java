@@ -3,7 +3,7 @@ package rostyk.stupnytskiy.andromeda.controller.account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.GoodsSellerDataRequest;
-import rostyk.stupnytskiy.andromeda.service.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 
 import javax.validation.Valid;
 

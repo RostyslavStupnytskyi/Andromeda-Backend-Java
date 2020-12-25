@@ -26,6 +26,8 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private CurrencyResponse currency;
 
+    private Integer count;
+
 
     public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
         super(advertisement);
@@ -33,6 +35,7 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
         this.images = advertisement.getImages();
         this.currency = new CurrencyResponse(advertisement.getCurrency());
+        this.count = advertisement.getCount();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
     }
 }

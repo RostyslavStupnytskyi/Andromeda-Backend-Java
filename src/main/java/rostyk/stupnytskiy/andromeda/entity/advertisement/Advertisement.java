@@ -31,6 +31,11 @@ public class Advertisement implements AdvertisementEntity{
         return new AdvertisementResponse(this);
     }
 
+    @Transient
+    public String getDiscriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
+
     @Override
     public String toString() {
         return "Advertisement{" +

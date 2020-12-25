@@ -31,8 +31,10 @@ public class DeliveryTypeController {
          return deliveryTypeService.getAll();
     }
 
-    @GetMapping()
-    private List<DeliveryTypeResponse> getByCountry(String code){
+    @GetMapping("/{code}")
+    private List<DeliveryTypeResponse> getByCountry(
+            @PathVariable String code
+            ){
         return deliveryTypeService.getAllByCountryCode(code);
     }
 }

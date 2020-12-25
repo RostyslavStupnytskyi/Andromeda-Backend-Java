@@ -5,18 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailPriceRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesalePriceRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
-import rostyk.stupnytskiy.andromeda.service.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 
 @Service
 public class RetailGoodsAdvertisementService {
@@ -57,6 +52,7 @@ public class RetailGoodsAdvertisementService {
         advertisement.setCurrency(currencyService.findById(request.getCurrencyId()));
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
+        advertisement.setCount(request.getCount());
         return advertisementRepository.save(advertisement);
     }
 

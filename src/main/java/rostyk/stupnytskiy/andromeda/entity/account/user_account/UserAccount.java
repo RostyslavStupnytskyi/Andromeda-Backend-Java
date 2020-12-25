@@ -1,13 +1,11 @@
 package rostyk.stupnytskiy.andromeda.entity.account.user_account;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.Address;
-import rostyk.stupnytskiy.andromeda.entity.Cart;
+import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter

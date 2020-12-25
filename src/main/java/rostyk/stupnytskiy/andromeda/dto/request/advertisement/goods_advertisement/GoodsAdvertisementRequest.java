@@ -14,6 +14,7 @@ public class GoodsAdvertisementRequest extends AdvertisementRequest {
 
     private Long subcategoryId;
     private Long currencyId;
+    private Integer count;
 
     private List<String> images;
 

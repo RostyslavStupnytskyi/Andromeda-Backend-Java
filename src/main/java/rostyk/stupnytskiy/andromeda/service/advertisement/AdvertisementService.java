@@ -2,17 +2,13 @@ package rostyk.stupnytskiy.andromeda.service.advertisement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
-import rostyk.stupnytskiy.andromeda.service.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 @Service
@@ -20,6 +16,9 @@ public class AdvertisementService {
 
     @Autowired
     private AdvertisementRepository advertisementRepository;
+
+    @Autowired
+    private GoodsAdvertisementRepository goodsAdvertisementRepository;
 
     @Autowired
     private SubcategoryService subcategoryService;
@@ -38,6 +37,10 @@ public class AdvertisementService {
 
     public Advertisement findById(Long id) {
         return advertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
+    }
+
+    public GoodsAdvertisement findGoodsAdvertisementById(Long id) {
+        return goodsAdvertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
     }
 
     //TODO

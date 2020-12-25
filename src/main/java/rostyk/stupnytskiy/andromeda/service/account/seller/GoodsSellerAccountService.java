@@ -1,12 +1,11 @@
-package rostyk.stupnytskiy.andromeda.service.seller;
+package rostyk.stupnytskiy.andromeda.service.account.seller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.SellerDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.GoodsSellerDataRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.repository.GoodsSellerRepository;
-import rostyk.stupnytskiy.andromeda.service.AccountService;
+import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 

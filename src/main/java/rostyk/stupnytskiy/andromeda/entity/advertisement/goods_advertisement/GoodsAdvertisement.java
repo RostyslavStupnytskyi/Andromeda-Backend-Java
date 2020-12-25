@@ -3,12 +3,12 @@ package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
-import rostyk.stupnytskiy.andromeda.entity.CartItem;
-import rostyk.stupnytskiy.andromeda.entity.Category;
+import rostyk.stupnytskiy.andromeda.entity.cart.CartItem;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
+import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 import rostyk.stupnytskiy.andromeda.entity.country.Currency;
 
 import javax.persistence.*;
@@ -25,6 +25,8 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     private Boolean onlySellerCountry;
 
+    private Integer count;
+
     @ManyToOne
     private Subcategory subcategory;
 
@@ -37,8 +39,8 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
     @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL)
     private List<Property> properties = new ArrayList<>();
 
-    @OneToMany(mappedBy = "advertisement")
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "goodsAdvertisement")
+    private List<GoodsCartItem> cartItems;
 
     @ManyToOne
     private Currency currency;

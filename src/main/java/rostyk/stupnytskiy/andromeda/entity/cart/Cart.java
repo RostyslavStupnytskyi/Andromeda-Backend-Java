@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.entity;
+package rostyk.stupnytskiy.andromeda.entity.cart;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;

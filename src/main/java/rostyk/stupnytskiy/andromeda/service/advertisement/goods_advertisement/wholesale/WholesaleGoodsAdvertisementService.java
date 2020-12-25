@@ -3,21 +3,15 @@ package rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.w
 import com.sun.nio.sctp.IllegalReceiveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesalePriceRequest;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
-import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
-import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
-import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailPriceService;
-import rostyk.stupnytskiy.andromeda.service.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 
 @Service
 public class WholesaleGoodsAdvertisementService {
@@ -58,6 +52,7 @@ public class WholesaleGoodsAdvertisementService {
         advertisement.setCurrency(currencyService.findById(request.getCurrencyId()));
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
+        advertisement.setCount(request.getCount());
         return advertisementRepository.save(advertisement);
     }
 
