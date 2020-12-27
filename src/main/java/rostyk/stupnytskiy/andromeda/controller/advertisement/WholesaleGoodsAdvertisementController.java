@@ -8,6 +8,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -18,12 +19,12 @@ public class WholesaleGoodsAdvertisementController {
     private WholesaleGoodsAdvertisementService wholesaleGoodsAdvertisementService;
 
     @PostMapping
-    public void save(@Valid @RequestBody WholesaleGoodsAdvertisementRequest request){
+    public void save(@Valid @RequestBody WholesaleGoodsAdvertisementRequest request) throws IOException {
         wholesaleGoodsAdvertisementService.createAdvertisement(request);
     }
 
     @PutMapping("/change-price")
-    private void changeAdvertisementPrice(@RequestBody WholesalePriceRequest request, Long id){
+    private void changeAdvertisementPrice(@RequestBody WholesalePriceRequest request, Long id) throws IllegalAccessException {
         wholesaleGoodsAdvertisementService.addNewWholesalePriceToWholesaleGoodsAdvertisement(request, id);
     }
 }

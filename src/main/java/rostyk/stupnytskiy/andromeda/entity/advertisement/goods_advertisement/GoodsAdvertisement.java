@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 import rostyk.stupnytskiy.andromeda.entity.country.Currency;
+import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,11 +28,14 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     private Integer count;
 
+    @OneToMany(mappedBy = "goodsAdvertisement")
+    private List<GoodsOrderItem> goodsOrderItem;
+
     @ManyToOne
     private Subcategory subcategory;
 
     @ElementCollection
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
     @ManyToOne
     private GoodsSellerAccount seller;

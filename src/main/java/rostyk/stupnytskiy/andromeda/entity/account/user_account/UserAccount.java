@@ -4,8 +4,10 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
+import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +24,9 @@ public class UserAccount extends Account {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<GoodsOrder> goodsOrders;
 
     public UserAccount() {
         super.setUserRole(UserRole.ROLE_USER);
