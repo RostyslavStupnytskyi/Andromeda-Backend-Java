@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.account.user_account;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
@@ -19,7 +20,6 @@ public class UserAccount extends Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(nullable = false)
     private String username;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -27,6 +27,10 @@ public class UserAccount extends Account {
 
     @OneToMany(mappedBy = "user")
     private List<GoodsOrder> goodsOrders;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<UserDeliveryAddress> addresses;
 
     public UserAccount() {
         super.setUserRole(UserRole.ROLE_USER);

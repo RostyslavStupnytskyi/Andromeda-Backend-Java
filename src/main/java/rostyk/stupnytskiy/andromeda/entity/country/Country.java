@@ -27,13 +27,15 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String countryCode; // один з парметрів збереження країн
 
+    @Column(unique = true)
     private Long apiId; // id з вибраного API
 
     private Region region; // для зручного пошуку країн по регіону
 
-    @Column(name = "english_name")
+    @Column(name = "english_name",unique = true)
     private String englishName; // назва країни англійською
 
     @ManyToMany(mappedBy = "countriesOfDelivery")

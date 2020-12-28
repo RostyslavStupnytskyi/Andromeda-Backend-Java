@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 
 @Repository
-public interface AddressRepository extends JpaRepository<UserDeliveryAddress, Long> {
+public interface UserDeliveryAddressRepository extends JpaRepository<UserDeliveryAddress, Long> {
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "cart_item_type")
 public class CartItem {
 

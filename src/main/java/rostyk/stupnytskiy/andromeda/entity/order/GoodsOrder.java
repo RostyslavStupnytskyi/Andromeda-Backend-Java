@@ -1,8 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.order;
 
 import lombok.*;
-import org.springframework.data.domain.Sort;
-import rostyk.stupnytskiy.andromeda.entity.Address;
+import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
@@ -27,8 +26,8 @@ public class GoodsOrder {
 
     private LocalDateTime creationDate;
 
-    @OneToOne
-    private Address address;
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserDeliveryAddress address;
 
     @ManyToOne
     private UserAccount user;
@@ -40,6 +39,6 @@ public class GoodsOrder {
     private DeliveryType deliveryType;
 
     @OneToMany(mappedBy = "goodsOrder")
-    private List<rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem> orderItems;
+    private List<GoodsOrderItem> orderItems;
 
 }
