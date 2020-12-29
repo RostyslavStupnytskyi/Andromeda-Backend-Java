@@ -26,6 +26,8 @@ public class GoodsOrder {
 
     private LocalDateTime creationDate;
 
+    private GoodsOrderStatus orderStatus;
+
     @OneToOne(cascade = CascadeType.ALL)
     private UserDeliveryAddress address;
 
