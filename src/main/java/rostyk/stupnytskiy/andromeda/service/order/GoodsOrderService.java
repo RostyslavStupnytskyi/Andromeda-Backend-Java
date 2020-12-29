@@ -43,6 +43,7 @@ public class GoodsOrderService {
     public void createGoodsOrder(GoodsOrderRequest request) {
         GoodsOrder goodsOrder = goodsOrderRequestToGoodsOrder(request);
         request.getItems().forEach((i) -> goodsOrderItemService.save(i, goodsOrder));
+        //testing
     }
 
     private GoodsOrder goodsOrderRequestToGoodsOrder(GoodsOrderRequest request) {
