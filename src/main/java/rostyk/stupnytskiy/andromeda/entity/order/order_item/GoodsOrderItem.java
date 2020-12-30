@@ -21,6 +21,7 @@ public class GoodsOrderItem {
 
     private Integer count;
 
+    private GoodsOrderItemStatus status;
 
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;

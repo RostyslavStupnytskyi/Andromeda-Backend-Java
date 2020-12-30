@@ -40,7 +40,7 @@ public class GoodsCartItemService {
 
     public void updateCartItemCount(Long id,Cart cart, Integer count){
         GoodsCartItem goodsCartItem = findByIdAndCart(id, cart);
-        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count && count <= 999) {
+        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
             goodsCartItem.setCount(count);
             save(goodsCartItem);
         }
