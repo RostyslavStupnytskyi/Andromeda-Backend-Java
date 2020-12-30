@@ -5,6 +5,7 @@ import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 
@@ -44,6 +45,9 @@ public class GoodsOrder {
 
     @OneToOne
     private GoodsOrderDeliveryDetails deliveryDetails;
+
+    @OneToOne(mappedBy = "goodsOrder")
+    private GoodsSellerFeedback goodsSellerFeedback;
 
 
     public boolean didAllGoodsOrderItemsDelivered() {

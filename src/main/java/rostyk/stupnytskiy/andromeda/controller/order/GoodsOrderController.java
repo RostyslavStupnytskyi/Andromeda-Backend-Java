@@ -24,11 +24,11 @@ public class GoodsOrderController {
     }
 
     @PutMapping("/shipment")
-    private void updateGoodsOrderToShipment(@Valid @RequestBody GoodsOrderDeliveryDetailsForShipmentRequest request){
-        goodsOrderService.updateGoodsOrderToDelivery(request);
+    private void confirmGoodsOrderSending(@Valid @RequestBody GoodsOrderDeliveryDetailsForShipmentRequest request){
+        goodsOrderService.confirmGoodsOrderSending(request);
     }
 
-    @PutMapping()
+    @PutMapping("/confirm")
     private void confirmGoodsOrderDelivery(@Valid @RequestBody ConfirmGoodsOrderDeliveryRequest request){
         goodsOrderService.confirmGoodsOrderDelivery(request);
     }

@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.entity;
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.*;
 
@@ -21,6 +22,9 @@ public class UserDeliveryAddress {
 
     @ManyToOne
     private UserAccount user;
+
+    @ManyToOne
+    private Country country;
 
     private String recipient;
 

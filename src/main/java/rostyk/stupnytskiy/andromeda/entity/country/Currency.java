@@ -25,7 +25,4 @@ public class Currency {
     private String code;
 
     private String symbol;
-
-    @OneToMany(mappedBy = "currency")
-    private List<GoodsAdvertisement> advertisements;
 }

@@ -24,6 +24,7 @@ public class GoodsOrderDeliveryDetailsService {
         goodsOrderDeliveryDetails.setRegion(address.getRegion());
         goodsOrderDeliveryDetails.setPhoneNumber(address.getPhoneNumber());
         goodsOrderDeliveryDetails.setStreet(address.getStreet());
+        goodsOrderDeliveryDetails.setCountry(address.getCountry());
         return save(goodsOrderDeliveryDetails);
     }
 

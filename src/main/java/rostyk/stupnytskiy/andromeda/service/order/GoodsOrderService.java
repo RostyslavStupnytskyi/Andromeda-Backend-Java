@@ -6,11 +6,9 @@ import rostyk.stupnytskiy.andromeda.dto.request.order.ConfirmGoodsOrderDeliveryR
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderDeliveryDetailsForShipmentRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderItemRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderRequest;
-import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
 import rostyk.stupnytskiy.andromeda.repository.GoodsOrderRepository;
@@ -21,9 +19,8 @@ import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountSer
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import static rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus.WARRANTY_PERIOD;
+import static rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus.WAITING_FOR_FEEDBACK;
 
 @Service
 public class GoodsOrderService {
@@ -69,10 +66,10 @@ public class GoodsOrderService {
         return goodsOrderRepository.save(goodsOrder);
     }
 
-    public void updateGoodsOrderToDelivery(GoodsOrderDeliveryDetailsForShipmentRequest request){
+    public void confirmGoodsOrderSending(GoodsOrderDeliveryDetailsForShipmentRequest request){
         GoodsOrder goodsOrder = findOneByIdAndSeller(request.getOrderId(), goodsSellerAccountService.findBySecurityContextHolder());
         goodsOrder.setOrderStatus(GoodsOrderStatus.WAITING_FOR_DELIVERY);
-        goodsOrder.getOrderItems().forEach((i) -> goodsOrderItemService.updateGoodsOrderItemStatusToDelivery(i));
+        goodsOrder.getOrderItems().forEach((i) -> goodsOrderItemService.confirmGoodsOrderItemSending(i));
         goodsOrderDeliveryDetailsService.updateGoodsOrderDeliveryDetailsToShipment(request, goodsOrder.getDeliveryDetails());
         goodsOrderRepository.save(goodsOrder);
     }
@@ -94,7 +91,7 @@ public class GoodsOrderService {
         return goodsOrderRepository.findOneByIdAndSeller(id, seller).orElseThrow(IllegalArgumentException::new);
     }
 
-    private GoodsOrder findOneByIdAndUser(Long id, UserAccount user){
+    public GoodsOrder findOneByIdAndUser(Long id, UserAccount user){
         return goodsOrderRepository.findOneByIdAndUser(id, user).orElseThrow(IllegalArgumentException::new);
     }
 
@@ -104,7 +101,7 @@ public class GoodsOrderService {
                 (i) -> goodsOrderItemService.confirmGoodsOrderItemDelivery(goodsOrderItemService.findById(i))
         );
         if (goodsOrder.didAllGoodsOrderItemsDelivered()) {
-            goodsOrder.setOrderStatus(WARRANTY_PERIOD);
+            goodsOrder.setOrderStatus(WAITING_FOR_FEEDBACK);
             goodsOrderRepository.save(goodsOrder);
         }
 

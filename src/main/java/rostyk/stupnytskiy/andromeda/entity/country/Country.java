@@ -41,12 +41,6 @@ public class Country {
     @ManyToMany(mappedBy = "countriesOfDelivery")
     private Set<GoodsSellerAccount> goodsSellers;
 
-    @OneToMany(mappedBy = "country")
-    private List<DeliveryType> deliveryTypes;
-
-    @OneToMany(mappedBy = "country")
-    private List<Account> accounts;
-
 }
 
 

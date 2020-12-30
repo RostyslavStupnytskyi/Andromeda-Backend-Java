@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
+import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,4 +23,6 @@ public class UserDeliveryAddressRequest {
     private String city;
 
     private String street;
+
+    private String countryCode;
 }

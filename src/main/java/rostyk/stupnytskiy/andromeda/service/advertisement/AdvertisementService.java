@@ -43,26 +43,4 @@ public class AdvertisementService {
         return goodsAdvertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
     }
 
-    //TODO
-//    private void saveAdvertisementImages(AdvertisementCreationRequest request, Long id) throws IOException {
-//        Advertisement advertisement = findById(id);
-//        Account account = accountService.findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        if (request.getMainImage() != null) {
-//            advertisement.setMainImage(fileTool.savePublicationImage(request.getMainImage(), account.getLogin(), id));
-//        }
-//        List<String> images = new ArrayList<>();
-//        for (String image : request.getImages()) {
-//            images.add(fileTool.savePublicationImage(image, account.getLogin(), id));
-//        }
-//        advertisement.setImages(images);
-//        advertisementRepository.save(advertisement);
-//    }
-
-//    public void changeAdvertisementPrice(AdvertisementChangePriceRequest request, Long id) {
-//        Advertisement advertisement = findById(id);
-
-//        if (advertisement.getIsRetail()) retailPriceService.save(request.getRetailPriceRequest(), advertisement);
-//        else wholesalePriceService.save(request.getWholesalePriceRequest(), advertisement); TODO
-//    }
-
 }

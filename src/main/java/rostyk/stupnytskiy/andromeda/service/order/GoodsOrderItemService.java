@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.service.order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderItemRequest;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
@@ -22,7 +23,7 @@ public class GoodsOrderItemService {
         goodsOrderItemRepository.save(goodsOrderItemRequestToGoodsOrderItem(request, goodsOrder));
     }
 
-    public void updateGoodsOrderItemStatusToDelivery(GoodsOrderItem orderItem){
+    public void confirmGoodsOrderItemSending(GoodsOrderItem orderItem){
         orderItem.setStatus(GoodsOrderItemStatus.WAITING_FOR_DELIVERY);
         goodsOrderItemRepository.save(orderItem);
     }
@@ -44,6 +45,10 @@ public class GoodsOrderItemService {
 
     public GoodsOrderItem findById(Long id){
         return goodsOrderItemRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public GoodsOrderItem findByIdAndUser(Long id, UserAccount user){
+        return goodsOrderItemRepository.findByIdAndGoodsOrderUser(id, user).orElseThrow(IllegalArgumentException::new);
     }
 
 }

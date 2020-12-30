@@ -16,6 +16,9 @@ public class UserDeliveryAddressService {
     @Autowired
     private UserAccountService userAccountService;
 
+    @Autowired
+    private CountryService countryService;
+
     public UserDeliveryAddress findById(Long id) {
         return addressRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
@@ -36,6 +39,7 @@ public class UserDeliveryAddressService {
         address.setPhoneNumber(request.getPhoneNumber());
         address.setRecipient(request.getRecipient());
         address.setStreet(request.getStreet());
+        address.setCountry(countryService.findCountryByCountryCode(request.getCountryCode()));
         return address;
     }
 }
