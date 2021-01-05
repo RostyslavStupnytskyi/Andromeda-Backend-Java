@@ -22,6 +22,7 @@ public class Advertisement implements AdvertisementEntity{
 
     private String title;
 
+    @Lob
     private String description;
 
     private String mainImage;

@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.delivery.DeliveryTypeRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
+import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.repository.DeliveryTypeRepository;
+import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +23,9 @@ public class DeliveryTypeService {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private AccountService accountService;
 
 
     public void save(DeliveryTypeRequest request){
@@ -61,5 +67,10 @@ public class DeliveryTypeService {
                 .stream()
                 .map(DeliveryTypeResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<DeliveryTypeResponse> getALlByAccountCountry() {
+        Country country = accountService.getAccountBySecurityContextHolder().getCountry();
+        return getAllByCountryCode(country.getCountryCode());
     }
 }

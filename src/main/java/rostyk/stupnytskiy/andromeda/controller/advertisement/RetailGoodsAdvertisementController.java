@@ -19,6 +19,7 @@ public class RetailGoodsAdvertisementController {
 
     @PostMapping
     private void createRetail(@Valid @RequestBody RetailGoodsAdvertisementRequest request) throws IOException {
+        request.getImages().forEach((i) -> System.out.println("image"));
         retailGoodsAdvertisementService.createAdvertisement(request);
     }
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.AccountStatisticsService;
@@ -49,6 +50,11 @@ public class AccountController {
 
     @GetMapping("/checkToken")
     public void checkToken() {
+    }
+
+    @GetMapping("/getProfile")
+    private <T extends AccountResponse>AccountResponse getAccountResponse(Long id){
+        return accountService.getAccountResponse(id);
     }
 }
 

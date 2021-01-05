@@ -59,9 +59,14 @@ public class WholesalePriceService {
 
         List<WholesalePriceUnitRequest> priceUnits = request.getPriceUnits();
 
-        priceUnits.forEach(p -> {
-            if (p.getMax() <= p.getMin()) throw new IllegalArgumentException("WholesalePrice has unexpected values");
-        });
+        ListIterator<WholesalePriceUnitRequest> iterator = priceUnits.listIterator();
+
+        while (iterator.hasNext()) {
+            WholesalePriceUnitRequest p = iterator.next();
+            if (iterator.hasNext())
+                if (p.getMax() <= p.getMin())
+                    throw new IllegalArgumentException("WholesalePrice has unexpected values");
+        }
 
         for (int i = 1; i < priceUnits.size(); i++) {
             WholesalePriceUnitRequest previousPrice = priceUnits.get(i - 1);

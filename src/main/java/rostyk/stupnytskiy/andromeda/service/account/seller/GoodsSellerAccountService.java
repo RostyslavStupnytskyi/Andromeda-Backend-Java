@@ -25,20 +25,21 @@ public class GoodsSellerAccountService {
     private DeliveryTypeService deliveryTypeService;
 
     // save the main goods seller data
-    public void updateGoodsSellerData(GoodsSellerDataRequest request){
+    public void updateGoodsSellerData(GoodsSellerDataRequest request) {
         GoodsSellerAccount goodsSellerAccount = findBySecurityContextHolder();
-        if (request.getOnlySellerCountryDelivery() != null) goodsSellerAccount.setOnlySellerCountryDelivery(request.getOnlySellerCountryDelivery());
-        if (request.getCountryCodes() != null) goodsSellerAccount.setCountriesOfDelivery(countryService.getCountriesSetByCodes(request.getCountryCodes()));
-        if (request.getDeliveryTypesId() != null) goodsSellerAccount.setDeliveryTypes(deliveryTypeService.getDeliverySetByIds(request.getDeliveryTypesId()));
+        goodsSellerAccount.setOnlySellerCountryDelivery(request.getOnlySellerCountryDelivery());
+
+        if (request.getDeliveryTypesId() != null)
+            goodsSellerAccount.setDeliveryTypes(deliveryTypeService.getDeliverySetByIds(request.getDeliveryTypesId()));
         goodsSellerRepository.save(goodsSellerAccount);
     }
 
 
-    public GoodsSellerAccount findBySecurityContextHolder(){
+    public GoodsSellerAccount findBySecurityContextHolder() {
         return findById(accountService.getIdBySecurityContextHolder());
     }
 
-    public GoodsSellerAccount findById(Long id){
+    public GoodsSellerAccount findById(Long id) {
         return goodsSellerRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }
 }

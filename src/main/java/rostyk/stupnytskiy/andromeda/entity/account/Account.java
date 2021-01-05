@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.account;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.*;
@@ -38,5 +39,9 @@ public class Account {
 
     @ManyToOne
     private Country country;
+
+    public AccountResponse mapToResponse(){
+        return new AccountResponse(this);
+    }
 }
 

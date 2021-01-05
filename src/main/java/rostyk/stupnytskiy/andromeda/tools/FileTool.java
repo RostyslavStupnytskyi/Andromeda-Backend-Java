@@ -12,8 +12,10 @@ import java.util.UUID;
 @Component
 public class FileTool {
 
+//    public static final String PROJECT_DIR =
+//            System.getProperty("user.home")+ File.separator + "andromeda" + File.separator;
     public static final String PROJECT_DIR =
-            System.getProperty("user.home")+ File.separator + "andromeda" + File.separator;
+            "D:\\andromeda" + File.separator + "andromeda" + File.separator;
 
     public static final String CATEGORY_DIR =
             PROJECT_DIR + "category" + File.separator;

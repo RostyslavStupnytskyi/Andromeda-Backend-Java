@@ -38,9 +38,6 @@ public class Country {
     @Column(name = "english_name",unique = true)
     private String englishName; // назва країни англійською
 
-    @ManyToMany(mappedBy = "countriesOfDelivery")
-    private Set<GoodsSellerAccount> goodsSellers;
-
 }
 
 

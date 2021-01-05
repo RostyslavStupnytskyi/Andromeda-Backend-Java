@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
@@ -107,7 +108,9 @@ public class AccountService implements UserDetailsService {
         String name = "ВИПРАВИТИ";
         Long id = account.getId();
 
-        return new AuthenticationResponse(name, token, id,account.getUserRole());
+
+
+        return new AuthenticationResponse(token, id,account.getUserRole());
     }
 
 
@@ -137,4 +140,11 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(userAccount);
     }
 
+    public <T extends AccountResponse>AccountResponse getAccountResponse(Long id) {
+        if (id == null) {
+            return getAccountBySecurityContextHolder().mapToResponse();
+        } else {
+            return findById(id).mapToResponse();
+        }
+    }
 }

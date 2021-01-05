@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.ret
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
+import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
@@ -43,11 +44,15 @@ public class RetailGoodsAdvertisementService {
     private PropertyService propertyService;
 
     @Autowired
+    private DeliveryTypeService deliveryTypeService;
+
+    @Autowired
     private FileTool fileTool;
 
     public void createAdvertisement(RetailGoodsAdvertisementRequest request) throws IOException {
 
         RetailGoodsAdvertisement advertisement = saveRetailGoodsAdvertisementRequest(request);
+        if (request.getProperties() != null)
         request.getProperties().forEach(p -> propertyService.save(p, advertisement));
         retailPriceService.save(request.getPrice(), advertisement);
     }
@@ -64,6 +69,11 @@ public class RetailGoodsAdvertisementService {
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
         advertisement.setCount(request.getCount());
 
+        if (request.getDeliveryTypes() != null)
+        request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
+
+        advertisement.getDeliveryTypes().forEach((d) -> System.out.println(d.getTitle()));
+
         if (request.getMainImage() != null)
             advertisement.setMainImage(fileTool.saveAdvertisementImage (
                     request.getMainImage(),seller.getLogin())
@@ -71,7 +81,7 @@ public class RetailGoodsAdvertisementService {
         if (request.getImages() != null){
             request.getImages().forEach(img -> {
                 try {
-                    request.getImages().add(fileTool.saveAdvertisementImage(img, seller.getLogin()));
+                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getLogin()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

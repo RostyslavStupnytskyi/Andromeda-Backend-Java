@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.who
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
+import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.PropertyService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
@@ -41,11 +42,15 @@ public class WholesaleGoodsAdvertisementService {
     private PropertyService propertyService;
 
     @Autowired
+    private DeliveryTypeService deliveryTypeService;
+
+    @Autowired
     private FileTool fileTool;
 
     public void createAdvertisement(WholesaleGoodsAdvertisementRequest request) throws IOException {
         wholesalePriceService.validWholesaleUnit(request.getPrice());
         WholesaleGoodsAdvertisement advertisement = saveWholesaleGoodsAdvertisementRequest(request);
+        if (request.getProperties() != null)
         request.getProperties().forEach(p -> propertyService.save(p, advertisement));
         wholesalePriceService.save(request.getPrice(),advertisement);
 //        retailPriceService.save(request.getPrice(), advertisement);
@@ -54,6 +59,9 @@ public class WholesaleGoodsAdvertisementService {
     public WholesaleGoodsAdvertisement saveWholesaleGoodsAdvertisementRequest(WholesaleGoodsAdvertisementRequest request) throws IOException {
         WholesaleGoodsAdvertisement advertisement = new WholesaleGoodsAdvertisement();
         GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
+
+        if (request.getDeliveryTypes() != null)
+        request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
 
         advertisement.setTitle(request.getTitle());
         advertisement.setDescription(request.getDescription());
@@ -67,6 +75,7 @@ public class WholesaleGoodsAdvertisementService {
             advertisement.setMainImage(fileTool.saveAdvertisementImage(
                     request.getMainImage(),seller.getLogin())
             );
+
         if (request.getImages() != null){
             request.getImages().forEach(img -> {
                 try {

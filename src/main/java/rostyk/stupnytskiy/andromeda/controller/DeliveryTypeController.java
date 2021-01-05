@@ -17,24 +17,29 @@ public class DeliveryTypeController {
     private DeliveryTypeService deliveryTypeService;
 
     @PostMapping
-    private void save(@RequestBody DeliveryTypeRequest request){
+    private void save(@RequestBody DeliveryTypeRequest request) {
         deliveryTypeService.save(request);
     }
 
     @PutMapping
-    private void update(@RequestBody DeliveryTypeRequest request, Long id){
+    private void update(@RequestBody DeliveryTypeRequest request, Long id) {
         deliveryTypeService.update(request, id);
     }
 
     @GetMapping("/all")
-    private List<DeliveryTypeResponse> getAll(){
-         return deliveryTypeService.getAll();
+    private List<DeliveryTypeResponse> getAll() {
+        return deliveryTypeService.getAll();
     }
 
     @GetMapping("/{code}")
     private List<DeliveryTypeResponse> getByCountry(
             @PathVariable String code
-            ){
+    ) {
         return deliveryTypeService.getAllByCountryCode(code);
+    }
+
+    @GetMapping("/account")
+    private List<DeliveryTypeResponse> getAllByAccountCountry() {
+        return deliveryTypeService.getALlByAccountCountry();
     }
 }

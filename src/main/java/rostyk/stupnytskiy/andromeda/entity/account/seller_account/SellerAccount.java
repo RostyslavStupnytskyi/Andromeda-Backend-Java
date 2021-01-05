@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.account.seller_account;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.dto.response.account.seller.SellerResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
@@ -23,5 +24,10 @@ public class SellerAccount extends Account {
 
     public SellerAccount() {
         super.setUserRole(UserRole.ROLE_SELLER);
+    }
+
+
+    public SellerResponse mapToResponse() {
+        return new SellerResponse(this);
     }
 }

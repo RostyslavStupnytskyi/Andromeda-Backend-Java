@@ -28,6 +28,8 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private Integer count;
 
+    private String seller;
+
 
     public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
         super(advertisement);
@@ -37,5 +39,6 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.currency = new CurrencyResponse(advertisement.getCurrency());
         this.count = advertisement.getCount();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
+        this.seller = advertisement.getSeller().getShopName();
     }
 }

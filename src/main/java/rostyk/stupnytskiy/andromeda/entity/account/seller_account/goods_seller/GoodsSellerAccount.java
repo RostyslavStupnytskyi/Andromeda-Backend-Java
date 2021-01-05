@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
@@ -19,17 +20,10 @@ import java.util.Set;
 @Entity
 public class GoodsSellerAccount extends SellerAccount {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Boolean onlySellerCountryDelivery;
+    private Boolean onlySellerCountryDelivery = false;
 
     @OneToMany(mappedBy = "seller")
     private List<GoodsAdvertisement> advertisements;
-
-    @ManyToMany
-    private Set<Country> countriesOfDelivery;
 
     @ManyToMany
     private Set<DeliveryType> deliveryTypes;
@@ -37,4 +31,8 @@ public class GoodsSellerAccount extends SellerAccount {
 
     @OneToMany(mappedBy = "seller")
     private List<GoodsOrder> goodsOrders;
+
+    public GoodsSellerResponse mapToResponse(){
+        return new GoodsSellerResponse(this);
+    }
 }

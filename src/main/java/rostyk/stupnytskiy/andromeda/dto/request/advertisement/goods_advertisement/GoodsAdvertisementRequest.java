@@ -20,4 +20,6 @@ public class GoodsAdvertisementRequest extends AdvertisementRequest {
 
     private List<PropertyRequest> properties;
 
+    private List<Long> deliveryTypes;
+
 }
