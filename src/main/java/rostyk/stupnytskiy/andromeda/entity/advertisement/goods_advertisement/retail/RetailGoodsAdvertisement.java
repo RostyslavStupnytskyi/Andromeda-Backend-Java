@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
@@ -33,6 +36,10 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
         return new RetailGoodsAdvertisementResponse(this);
     }
 
+    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse(){
+        return new RetailGoodsAdvertisementForSearchResponse(this);
+    }
+
     @Override
     public String toString() {
         return "RetailGoodsAdvertisement{"
@@ -43,5 +50,9 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
     public RetailPrice getCurrentPrice(){
         retailPrices.sort(Comparator.comparing(RetailPrice::getDateTime));
         return retailPrices.get(retailPrices.size() - 1);
+    }
+
+    public RetailGoodsAdvertisement(GoodsAdvertisement advertisement) {
+        super(advertisement);
     }
 }

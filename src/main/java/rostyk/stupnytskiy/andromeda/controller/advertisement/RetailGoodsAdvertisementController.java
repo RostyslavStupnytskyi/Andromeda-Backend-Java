@@ -17,12 +17,6 @@ public class RetailGoodsAdvertisementController {
     @Autowired
     private RetailGoodsAdvertisementService retailGoodsAdvertisementService;
 
-    @PostMapping
-    private void createRetail(@Valid @RequestBody RetailGoodsAdvertisementRequest request) throws IOException {
-        request.getImages().forEach((i) -> System.out.println("image"));
-        retailGoodsAdvertisementService.createAdvertisement(request);
-    }
-
     @PutMapping("/change-price")
     private void changeAdvertisementPrice(@RequestBody RetailPriceRequest request, Long id) throws IllegalAccessException {
         retailGoodsAdvertisementService.addNewWRetailPriceToRetailGoodsAdvertisement(request, id);

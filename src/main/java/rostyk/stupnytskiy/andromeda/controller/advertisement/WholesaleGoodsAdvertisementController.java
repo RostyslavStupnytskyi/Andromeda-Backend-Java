@@ -18,11 +18,6 @@ public class WholesaleGoodsAdvertisementController {
     @Autowired
     private WholesaleGoodsAdvertisementService wholesaleGoodsAdvertisementService;
 
-    @PostMapping
-    public void save(@Valid @RequestBody WholesaleGoodsAdvertisementRequest request) throws IOException {
-        wholesaleGoodsAdvertisementService.createAdvertisement(request);
-    }
-
     @PutMapping("/change-price")
     private void changeAdvertisementPrice(@RequestBody WholesalePriceRequest request, Long id) throws IllegalAccessException {
         wholesaleGoodsAdvertisementService.addNewWholesalePriceToWholesaleGoodsAdvertisement(request, id);

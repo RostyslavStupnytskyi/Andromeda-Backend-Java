@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
@@ -32,6 +34,10 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
         return new WholesaleGoodsAdvertisementResponse(this);
     }
 
+    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse(){
+        return new WholesaleGoodsAdvertisementForSearchResponse(this);
+    }
+
     @Override
     public String toString() {
         return "WholesaleGoodsAdvertisement{" +
@@ -40,6 +46,9 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
                 '}';
     }
 
+    public WholesaleGoodsAdvertisement(GoodsAdvertisement advertisement) {
+        super(advertisement);
+    }
 
     public WholesalePrice getCurrentPrice(){
         wholesalePrices.sort(Comparator.comparing(WholesalePrice::getDateTime));

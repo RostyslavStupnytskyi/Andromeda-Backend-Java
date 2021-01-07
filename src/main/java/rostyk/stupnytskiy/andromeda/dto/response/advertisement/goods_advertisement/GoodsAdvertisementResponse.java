@@ -1,5 +1,6 @@
 package rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
@@ -30,6 +31,10 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private String seller;
 
+    private Long sellerId;
+
+
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
 
     public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
         super(advertisement);
@@ -40,5 +45,6 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.count = advertisement.getCount();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
         this.seller = advertisement.getSeller().getShopName();
+        this.sellerId = advertisement.getSeller().getId();
     }
 }

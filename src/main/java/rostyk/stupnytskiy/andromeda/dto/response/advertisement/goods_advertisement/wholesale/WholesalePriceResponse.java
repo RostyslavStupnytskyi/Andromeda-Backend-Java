@@ -1,5 +1,6 @@
 package rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
@@ -14,13 +15,14 @@ public class WholesalePriceResponse {
 
     private Long id;
 
-    private LocalDateTime dateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDateTime date;
 
     private List<WholesalePriceUnitResponse> priceUnits;
 
     public WholesalePriceResponse(WholesalePrice wholesalePrice) {
         this.id = wholesalePrice.getId();
-        this.dateTime = wholesalePrice.getDateTime();
+        this.date = wholesalePrice.getDateTime();
         this.priceUnits = wholesalePrice.getPriceUnits()
                 .stream()
                 .map(WholesalePriceUnitResponse::new)

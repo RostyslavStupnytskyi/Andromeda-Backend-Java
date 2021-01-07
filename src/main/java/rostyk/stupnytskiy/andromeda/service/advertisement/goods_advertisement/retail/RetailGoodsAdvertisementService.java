@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailPriceRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
@@ -18,6 +19,7 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.time.LocalDateTime;
 
 @Service
 public class RetailGoodsAdvertisementService {
@@ -49,45 +51,11 @@ public class RetailGoodsAdvertisementService {
     @Autowired
     private FileTool fileTool;
 
-    public void createAdvertisement(RetailGoodsAdvertisementRequest request) throws IOException {
-
-        RetailGoodsAdvertisement advertisement = saveRetailGoodsAdvertisementRequest(request);
+    public void finishAdvertisementCreation(RetailGoodsAdvertisement advertisement, RetailGoodsAdvertisementRequest request) {
         if (request.getProperties() != null)
-        request.getProperties().forEach(p -> propertyService.save(p, advertisement));
+            request.getProperties().forEach(p -> propertyService.save(p, advertisement));
+
         retailPriceService.save(request.getPrice(), advertisement);
-    }
-
-    public RetailGoodsAdvertisement saveRetailGoodsAdvertisementRequest(RetailGoodsAdvertisementRequest request) throws IOException {
-        RetailGoodsAdvertisement advertisement = new RetailGoodsAdvertisement();
-        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
-
-        advertisement.setTitle(request.getTitle());
-        advertisement.setDescription(request.getDescription());
-        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
-        advertisement.setCurrency(currencyService.findById(request.getCurrencyId()));
-        advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
-        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
-        advertisement.setCount(request.getCount());
-
-        if (request.getDeliveryTypes() != null)
-        request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
-
-        advertisement.getDeliveryTypes().forEach((d) -> System.out.println(d.getTitle()));
-
-        if (request.getMainImage() != null)
-            advertisement.setMainImage(fileTool.saveAdvertisementImage (
-                    request.getMainImage(),seller.getLogin())
-            );
-        if (request.getImages() != null){
-            request.getImages().forEach(img -> {
-                try {
-                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getLogin()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        return advertisementRepository.save(advertisement);
     }
 
     public void addNewWRetailPriceToRetailGoodsAdvertisement(RetailPriceRequest request, Long id) throws IllegalAccessException {

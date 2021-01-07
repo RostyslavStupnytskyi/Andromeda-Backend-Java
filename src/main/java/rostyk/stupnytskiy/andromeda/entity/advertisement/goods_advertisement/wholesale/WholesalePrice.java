@@ -27,4 +27,10 @@ public class WholesalePrice {
     @ManyToOne
     private WholesaleGoodsAdvertisement advertisement;
 
+    public String getStringPriceSides() {
+        return (priceUnits.stream().mapToDouble(WholesalePriceUnit::getPrice).min().getAsDouble()
+                + " - "
+                + priceUnits.stream().mapToDouble(WholesalePriceUnit::getPrice).max().getAsDouble());
+    }
+
 }

@@ -29,7 +29,7 @@ public class DeliveryType {
     @ManyToOne
     private Country country;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "deliveryTypes")
     private List<GoodsAdvertisement> goodsAdvertisements;
 
     @ManyToMany(mappedBy = "deliveryTypes")
