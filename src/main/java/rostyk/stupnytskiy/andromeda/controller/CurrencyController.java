@@ -26,4 +26,9 @@ public class CurrencyController {
         return currencyService.geAll();
     }
 
+    @GetMapping
+    private void test(){
+        currencyService.reloadCurrencyValues();
+    }
+
 }

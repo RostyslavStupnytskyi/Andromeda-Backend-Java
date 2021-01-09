@@ -17,18 +17,18 @@ public class RetailPriceService {
     @Autowired
     private RetailPriceRepository retailPriceRepository;
 
-    public void save(RetailPriceRequest request, RetailGoodsAdvertisement advertisement){
-        retailPriceRepository.save(retailPriceRequestToRetailPrice(request, advertisement));
+    public RetailPrice save(RetailPriceRequest request, RetailGoodsAdvertisement advertisement) {
+        return retailPriceRepository.save(retailPriceRequestToRetailPrice(request, advertisement));
     }
 
-    public RetailPrice retailPriceRequestToRetailPrice(RetailPriceRequest request){
+    public RetailPrice retailPriceRequestToRetailPrice(RetailPriceRequest request) {
         RetailPrice retailPrice = new RetailPrice();
         retailPrice.setDateTime(LocalDateTime.now());
         retailPrice.setPrice(request.getPrice());
         return retailPrice;
     }
 
-    public RetailPrice retailPriceRequestToRetailPrice(RetailPriceRequest request, RetailGoodsAdvertisement advertisement){
+    public RetailPrice retailPriceRequestToRetailPrice(RetailPriceRequest request, RetailGoodsAdvertisement advertisement) {
         RetailPrice retailPrice = new RetailPrice();
         retailPrice.setAdvertisement(advertisement);
         retailPrice.setDateTime(LocalDateTime.now());

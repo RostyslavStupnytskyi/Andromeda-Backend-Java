@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.G
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
@@ -52,10 +53,10 @@ public class WholesaleGoodsAdvertisementService {
     private FileTool fileTool;
 
 
-    public void finishAdvertisementCreation(WholesaleGoodsAdvertisement advertisement, WholesaleGoodsAdvertisementRequest request) {
+    public WholesalePrice finishAdvertisementCreation(WholesaleGoodsAdvertisement advertisement, WholesaleGoodsAdvertisementRequest request) {
         if (request.getProperties() != null)
             request.getProperties().forEach(p -> propertyService.save(p, advertisement));
-        wholesalePriceService.save(request.getPrice(),advertisement);
+        return wholesalePriceService.save(request.getPrice(),advertisement);
     }
 
     public void addNewWholesalePriceToWholesaleGoodsAdvertisement(WholesalePriceRequest request, Long id) throws IllegalAccessException {

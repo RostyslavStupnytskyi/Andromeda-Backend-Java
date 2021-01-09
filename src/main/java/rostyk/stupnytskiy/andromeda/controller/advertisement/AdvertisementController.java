@@ -44,6 +44,11 @@ public class AdvertisementController {
         return advertisementService.findPageBySearchRequest(request); //(request);
     }
 
+    @PutMapping
+    public void test(){
+        goodsAdvertisementService.exchangePriceForAll();
+    }
+
 
 //    @PutMapping
 //    private void addStatistics() {

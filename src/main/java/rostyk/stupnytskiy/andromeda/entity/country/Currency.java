@@ -25,4 +25,6 @@ public class Currency {
     private String code;
 
     private String symbol;
+
+    private Double priceInHryvnia;
 }

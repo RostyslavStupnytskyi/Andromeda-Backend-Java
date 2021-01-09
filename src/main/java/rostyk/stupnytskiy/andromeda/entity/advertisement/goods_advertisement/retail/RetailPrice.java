@@ -23,8 +23,4 @@ public class RetailPrice {
 
     @ManyToOne
     private RetailGoodsAdvertisement advertisement;
-
-    public String getStringPrice(){
-        return price.toString();
-    }
 }

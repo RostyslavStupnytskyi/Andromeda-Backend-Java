@@ -26,11 +26,12 @@ public class WholesalePriceService {
     private WholesalePriceUnitRepository wholesalePriceUnitRepository;
 
 
-    public void save(WholesalePriceRequest request, WholesaleGoodsAdvertisement advertisement) {
+    public WholesalePrice save(WholesalePriceRequest request, WholesaleGoodsAdvertisement advertisement) {
         WholesalePrice wholesalePrice = wholesalePriceRepository.save(wholesalePriceRequestToWholesalePrice(advertisement));
         request.getPriceUnits().forEach(
                 (priceUnit) -> wholesalePriceUnitRepository.save(wholesalePriceUnitRequestToWholesalePriceUnit(priceUnit, wholesalePrice))
         );
+        return wholesalePrice;
     }
 
     public WholesalePrice wholesalePriceRequestToWholesalePrice(WholesaleGoodsAdvertisement advertisement) {

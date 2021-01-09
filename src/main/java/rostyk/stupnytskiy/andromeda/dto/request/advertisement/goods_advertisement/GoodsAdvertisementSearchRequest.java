@@ -13,6 +13,8 @@ public class GoodsAdvertisementSearchRequest {
     private String fromCountryCode;
     private Boolean image;
     private Boolean rating;
+    @JsonProperty("currency")
+    private String currencyCode;
 
     @JsonProperty("pagination")
     private PaginationRequest paginationRequest;

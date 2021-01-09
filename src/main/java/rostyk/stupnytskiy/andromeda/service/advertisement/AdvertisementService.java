@@ -19,8 +19,10 @@ import rostyk.stupnytskiy.andromeda.specification.GoodsAdvertisementSpecificatio
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AdvertisementService {
@@ -39,9 +41,6 @@ public class AdvertisementService {
 
     @Autowired
     private GoodsSellerAccountService goodsSellerAccountService;
-
-//    @Autowired
-//    private AdvertisementStatisticsService advertisementStatisticsService;
 
     @Autowired
     private FileTool fileTool;
@@ -63,15 +62,19 @@ public class AdvertisementService {
                 .collect(Collectors.toList());
     }
 
-    public PageResponse<GoodsAdvertisementForSearchResponse> findPageBySearchRequest(GoodsAdvertisementSearchRequest request ) {
+    public PageResponse<GoodsAdvertisementForSearchResponse> findPageBySearchRequest(GoodsAdvertisementSearchRequest request) {
+        final Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findAll(
+                new GoodsAdvertisementSpecification(request),
+                request.getPaginationRequest().mapToPageable()
+        );
 
-        final Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findAll(new GoodsAdvertisementSpecification(request), request.getPaginationRequest().mapToPageable());
         return new PageResponse<>(page.get()
                 .map(GoodsAdvertisement::mapToSearchResponse)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages());
     }
+
 
     public void addStatisticsToAll() {
         goodsAdvertisementRepository.findAll().forEach((a) -> {

@@ -32,6 +32,9 @@ public class UserAccount extends Account {
     @OneToMany(mappedBy = "user")
     private List<UserDeliveryAddress> addresses;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserSettings settings;
+
     public UserAccount() {
         super.setUserRole(UserRole.ROLE_USER);
     }

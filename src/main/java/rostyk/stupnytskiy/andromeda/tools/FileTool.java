@@ -15,7 +15,7 @@ public class FileTool {
 //    public static final String PROJECT_DIR =
 //            System.getProperty("user.home")+ File.separator + "andromeda" + File.separator;
     public static final String PROJECT_DIR =
-            "D:\\andromeda" + File.separator + "andromeda" + File.separator;
+            "D:\\andromeda" + File.separator;
 
     public static final String CATEGORY_DIR =
             PROJECT_DIR + "category" + File.separator;
@@ -24,13 +24,18 @@ public class FileTool {
        return saveImage(img,CATEGORY_DIR);
     }
 
-    public String saveUserAvatarImage(String img, String userLogin) throws IOException {
-        String userDir = PROJECT_DIR + "user_" + userLogin + File.separator;
+    public void createUserDir(Long userId){
+        String userDir = PROJECT_DIR + "user_" + userId + File.separator;
+        createDir(userDir);
+    }
+
+    public String saveUserAvatarImage(String img, Long userId) throws IOException {
+        String userDir = PROJECT_DIR + "user_" + userId + File.separator;
         return saveImage(img,userDir);
     }
 
-    public String saveAdvertisementImage(String img, String userLogin) throws IOException {
-        String userDir = PROJECT_DIR + "user_" + userLogin + File.separator + "advertisements" + File.separator;
+    public String saveAdvertisementImage(String img, Long userId) throws IOException {
+        String userDir = PROJECT_DIR + "user_" + userId + File.separator + "advertisements" + File.separator;
         return saveImage(img,userDir);
     }
 

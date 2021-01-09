@@ -9,7 +9,9 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.G
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailPrice;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
@@ -62,16 +64,30 @@ public class GoodsAdvertisementService {
 
     public void saveRetailGoodsAdvertisement(RetailGoodsAdvertisementRequest request) {
         RetailGoodsAdvertisement advertisement =
-                advertisementRepository.save( new RetailGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
-        retailGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
+                advertisementRepository.save(new RetailGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
+        RetailPrice price = retailGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
+        advertisement.setPriceInHryvnia(price.getPrice() * advertisement.getCurrency().getPriceInHryvnia());
+        advertisementRepository.save(advertisement);
     }
 
     public void saveWholesaleGoodsAdvertisement(WholesaleGoodsAdvertisementRequest request) {
         wholesaleGoodsAdvertisementService.validWholesaleUnit(request.getPrice());
         WholesaleGoodsAdvertisement advertisement =
                 advertisementRepository.save(new WholesaleGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
-        wholesaleGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
+        WholesalePrice price = wholesaleGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
+        advertisement.setPriceInHryvnia(price.getMinPrice() * advertisement.getCurrency().getPriceInHryvnia());
+        advertisementRepository.save(advertisement);
     }
+
+    public void exchangePriceForAll() {
+        goodsAdvertisementRepository.findAll().forEach((a) -> {
+            a.setPriceInHryvnia(
+                    Math.round(a.getPriceForExchanging() * a.getCurrency().getPriceInHryvnia() * 100) / 100.0
+            );
+            goodsAdvertisementRepository.save(a);
+        });
+    }
+
 
     public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
         GoodsAdvertisement advertisement = new GoodsAdvertisement();
@@ -98,7 +114,7 @@ public class GoodsAdvertisementService {
         if (request.getMainImage() != null) {
             try {
                 advertisement.setMainImage(fileTool.saveAdvertisementImage(
-                        request.getMainImage(), seller.getLogin())
+                        request.getMainImage(), seller.getId())
                 );
             } catch (IOException e) {
                 e.printStackTrace();
@@ -107,7 +123,7 @@ public class GoodsAdvertisementService {
         if (request.getImages() != null) {
             request.getImages().forEach(img -> {
                 try {
-                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getLogin()));
+                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

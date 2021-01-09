@@ -11,10 +11,12 @@ import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertiseme
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Comparator;
 import java.util.List;
@@ -26,9 +28,9 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("goods_retail")
-public class RetailGoodsAdvertisement extends GoodsAdvertisement implements AdvertisementEntity {
+public class RetailGoodsAdvertisement extends GoodsAdvertisement implements AdvertisementEntity, GoodsAdvertisementEntity {
 
-    @OneToMany(mappedBy = "advertisement")
+    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY)
     private List<RetailPrice> retailPrices;
 
     @Override
@@ -36,18 +38,23 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
         return new RetailGoodsAdvertisementResponse(this);
     }
 
-    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse(){
+    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse() {
         return new RetailGoodsAdvertisementForSearchResponse(this);
     }
 
     @Override
     public String toString() {
         return "RetailGoodsAdvertisement{"
-                + '\'' +" is only seller " + super.getOnlySellerCountry() +
+                + '\'' + " is only seller " + super.getOnlySellerCountry() +
                 '}';
     }
 
-    public RetailPrice getCurrentPrice(){
+    @Override
+    public Double getPriceForExchanging() {
+        return getCurrentPrice().getPrice();
+    }
+
+    public RetailPrice getCurrentPrice() {
         retailPrices.sort(Comparator.comparing(RetailPrice::getDateTime));
         return retailPrices.get(retailPrices.size() - 1);
     }

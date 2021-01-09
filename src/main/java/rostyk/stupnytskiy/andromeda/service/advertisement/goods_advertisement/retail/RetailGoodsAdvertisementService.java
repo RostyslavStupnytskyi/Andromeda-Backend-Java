@@ -8,6 +8,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailPrice;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.RetailGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
@@ -51,11 +52,10 @@ public class RetailGoodsAdvertisementService {
     @Autowired
     private FileTool fileTool;
 
-    public void finishAdvertisementCreation(RetailGoodsAdvertisement advertisement, RetailGoodsAdvertisementRequest request) {
+    public RetailPrice finishAdvertisementCreation(RetailGoodsAdvertisement advertisement, RetailGoodsAdvertisementRequest request) {
         if (request.getProperties() != null)
             request.getProperties().forEach(p -> propertyService.save(p, advertisement));
-
-        retailPriceService.save(request.getPrice(), advertisement);
+        return retailPriceService.save(request.getPrice(), advertisement);
     }
 
     public void addNewWRetailPriceToRetailGoodsAdvertisement(RetailPriceRequest request, Long id) throws IllegalAccessException {

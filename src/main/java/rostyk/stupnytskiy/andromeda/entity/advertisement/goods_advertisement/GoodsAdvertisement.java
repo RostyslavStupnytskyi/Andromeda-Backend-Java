@@ -22,11 +22,13 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-public class GoodsAdvertisement extends Advertisement implements AdvertisementEntity {
+public class GoodsAdvertisement extends Advertisement implements AdvertisementEntity, GoodsAdvertisementEntity {
 
     private Boolean onlySellerCountry;
 
     private Integer count;
+
+    private Double priceInHryvnia;
 
     @ManyToOne
     private Subcategory subcategory;
@@ -54,10 +56,14 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
         return new GoodsAdvertisementResponse(this);
     }
 
-    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse(){
+    @Override
+    public <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse() {
         return new GoodsAdvertisementForSearchResponse(this);
     }
 
+    public Double getPriceForExchanging() {
+        return 0.0;
+    }
 
     @Override
     public String toString() {
@@ -67,7 +73,7 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
                 '}';
     }
 
-    public GoodsAdvertisement(GoodsAdvertisement advertisement){
+    public GoodsAdvertisement(GoodsAdvertisement advertisement) {
         setTitle(advertisement.getTitle());
         setDescription(advertisement.getDescription());
         setMainImage(advertisement.getMainImage());

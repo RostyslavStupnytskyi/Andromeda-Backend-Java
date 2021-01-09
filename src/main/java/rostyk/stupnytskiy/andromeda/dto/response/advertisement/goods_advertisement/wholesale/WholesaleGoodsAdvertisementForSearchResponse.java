@@ -9,10 +9,13 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.who
 @Setter
 public class WholesaleGoodsAdvertisementForSearchResponse extends GoodsAdvertisementForSearchResponse {
 
-    private String price;
+    private Double priceMin;
+
+    private Double priceMax;
 
     public WholesaleGoodsAdvertisementForSearchResponse(WholesaleGoodsAdvertisement advertisement){
         super(advertisement);
-        this.price = advertisement.getCurrentPrice().getStringPriceSides();
+        this.priceMin = advertisement.getCurrentPrice().getMinPrice();
+        this.priceMax = advertisement.getCurrentPrice().getMaxPrice();
     }
 }

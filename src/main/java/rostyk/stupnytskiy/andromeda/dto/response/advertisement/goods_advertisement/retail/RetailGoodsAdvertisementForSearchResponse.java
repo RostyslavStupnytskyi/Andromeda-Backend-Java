@@ -8,10 +8,11 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.ret
 @Getter
 @Setter
 public class RetailGoodsAdvertisementForSearchResponse extends GoodsAdvertisementForSearchResponse {
-    private String price;
+
+    private Double price;
 
     public RetailGoodsAdvertisementForSearchResponse(RetailGoodsAdvertisement advertisement) {
         super(advertisement);
-        this.price = advertisement.getCurrentPrice().getStringPrice();
+        this.price = advertisement.getCurrentPrice().getPrice();
     }
 }
