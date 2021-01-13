@@ -2,12 +2,13 @@ package rostyk.stupnytskiy.andromeda.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.UserDeliveryAddressRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.UserDeliveryAddressResponse;
 import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -20,5 +21,20 @@ public class UserDeliveryAddressController {
     @PostMapping
     private void saveAddressToAccount(@Valid @RequestBody UserDeliveryAddressRequest request){
         addressService.saveAddressToUser(request);
+    }
+
+    @GetMapping("user")
+    private List<UserDeliveryAddressResponse> getUserDeliveryAddresses(){
+        return addressService.getUserAddresses();
+    }
+
+    @PutMapping("/make-default")
+    private void makeAddressDefault(Long id) {
+        addressService.makeAddressDefault(id);
+    }
+
+    @GetMapping("/default")
+    private UserDeliveryAddressResponse getDefaultUserAddress(){
+        return addressService.getDefaultUserDeliveryAddress();
     }
 }

@@ -50,6 +50,7 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
     private Predicate findByImage(Root<GoodsAdvertisement> r, CriteriaBuilder cb) {
         Predicate predicate;
         if (image != null && image) {
+            System.out.println("get only image");
             return cb.isNotNull(r.get("mainImage"));
         } else {
             predicate = cb.conjunction();

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.cart.CartItem;
 
@@ -11,6 +12,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,9 +23,22 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorValue("goods_item")
 public class GoodsCartItem extends CartItem {
 
+    private LocalDateTime date;
+
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
+    @ManyToOne
+    private DeliveryType deliveryType;
+
     @NotNull
     private Integer count = 1;
+
+    @Override
+    public String toString() {
+        return "GoodsCartItem{" +
+                "goodsAdvertisement=" + goodsAdvertisement.getId()  +
+                ", count=" + count +
+                '}';
+    }
 }

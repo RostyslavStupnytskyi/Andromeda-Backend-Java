@@ -148,4 +148,8 @@ public class AccountService implements UserDetailsService {
             return findById(id).mapToResponse();
         }
     }
+
+    public void save(UserAccount userAccount) {
+        accountRepository.save(userAccount);
+    }
 }

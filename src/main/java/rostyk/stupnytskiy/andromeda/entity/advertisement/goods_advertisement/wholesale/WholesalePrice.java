@@ -27,11 +27,31 @@ public class WholesalePrice {
     @ManyToOne
     private WholesaleGoodsAdvertisement advertisement;
 
-    public Double getMinPrice(){
+    public Double getMinPrice() {
         return priceUnits.stream().mapToDouble(WholesalePriceUnit::getPrice).min().getAsDouble();
     }
-    public Double getMaxPrice(){
+
+    public Double getMaxPrice() {
         return priceUnits.stream().mapToDouble(WholesalePriceUnit::getPrice).max().getAsDouble();
     }
 
+    public Double getPriceForCount(Integer count) {
+        double price = 0.0;
+        for (WholesalePriceUnit p : priceUnits) {
+            if (count >= p.getMin() && (count <= p.getMax() || p.getMax() == null)) {
+                price = p.getPrice() * count;
+            }
+        }
+        return price;
+    }
+
+    public Double getPriceByCount(Integer count) {
+        double price = 0.0;
+        for (WholesalePriceUnit p : priceUnits) {
+            if (count >= p.getMin() && (count <= p.getMax() || p.getMax() == null)) {
+                price = p.getPrice();
+            }
+        }
+        return price;
+    }
 }

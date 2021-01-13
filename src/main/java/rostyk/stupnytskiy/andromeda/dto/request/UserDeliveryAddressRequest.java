@@ -25,4 +25,6 @@ public class UserDeliveryAddressRequest {
     private String street;
 
     private String countryCode;
+
+    private String house;
 }

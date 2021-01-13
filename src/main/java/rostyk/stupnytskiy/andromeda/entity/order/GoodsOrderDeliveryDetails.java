@@ -35,6 +35,9 @@ public class GoodsOrderDeliveryDetails {
 
     private String shipment;
 
+    @Lob
+    private String sellerMessage;
+
     @OneToOne(mappedBy = "deliveryDetails")
     private GoodsOrder goodsOrder;
 }

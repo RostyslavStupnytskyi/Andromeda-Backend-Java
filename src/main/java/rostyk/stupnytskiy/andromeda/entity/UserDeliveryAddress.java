@@ -36,4 +36,6 @@ public class UserDeliveryAddress {
 
     private String street;
 
+    private String house;
+
 }

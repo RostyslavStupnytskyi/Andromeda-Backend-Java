@@ -34,7 +34,6 @@ public class GoodsAdvertisementForSearchResponse {
         this.sold = advertisement.getStatistics().getSold();
         this.date = advertisement.getStatistics().getCreationDate();
         this.type = advertisement.getDiscriminatorValue();
-        this.currency = new CurrencyResponse(advertisement.getCurrency());
         this.rating = advertisement.getStatistics().getRating();
     }
 }

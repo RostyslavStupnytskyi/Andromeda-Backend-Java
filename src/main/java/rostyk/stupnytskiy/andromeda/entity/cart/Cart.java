@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity.cart;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,5 +24,5 @@ public class Cart {
     private UserAccount user;
 
     @OneToMany(mappedBy = "cart")
-    private List<CartItem> cartItems;
+    private List<GoodsCartItem> cartItems;
 }

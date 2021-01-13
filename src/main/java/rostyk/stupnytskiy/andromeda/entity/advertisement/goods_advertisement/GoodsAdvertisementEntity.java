@@ -5,5 +5,5 @@ import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertiseme
 public interface GoodsAdvertisementEntity {
     <T extends GoodsAdvertisementForSearchResponse> GoodsAdvertisementForSearchResponse mapToSearchResponse();
 
-    Double getPriceForExchanging();
+    Double getPriceForSort();
 }

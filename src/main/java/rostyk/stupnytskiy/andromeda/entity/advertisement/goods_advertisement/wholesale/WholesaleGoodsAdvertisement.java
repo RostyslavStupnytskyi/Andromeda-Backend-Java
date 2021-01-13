@@ -41,7 +41,7 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
     }
 
     @Override
-    public Double getPriceForExchanging(){
+    public Double getPriceForSort(){
         return getCurrentPrice().getMinPrice();
     }
 
@@ -56,6 +56,14 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
     public WholesalePrice getCurrentPrice() {
         wholesalePrices.sort(Comparator.comparing(WholesalePrice::getDateTime));
         return wholesalePrices.get(wholesalePrices.size() - 1);
+    }
+
+    public Double getPriceByCount(Integer count) {
+        return getCurrentPrice().getPriceForCount(count);
+    }
+
+    public Double getPriceForCart(Integer count) {
+        return getCurrentPrice().getPriceByCount(count);
     }
 
     public WholesaleGoodsAdvertisement(GoodsAdvertisement advertisement) {

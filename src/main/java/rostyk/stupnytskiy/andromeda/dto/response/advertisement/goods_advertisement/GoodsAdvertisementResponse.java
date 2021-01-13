@@ -41,7 +41,6 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.onlySellerCountry = advertisement.getOnlySellerCountry();
         this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
         this.images = advertisement.getImages();
-        this.currency = new CurrencyResponse(advertisement.getCurrency());
         this.count = advertisement.getCount();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
         this.seller = advertisement.getSeller().getShopName();

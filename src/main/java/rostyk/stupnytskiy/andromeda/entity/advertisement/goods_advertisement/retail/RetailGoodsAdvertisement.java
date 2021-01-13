@@ -50,13 +50,21 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
     }
 
     @Override
-    public Double getPriceForExchanging() {
+    public Double getPriceForSort() {
         return getCurrentPrice().getPrice();
     }
 
     public RetailPrice getCurrentPrice() {
         retailPrices.sort(Comparator.comparing(RetailPrice::getDateTime));
         return retailPrices.get(retailPrices.size() - 1);
+    }
+
+    public Double getPriceByCount(Integer count) {
+        return getCurrentPrice().getPrice() * count;
+    }
+
+    public Double getPriceForCart(Integer count) {
+        return getCurrentPrice().getPrice();
     }
 
     public RetailGoodsAdvertisement(GoodsAdvertisement advertisement) {

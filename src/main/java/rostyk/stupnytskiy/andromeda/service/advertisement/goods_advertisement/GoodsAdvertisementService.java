@@ -14,14 +14,12 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.who
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
-import rostyk.stupnytskiy.andromeda.repository.WholesaleGoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementService;
-import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesalePriceService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
@@ -66,7 +64,7 @@ public class GoodsAdvertisementService {
         RetailGoodsAdvertisement advertisement =
                 advertisementRepository.save(new RetailGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
         RetailPrice price = retailGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
-        advertisement.setPriceInHryvnia(price.getPrice() * advertisement.getCurrency().getPriceInHryvnia());
+        advertisement.setPriceToSort(price.getPrice());
         advertisementRepository.save(advertisement);
     }
 
@@ -75,14 +73,14 @@ public class GoodsAdvertisementService {
         WholesaleGoodsAdvertisement advertisement =
                 advertisementRepository.save(new WholesaleGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
         WholesalePrice price = wholesaleGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
-        advertisement.setPriceInHryvnia(price.getMinPrice() * advertisement.getCurrency().getPriceInHryvnia());
+        advertisement.setPriceToSort(price.getMinPrice());
         advertisementRepository.save(advertisement);
     }
 
     public void exchangePriceForAll() {
         goodsAdvertisementRepository.findAll().forEach((a) -> {
-            a.setPriceInHryvnia(
-                    Math.round(a.getPriceForExchanging() * a.getCurrency().getPriceInHryvnia() * 100) / 100.0
+            a.setPriceToSort(
+                    Math.round(a.getPriceForSort() * 100) / 100.0
             );
             goodsAdvertisementRepository.save(a);
         });
@@ -96,7 +94,6 @@ public class GoodsAdvertisementService {
         advertisement.setTitle(request.getTitle());
         advertisement.setDescription(request.getDescription());
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
-        advertisement.setCurrency(currencyService.findById(request.getCurrencyId()));
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
         advertisement.setCount(request.getCount());

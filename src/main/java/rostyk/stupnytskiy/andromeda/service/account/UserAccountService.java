@@ -36,6 +36,10 @@ public class UserAccountService {
         return new UserDataResponse(findBySecurityContextHolder());
     }
 
+    public void save(UserAccount userAccount){
+        accountService.save(userAccount);
+    }
+
     public UserAccount findById(Long id) {
         return userRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }

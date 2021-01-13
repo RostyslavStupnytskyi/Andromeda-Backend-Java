@@ -14,7 +14,6 @@ public class GoodsOrderRequest {
 
     private Long addressId;
 
-    @JsonProperty("delivery")
-    private Long deliveryType;
+
 
 }

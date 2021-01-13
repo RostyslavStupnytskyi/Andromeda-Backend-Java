@@ -28,7 +28,7 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     private Integer count;
 
-    private Double priceInHryvnia;
+    private Double priceToSort;
 
     @ManyToOne
     private Subcategory subcategory;
@@ -45,9 +45,6 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
     @ManyToMany()
     private List<DeliveryType> deliveryTypes = new ArrayList<>();
 
-    @ManyToOne
-    private Currency currency;
-
     @OneToOne(cascade = CascadeType.ALL)
     private GoodsAdvertisementStatistics statistics;
 
@@ -61,7 +58,7 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
         return new GoodsAdvertisementForSearchResponse(this);
     }
 
-    public Double getPriceForExchanging() {
+    public Double getPriceForSort() {
         return 0.0;
     }
 
@@ -83,8 +80,15 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
         this.images = advertisement.getImages();
         this.seller = advertisement.getSeller();
         this.deliveryTypes = advertisement.getDeliveryTypes();
-        this.currency = advertisement.getCurrency();
         this.statistics = advertisement.getStatistics();
+    }
+
+    public Double getPriceByCount(Integer count) {
+        return 0.0;
+    }
+
+    public Double getPriceForCart(Integer count) {
+        return 0.0;
     }
 }
 

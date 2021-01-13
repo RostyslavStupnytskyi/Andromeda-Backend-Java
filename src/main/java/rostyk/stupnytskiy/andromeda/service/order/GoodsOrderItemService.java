@@ -8,6 +8,7 @@ import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 import rostyk.stupnytskiy.andromeda.repository.GoodsOrderItemRepository;
+import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 
 @Service
@@ -18,6 +19,9 @@ public class GoodsOrderItemService {
 
     @Autowired
     private GoodsAdvertisementService goodsAdvertisementService;
+
+    @Autowired
+    private DeliveryTypeService deliveryTypeService;
 
     public void save(GoodsOrderItemRequest request, GoodsOrder goodsOrder){
         goodsOrderItemRepository.save(goodsOrderItemRequestToGoodsOrderItem(request, goodsOrder));
@@ -36,7 +40,8 @@ public class GoodsOrderItemService {
     public GoodsOrderItem goodsOrderItemRequestToGoodsOrderItem(GoodsOrderItemRequest request, GoodsOrder goodsOrder){
         GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
         goodsOrderItem.setCount(request.getCount());
-        goodsOrderItem.setDescription(request.getDescription());
+        goodsOrderItem.setDescriptionFromUser(request.getDescription());
+        goodsOrderItem.setDeliveryType(deliveryTypeService.findById(request.getDeliveryTypeId()));
         goodsOrderItem.setStatus(GoodsOrderItemStatus.WAITING_FOR_SHIPMENT);
         goodsOrderItem.setGoodsAdvertisement(goodsAdvertisementService.findById(request.getGoodsAdvertisementId()));
         goodsOrderItem.setGoodsOrder(goodsOrder);

@@ -28,6 +28,8 @@ public class UserAccount extends Account {
     @OneToMany(mappedBy = "user")
     private List<GoodsOrder> goodsOrders;
 
+    @OneToOne
+    private UserDeliveryAddress defaultAddress;
 
     @OneToMany(mappedBy = "user")
     private List<UserDeliveryAddress> addresses;

@@ -32,6 +32,14 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToMany(mappedBy = "seller")
     private List<GoodsOrder> goodsOrders;
 
+    @Override
+    public String toString() {
+        return "GoodsSellerAccount{" +
+                "Name:" + this.getShopName() +
+                "onlySellerCountryDelivery=" + onlySellerCountryDelivery +
+                '}';
+    }
+
     public GoodsSellerResponse mapToResponse(){
         return new GoodsSellerResponse(this);
     }

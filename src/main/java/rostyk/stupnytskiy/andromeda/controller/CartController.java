@@ -2,7 +2,13 @@ package rostyk.stupnytskiy.andromeda.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rostyk.stupnytskiy.andromeda.dto.request.cart.GoodsCartItemForCountingPriceRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.cart.CartResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.cart.CartSellerPositionResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.cart.ChangeGoodsCartItemCountResponse;
 import rostyk.stupnytskiy.andromeda.service.cart.CartService;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -13,17 +19,37 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    private void addGoodsItemToCart(Long id){
-        cartService.addGoodsItemToCart(id);
+    private void addGoodsItemToCart(Long id, Long deliveryId) {
+        cartService.addGoodsItemToCart(id, deliveryId);
     }
 
     @PutMapping
-    private void updateGoodsCartItemCount(Long id, Integer count){
-        cartService.updateGoodsCartItemCount(id, count);
+    private ChangeGoodsCartItemCountResponse updateGoodsCartItemCount(Long id, Integer count) {
+        return cartService.updateGoodsCartItemCount(id, count);
+    }
+
+    @PutMapping("/check")
+    private ChangeGoodsCartItemCountResponse checkGoodsCartItemCount(Long id, Integer count) {
+        return cartService.checkGoodsCartItemCount(id, count);
     }
 
     @DeleteMapping
-    private void delete(Long id){
+    private void delete(Long id) {
         cartService.deleteGoodsItemFromCart(id);
+    }
+
+    @GetMapping
+    private CartResponse getCart() {
+        return cartService.getCartResponse();
+    }
+
+    @GetMapping("/items")
+    private List<CartSellerPositionResponse> getItemsForOrder(Long[] id){
+        return cartService.getItemsForOrder(id);
+    }
+
+    @PutMapping("/price")
+    private Double countPrice(@RequestBody List<GoodsCartItemForCountingPriceRequest> items) {
+        return cartService.countCartPrice(items);
     }
 }

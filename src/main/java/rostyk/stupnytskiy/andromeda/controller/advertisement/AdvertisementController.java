@@ -44,6 +44,11 @@ public class AdvertisementController {
         return advertisementService.findPageBySearchRequest(request); //(request);
     }
 
+    @GetMapping("/count")
+    private Integer getAdvertisementCount(Long id){
+        return goodsAdvertisementService.findById(id).getCount();
+    }
+
     @PutMapping
     public void test(){
         goodsAdvertisementService.exchangePriceForAll();

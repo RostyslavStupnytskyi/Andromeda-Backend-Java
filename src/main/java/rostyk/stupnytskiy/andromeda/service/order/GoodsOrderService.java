@@ -59,7 +59,6 @@ public class GoodsOrderService {
         GoodsOrder goodsOrder = new GoodsOrder();
         goodsOrder.setCreationDate(LocalDateTime.now());
         goodsOrder.setOrderStatus(GoodsOrderStatus.WAITING_FOR_SENDING);
-        goodsOrder.setDeliveryType(deliveryTypeService.findById(request.getAddressId()));
         goodsOrder.setUser(userAccountService.findBySecurityContextHolder());
         goodsOrder.setSeller(getSellerAccountFromGoodsItemRequest(request.getItems().get(0)));
         goodsOrder.setDeliveryDetails(goodsOrderDeliveryDetailsService.userDeliveryAddressToDeliveryDetails(userDeliveryAddressService.findById(request.getAddressId())));

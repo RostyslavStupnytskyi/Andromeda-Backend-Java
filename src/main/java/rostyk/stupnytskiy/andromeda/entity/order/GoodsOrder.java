@@ -37,9 +37,6 @@ public class GoodsOrder {
     @ManyToOne
     private GoodsSellerAccount seller;
 
-    @ManyToOne
-    private DeliveryType deliveryType;
-
     @OneToMany(mappedBy = "goodsOrder", cascade = CascadeType.ALL)
     private List<GoodsOrderItem> orderItems = new ArrayList<>();
 
@@ -48,7 +45,6 @@ public class GoodsOrder {
 
     @OneToOne(mappedBy = "goodsOrder")
     private GoodsSellerFeedback goodsSellerFeedback;
-
 
     public boolean didAllGoodsOrderItemsDelivered() {
         for (GoodsOrderItem orderItem : orderItems) {
