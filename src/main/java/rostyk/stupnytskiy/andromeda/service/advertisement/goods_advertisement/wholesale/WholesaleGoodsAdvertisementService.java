@@ -60,11 +60,15 @@ public class WholesaleGoodsAdvertisementService {
     }
 
     public void addNewWholesalePriceToWholesaleGoodsAdvertisement(WholesalePriceRequest request, Long id) throws IllegalAccessException {
-        if (goodsSellerAccountService.findBySecurityContextHolder() == findById(id).getSeller()) wholesalePriceService.save(request,findById(id));
+        wholesalePriceService.validWholesaleUnit(request);
+        WholesaleGoodsAdvertisement advertisement = findById(id);
+        if (goodsSellerAccountService.findBySecurityContextHolder() == advertisement.getSeller()) {
+            advertisement.setPriceToSort(wholesalePriceService.save(request,advertisement).getMinPrice());
+            advertisementRepository.save(advertisement);
+        }
         else throw new IllegalAccessException();
 
-        wholesalePriceService.validWholesaleUnit(request);
-        wholesalePriceService.save(request,findById(id));
+//        wholesalePriceService.save(request,findById(id));
     }
 
     public WholesaleGoodsAdvertisement findById(Long id){

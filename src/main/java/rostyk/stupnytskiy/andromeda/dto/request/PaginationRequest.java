@@ -28,11 +28,12 @@ public class PaginationRequest {
 
     public Pageable mapToPageable() {
         if (field != null && direction != null) {
-            return PageRequest.of(page, size, direction, field);
+            return PageRequest.of(page, size, direction, field, "id");
         } else if (field != null) {
-            return PageRequest.of(page, size, Sort.Direction.ASC, field);
+            return PageRequest.of(page, size, Sort.Direction.ASC, field, "id");
         } else {
             return PageRequest.of(page, size);
+
         }
     }
 }

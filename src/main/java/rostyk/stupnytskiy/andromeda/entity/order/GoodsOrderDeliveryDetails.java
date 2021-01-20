@@ -35,6 +35,8 @@ public class GoodsOrderDeliveryDetails {
 
     private String shipment;
 
+    private String house;
+
     @Lob
     private String sellerMessage;
 

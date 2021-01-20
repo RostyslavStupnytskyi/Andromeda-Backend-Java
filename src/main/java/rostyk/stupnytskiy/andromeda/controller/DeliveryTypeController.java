@@ -38,6 +38,11 @@ public class DeliveryTypeController {
         return deliveryTypeService.getAllByCountryCode(code);
     }
 
+    @GetMapping("advertisement")
+    private List<DeliveryTypeResponse> getAllByAdvertisement(Long id) {
+        return deliveryTypeService.getAllByAdvertisementId(id);
+    }
+
     @GetMapping("/account")
     private List<DeliveryTypeResponse> getAllByAccountCountry() {
         return deliveryTypeService.getALlByAccountCountry();

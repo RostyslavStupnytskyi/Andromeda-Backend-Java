@@ -25,6 +25,9 @@ public class GoodsSellerFeedback {
 
     private Double serviceRating;
 
+    @Lob
+    private String text;
+
     @ManyToOne
     private GoodsSellerAccount seller;
 

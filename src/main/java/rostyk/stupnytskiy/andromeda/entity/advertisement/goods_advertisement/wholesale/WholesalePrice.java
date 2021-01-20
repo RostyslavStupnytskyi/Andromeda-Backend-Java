@@ -5,6 +5,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -21,8 +22,8 @@ public class WholesalePrice {
 
     private LocalDateTime dateTime;
 
-    @OneToMany(mappedBy = "wholesalePrice", cascade = CascadeType.ALL)
-    private List<WholesalePriceUnit> priceUnits;
+    @OneToMany(mappedBy = "wholesalePrice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<WholesalePriceUnit> priceUnits = new ArrayList<>();
 
     @ManyToOne
     private WholesaleGoodsAdvertisement advertisement;
@@ -45,7 +46,7 @@ public class WholesalePrice {
         return price;
     }
 
-    public Double getPriceByCount(Integer count) {
+    public Double getPriceForUnitByCount(Integer count) {
         double price = 0.0;
         for (WholesalePriceUnit p : priceUnits) {
             if (count >= p.getMin() && (count <= p.getMax() || p.getMax() == null)) {

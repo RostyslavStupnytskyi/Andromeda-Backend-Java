@@ -24,4 +24,11 @@ public class Property {
 
     @ManyToOne
     private GoodsAdvertisement advertisement;
+
+    @Override
+    public String toString() {
+        return "Property{" +
+                "id=" + id +
+                '}';
+    }
 }

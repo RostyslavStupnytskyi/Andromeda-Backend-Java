@@ -59,11 +59,15 @@ public class RetailGoodsAdvertisementService {
     }
 
     public void addNewWRetailPriceToRetailGoodsAdvertisement(RetailPriceRequest request, Long id) throws IllegalAccessException {
-        if (goodsSellerAccountService.findBySecurityContextHolder() == findById(id).getSeller()) retailPriceService.save(request,findById(id));
-        else throw new IllegalAccessException();
+        RetailGoodsAdvertisement advertisement = findById(id);
+        if (goodsSellerAccountService.findBySecurityContextHolder() == advertisement.getSeller()) {
+            RetailPrice price = retailPriceService.save(request, advertisement);
+            advertisement.setPriceToSort(price.getPrice());
+            advertisementRepository.save(advertisement);
+        } else throw new IllegalAccessException();
     }
 
-    public RetailGoodsAdvertisement findById(Long id){
+    public RetailGoodsAdvertisement findById(Long id) {
         return retailGoodsAdvertisementRepository.findById(id).orElseThrow(IllegalReceiveException::new);
     }
 

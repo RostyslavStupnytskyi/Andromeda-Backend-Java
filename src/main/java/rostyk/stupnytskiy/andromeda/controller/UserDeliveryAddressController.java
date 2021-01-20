@@ -19,8 +19,8 @@ public class UserDeliveryAddressController {
     private UserDeliveryAddressService addressService;
 
     @PostMapping
-    private void saveAddressToAccount(@Valid @RequestBody UserDeliveryAddressRequest request){
-        addressService.saveAddressToUser(request);
+    private UserDeliveryAddressResponse saveAddressToAccount(@Valid @RequestBody UserDeliveryAddressRequest request){
+        return new UserDeliveryAddressResponse(addressService.saveAddressToUser(request));
     }
 
     @GetMapping("user")

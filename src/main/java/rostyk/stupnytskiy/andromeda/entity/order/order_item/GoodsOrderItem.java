@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -38,4 +39,8 @@ public class GoodsOrderItem {
 
     @OneToOne(mappedBy = "goodsOrderItem")
     private GoodsAdvertisementFeedback goodsAdvertisementFeedback;
+
+    public Double getPriceByDateAndCount(LocalDateTime date) {
+        return goodsAdvertisement.getPriceByDateAndForCount(date, count);
+    }
 }

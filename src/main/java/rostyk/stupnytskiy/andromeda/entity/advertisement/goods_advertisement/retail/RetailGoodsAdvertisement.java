@@ -18,6 +18,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -57,6 +58,25 @@ public class RetailGoodsAdvertisement extends GoodsAdvertisement implements Adve
     public RetailPrice getCurrentPrice() {
         retailPrices.sort(Comparator.comparing(RetailPrice::getDateTime));
         return retailPrices.get(retailPrices.size() - 1);
+    }
+
+    public Double getPriceByDateAndForCount(LocalDateTime date, Integer count) {
+        return getPriceByDate(date).getPrice() * count;
+    }
+
+    public Double getPriceByDateAndForUnitCount(LocalDateTime date, Integer count) {
+        return getPriceByDate(date).getPrice();
+    }
+
+    private RetailPrice getPriceByDate(LocalDateTime date) {
+        for (int i = 0; i < retailPrices.size(); i++) {
+            if (date.isAfter(retailPrices.get(i).getDateTime()) && (i == retailPrices.size() - 1))
+                return retailPrices.get(i);
+            if (date.isAfter(retailPrices.get(i).getDateTime())
+                    && date.isBefore(retailPrices.get(i + 1).getDateTime()))
+                return retailPrices.get(i);
+        }
+        return new RetailPrice();
     }
 
     public Double getPriceByCount(Integer count) {

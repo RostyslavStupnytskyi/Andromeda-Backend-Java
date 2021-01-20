@@ -20,4 +20,6 @@ public class GoodsSellerFeedbackRequest {
     private Double serviceRating;
 
     private Long orderId;
+
+    private String text;
 }

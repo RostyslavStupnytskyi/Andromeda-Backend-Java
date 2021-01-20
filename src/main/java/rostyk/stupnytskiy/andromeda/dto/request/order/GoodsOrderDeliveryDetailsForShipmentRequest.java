@@ -19,6 +19,8 @@ public class GoodsOrderDeliveryDetailsForShipmentRequest {
     @NotBlank
     private String trackingNumber;
 
+    private String sellerMessage;
+
     @NotNull
     private Long orderId;
 }

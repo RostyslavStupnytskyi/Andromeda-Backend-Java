@@ -34,6 +34,8 @@ public class GoodsSellerFeedbackService {
         feedback.setUser(userAccountService.findBySecurityContextHolder());
         feedback.setCommunicationRating(request.getCommunicationRating());
         feedback.setServiceRating(request.getServiceRating());
+        feedback.setText(request.getText());
+        goodsOrderService.makeGoodsOrderClosed(feedback.getGoodsOrder());
         // TODO recount the average rating of seller statistics
         return feedback;
     }

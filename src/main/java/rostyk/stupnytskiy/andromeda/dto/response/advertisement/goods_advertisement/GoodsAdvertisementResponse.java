@@ -25,8 +25,6 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private List<PropertyResponse> properties;
 
-    private CurrencyResponse currency;
-
     private Integer count;
 
     private String seller;

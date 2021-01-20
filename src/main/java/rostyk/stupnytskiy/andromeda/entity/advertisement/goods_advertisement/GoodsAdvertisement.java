@@ -13,6 +13,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
 import rostyk.stupnytskiy.andromeda.entity.country.Currency;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
     @ManyToOne
     private GoodsSellerAccount seller;
 
-    @OneToMany(mappedBy = "advertisement", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "advertisement")
     private List<Property> properties = new ArrayList<>();
 
     @ManyToMany()
@@ -82,6 +83,15 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
         this.deliveryTypes = advertisement.getDeliveryTypes();
         this.statistics = advertisement.getStatistics();
     }
+
+    public Double getPriceByDateAndForCount(LocalDateTime date, Integer count) {
+        return 0.0;
+    }
+
+    public Double getPriceByDateAndForUnitCount(LocalDateTime date, Integer count) {
+        return 0.0;
+    }
+
 
     public Double getPriceByCount(Integer count) {
         return 0.0;

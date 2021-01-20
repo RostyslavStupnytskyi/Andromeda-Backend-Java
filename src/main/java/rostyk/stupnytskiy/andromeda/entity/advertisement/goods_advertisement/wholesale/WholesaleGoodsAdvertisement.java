@@ -16,6 +16,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,6 +41,25 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
         return new WholesaleGoodsAdvertisementForSearchResponse(this);
     }
 
+    public Double getPriceByDateAndForCount(LocalDateTime date, Integer count) {
+        return getPriceByDate(date).getPriceForCount(count);
+    }
+
+    public Double getPriceByDateAndForUnitCount(LocalDateTime date, Integer count) {
+        return getPriceByDate(date).getPriceForUnitByCount(count);
+    }
+
+    private WholesalePrice getPriceByDate(LocalDateTime date) {
+        for (int i = 0; i < wholesalePrices.size(); i++) {
+            if (date.isAfter(wholesalePrices.get(i).getDateTime()) && (i == wholesalePrices.size() - 1))
+                return wholesalePrices.get(i);
+            if (date.isAfter(wholesalePrices.get(i).getDateTime())
+                    && date.isBefore(wholesalePrices.get(i + 1).getDateTime()))
+                return wholesalePrices.get(i);
+        }
+        return new WholesalePrice();
+    }
+
     @Override
     public Double getPriceForSort(){
         return getCurrentPrice().getMinPrice();
@@ -47,8 +67,8 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
 
     @Override
     public String toString() {
-        return "WholesaleGoodsAdvertisement{" +
-                +'\'' + " is only seller " + super.getOnlySellerCountry() +
+        return "WholesaleGoodsAdvertisement{ id = " + super.getId()
+                + '\'' + " is only seller " + super.getOnlySellerCountry() +
 //                ", wholesalePrices=" + wholesalePrices +
                 '}';
     }
@@ -63,7 +83,7 @@ public class WholesaleGoodsAdvertisement extends GoodsAdvertisement implements A
     }
 
     public Double getPriceForCart(Integer count) {
-        return getCurrentPrice().getPriceByCount(count);
+        return getCurrentPrice().getPriceForUnitByCount(count);
     }
 
     public WholesaleGoodsAdvertisement(GoodsAdvertisement advertisement) {

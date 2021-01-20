@@ -25,6 +25,7 @@ public class GoodsOrderDeliveryDetailsService {
         goodsOrderDeliveryDetails.setPhoneNumber(address.getPhoneNumber());
         goodsOrderDeliveryDetails.setStreet(address.getStreet());
         goodsOrderDeliveryDetails.setCountry(address.getCountry());
+        goodsOrderDeliveryDetails.setHouse(address.getHouse());
         return save(goodsOrderDeliveryDetails);
     }
 
@@ -35,6 +36,8 @@ public class GoodsOrderDeliveryDetailsService {
     public void updateGoodsOrderDeliveryDetailsToShipment(GoodsOrderDeliveryDetailsForShipmentRequest request, GoodsOrderDeliveryDetails details){
         details.setShipment(deliveryTypeService.findById(request.getDeliveryTypeId()).getTitle());
         details.setTrackingNumber(request.getTrackingNumber());
+        if (!request.getSellerMessage().equals(""))
+        details.setSellerMessage(request.getSellerMessage());
         goodsOrderDeliveryDetailsRepository.save(details);
     }
 }

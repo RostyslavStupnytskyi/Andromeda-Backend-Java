@@ -39,6 +39,11 @@ public class FileTool {
         return saveImage(img,userDir);
     }
 
+    public String saveFeedbackImage(String img, Long id) throws IOException {
+        String userDir = PROJECT_DIR + "user_" + id + File.separator + "feedback" + File.separator;
+        return saveImage(img,userDir);
+    }
+
     private String saveImage(String img, String dir) throws IOException {
         createDir(dir);//create folder if not exists
 
@@ -74,4 +79,6 @@ public class FileTool {
             file.mkdirs();
         }
     }
+
+
 }

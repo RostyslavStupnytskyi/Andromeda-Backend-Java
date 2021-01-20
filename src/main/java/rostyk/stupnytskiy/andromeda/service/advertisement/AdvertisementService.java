@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.service.advertisement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementSearchRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
@@ -19,10 +20,8 @@ import rostyk.stupnytskiy.andromeda.specification.GoodsAdvertisementSpecificatio
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class AdvertisementService {
@@ -86,5 +85,9 @@ public class AdvertisementService {
                     .build());
             goodsAdvertisementRepository.save(a);
         });
+    }
+
+    public void changeAdvertisementTitle(Long id, String title) {
+
     }
 }

@@ -28,13 +28,15 @@ public class UserDeliveryAddressService {
         return addressRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    public void saveAddressToUser(UserDeliveryAddressRequest request) {
+    public UserDeliveryAddress saveAddressToUser(UserDeliveryAddressRequest request) {
         UserDeliveryAddress address = save(addressRequestToAddress(request, null));
         UserAccount user = userAccountService.findBySecurityContextHolder();
         if (user.getAddresses().size() == 1) {
             user.setDefaultAddress(address);
             userAccountService.save(user);
         }
+
+        return address;
     }
 
     public UserDeliveryAddress save(UserDeliveryAddress address) {

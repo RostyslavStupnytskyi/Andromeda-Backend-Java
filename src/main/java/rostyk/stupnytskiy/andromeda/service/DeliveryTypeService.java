@@ -9,6 +9,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.repository.DeliveryTypeRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,9 @@ public class DeliveryTypeService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private GoodsAdvertisementService goodsAdvertisementService;
 
 
     public void save(DeliveryTypeRequest request){
@@ -72,5 +76,12 @@ public class DeliveryTypeService {
     public List<DeliveryTypeResponse> getALlByAccountCountry() {
         Country country = accountService.getAccountBySecurityContextHolder().getCountry();
         return getAllByCountryCode(country.getCountryCode());
+    }
+
+    public List<DeliveryTypeResponse> getAllByAdvertisementId(Long id) {
+        return deliveryTypeRepository.getAllByAdvertisementId(id)
+                .stream()
+                .map(DeliveryTypeResponse::new)
+                .collect(Collectors.toList());
     }
 }

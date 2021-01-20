@@ -27,9 +27,13 @@ public class GoodsOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private LocalDateTime creationDate;
+    private LocalDateTime closingDate;
 
     private GoodsOrderStatus orderStatus;
+
+    private Boolean isViewed;
 
     @ManyToOne
     private UserAccount user;
@@ -51,5 +55,13 @@ public class GoodsOrder {
             if (!orderItem.getStatus().equals(GoodsOrderItemStatus.WAITING_FOR_FEEDBACK)) return false;
         }
         return true;
+    }
+
+    public Double getPrice() {
+        Double sum = 0.0;
+        for (GoodsOrderItem i : orderItems) {
+            sum += i.getPriceByDateAndCount(creationDate);
+        }
+        return sum;
     }
 }

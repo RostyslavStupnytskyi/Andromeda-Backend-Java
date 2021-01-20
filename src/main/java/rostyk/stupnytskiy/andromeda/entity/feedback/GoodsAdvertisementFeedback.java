@@ -1,17 +1,19 @@
 package rostyk.stupnytskiy.andromeda.entity.feedback;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 
 @Entity
 public class GoodsAdvertisementFeedback {
@@ -30,7 +32,11 @@ public class GoodsAdvertisementFeedback {
 
     private String text;
 
-    private String image;
+    @ManyToOne
+    private UserAccount userAccount;
+
+    @ElementCollection
+    private List<String> images = new ArrayList<>();
 
     @ManyToOne
     private Country country;

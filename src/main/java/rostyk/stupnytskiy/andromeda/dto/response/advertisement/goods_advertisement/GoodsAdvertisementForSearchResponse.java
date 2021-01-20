@@ -22,7 +22,6 @@ public class GoodsAdvertisementForSearchResponse {
     private Long sold;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime date;
-    private CurrencyResponse currency;
 
 
     public GoodsAdvertisementForSearchResponse(GoodsAdvertisement advertisement) {

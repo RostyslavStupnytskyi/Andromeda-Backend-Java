@@ -29,7 +29,7 @@ public class WholesalePriceService {
     public WholesalePrice save(WholesalePriceRequest request, WholesaleGoodsAdvertisement advertisement) {
         WholesalePrice wholesalePrice = wholesalePriceRepository.save(wholesalePriceRequestToWholesalePrice(advertisement));
         request.getPriceUnits().forEach(
-                (priceUnit) -> wholesalePriceUnitRepository.save(wholesalePriceUnitRequestToWholesalePriceUnit(priceUnit, wholesalePrice))
+                (priceUnit) -> wholesalePrice.getPriceUnits().add(wholesalePriceUnitRepository.save(wholesalePriceUnitRequestToWholesalePriceUnit(priceUnit, wholesalePrice)))
         );
         return wholesalePrice;
     }
