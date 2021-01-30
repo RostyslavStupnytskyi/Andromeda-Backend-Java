@@ -25,11 +25,13 @@ public class AdvertisementResponse {
 
     private String type;
 
+
     public AdvertisementResponse(Advertisement advertisement) {
         this.id = advertisement.getId();
         this.title = advertisement.getTitle();
         this.description = advertisement.getDescription();
         this.mainImage = advertisement.getMainImage();
         this.type = advertisement.getDiscriminatorValue();
+
     }
 }

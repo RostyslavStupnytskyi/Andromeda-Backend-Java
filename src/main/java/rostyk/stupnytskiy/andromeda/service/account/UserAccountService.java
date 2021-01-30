@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSettingsRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.repository.UserRepository;
 import rostyk.stupnytskiy.andromeda.repository.UserSettingsRepository;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 
 @Service
 public class UserAccountService {
@@ -27,6 +29,9 @@ public class UserAccountService {
 
     @Autowired
     private CurrencyService currencyService;
+
+    @Autowired
+    private UserStatisticsService userStatisticsService;
 
     public UserAccount findBySecurityContextHolder() {
         return findById(accountService.getIdBySecurityContextHolder());
@@ -51,5 +56,12 @@ public class UserAccountService {
         if (request.getCurrencyCode() != null)
             user.getSettings().setCurrency(currencyService.findCurrencyByCurrencyCode(request.getCurrencyCode()));
         userSettingsRepository.save(user.getSettings());
+    }
+
+    public void addStatisticsToAll(){
+        userRepository.findAll().forEach((u) -> {
+            u.setUserStatistics(new UserStatistics());
+            userStatisticsService.createStartStatistics(u);
+        });
     }
 }

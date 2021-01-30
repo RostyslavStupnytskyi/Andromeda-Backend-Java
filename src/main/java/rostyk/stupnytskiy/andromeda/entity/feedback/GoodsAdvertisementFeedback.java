@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class GoodsAdvertisementFeedback {
 
     @ManyToOne
     private UserAccount userAccount;
+
+    private LocalDateTime creationDate;
 
     @ElementCollection
     private List<String> images = new ArrayList<>();

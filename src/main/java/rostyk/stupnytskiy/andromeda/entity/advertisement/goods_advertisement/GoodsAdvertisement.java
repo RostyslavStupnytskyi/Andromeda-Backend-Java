@@ -1,16 +1,17 @@
 package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.AdvertisementEntity;
-import rostyk.stupnytskiy.andromeda.entity.country.Currency;
+import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
+import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -48,6 +49,12 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     @OneToOne(cascade = CascadeType.ALL)
     private GoodsAdvertisementStatistics statistics;
+
+    @OneToMany(mappedBy = "goodsAdvertisement")
+    private List<GoodsAdvertisementFeedback> feedbacks;
+
+    @ManyToMany(mappedBy = "favoriteAdvertisements")
+    private List<UserAccount> users;
 
     @Override
     public <T extends AdvertisementResponse> AdvertisementResponse mapToResponse() {

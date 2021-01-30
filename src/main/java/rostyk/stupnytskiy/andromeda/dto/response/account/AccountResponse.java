@@ -18,14 +18,14 @@ public class AccountResponse {
     private Long id;
     private String avatar;
     private UserRole userRole;
-    private Long countryApiId;
+    private String countryCode;
 
     public AccountResponse(Account account) {
 //        this.username = account.getUsername();
         this.id = account.getId();
         this.avatar = account.getAvatar();
         this.userRole = account.getUserRole();
-        this.countryApiId = account.getCountry().getApiId();
+        this.countryCode = account.getCountry().getCountryCode();
     }
 
 }

@@ -23,6 +23,8 @@ import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -56,6 +58,12 @@ public class GoodsOrderService {
     @Autowired
     private GoodsSellerAccountService goodsSellerAccountService;
 
+    @Autowired
+    private GoodsSellerStatisticsService goodsSellerStatisticsService;
+
+    @Autowired
+    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
+
 
     public PageResponse<GoodsOrderResponse> getAllOrdersPageForSeller(PaginationRequest paginationRequest) {
         Page<GoodsOrder> page = goodsOrderRepository.findPageBySeller(goodsSellerAccountService.findBySecurityContextHolder(), paginationRequest.mapToPageable());
@@ -71,6 +79,7 @@ public class GoodsOrderService {
         validateGoodsOrderRequest(request);
         GoodsOrder goodsOrder = goodsOrderRequestToGoodsOrder(request);
         request.getItems().forEach((i) -> goodsOrderItemService.save(i, goodsOrder));
+        goodsSellerStatisticsService.incrementMonthStatisticsOrders(goodsOrder.getSeller());
     }
 
     private GoodsOrder goodsOrderRequestToGoodsOrder(GoodsOrderRequest request) {

@@ -11,8 +11,9 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
+import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailPrice;
@@ -23,6 +24,7 @@ import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
+import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementService;
@@ -57,6 +59,9 @@ public class GoodsAdvertisementService {
 
     @Autowired
     private GoodsSellerAccountService goodsSellerAccountService;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @Autowired
     private DeliveryTypeService deliveryTypeService;
@@ -109,7 +114,8 @@ public class GoodsAdvertisementService {
         GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
 
         advertisement.setTitle(request.getTitle());
-        advertisement.setDescription(request.getDescription());
+        if (!request.getDescription().isEmpty()) advertisement.setDescription(request.getDescription());
+
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
@@ -117,9 +123,11 @@ public class GoodsAdvertisementService {
 
         advertisement.setStatistics(GoodsAdvertisementStatistics.builder()
                 .creationDate(LocalDateTime.now())
-                .numberOfOrders(0)
                 .views(0)
                 .sold(0L)
+                .orders(0L)
+                .feedbacks(0)
+                .inLikesList(0)
                 .build());
 
         if (request.getDeliveryTypes() != null)
@@ -190,7 +198,7 @@ public class GoodsAdvertisementService {
         List<Property> propertyList = new ArrayList<>();
 
         advertisement.getProperties().forEach((p) ->
-            propertyService.delete(p.getId())
+                propertyService.delete(p.getId())
         );
         if (properties != null) {
             properties.forEach(p -> propertyService.save(p, advertisement));
@@ -205,5 +213,62 @@ public class GoodsAdvertisementService {
         if (deliveryIds != null)
             deliveryIds.forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
         goodsAdvertisementRepository.save(advertisement);
+    }
+
+    public void changeAdvertisementOnlySellerCountry(Long id, Boolean isOnly) {
+        GoodsAdvertisement advertisement = findByIdAndSeller(id);
+        advertisement.setOnlySellerCountry(isOnly);
+        goodsAdvertisementRepository.save(advertisement);
+    }
+
+    public String addImageToGoodsAdvertisement(Long id, String image) {
+        GoodsAdvertisement advertisement = findByIdAndSeller(id);
+        String imageName = null;
+        try {
+            imageName = fileTool.saveAdvertisementImage(image, advertisement.getSeller().getId());
+            if (advertisement.getMainImage() == null) advertisement.setMainImage(imageName);
+            else advertisement.getImages().add(imageName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        goodsAdvertisementRepository.save(advertisement);
+        return imageName;
+    }
+
+    public void makeMainImageToGoodsAdvertisement(Long id, String imageName) {
+        GoodsAdvertisement advertisement = findByIdAndSeller(id);
+        advertisement.getImages().add(advertisement.getMainImage());
+        advertisement.getImages().remove(imageName);
+        advertisement.setMainImage(imageName);
+        goodsAdvertisementRepository.save(advertisement);
+    }
+
+    public void deleteGoodsAdvertisementImage(Long id, String imageName) {
+        GoodsAdvertisement advertisement = findByIdAndSeller(id);
+        advertisement.getImages().remove(imageName);
+        fileTool.deleteAdvertisementImage(imageName, advertisement.getSeller().getId());
+        goodsAdvertisementRepository.save(advertisement);
+    }
+
+    public void addToFavorites(Long id) {
+        UserAccount user = userAccountService.findBySecurityContextHolder();
+        GoodsAdvertisement goodsAdvertisement = findById(id);
+        if (!user.getFavoriteAdvertisements().contains(goodsAdvertisement)) {
+            user.getFavoriteAdvertisements().add(goodsAdvertisement);
+            userAccountService.save(user);
+        }
+    }
+
+    public void removeFromFavorites (Long id) {
+        UserAccount user = userAccountService.findBySecurityContextHolder();
+        GoodsAdvertisement goodsAdvertisement = findById(id);
+        user.getFavoriteAdvertisements().remove(goodsAdvertisement);
+        userAccountService.save(user);
+    }
+
+    public Boolean isInFavorites (Long id) {
+        UserAccount user = userAccountService.findBySecurityContextHolder();
+        GoodsAdvertisement goodsAdvertisement = findById(id);
+        return  user.getFavoriteAdvertisements().contains(goodsAdvertisement);
     }
 }

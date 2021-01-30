@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,16 +15,20 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
+import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserSettings;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
 import rostyk.stupnytskiy.andromeda.repository.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.ConfirmationCodeGenerator;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
@@ -57,22 +62,41 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private GoodsSellerStatisticsService goodsSellerStatisticsService;
+
+    @Autowired
+    private UserStatisticsService userStatisticsService;
+
+
+    public String testAuth() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getCredentials());
+        return (String) auth.getPrincipal();
+    }
+
     // Register User
     public AuthenticationResponse registerUser(AccountLoginRequest request) throws IOException {
-        fileTool.createUserDir(registerUserAccount(request).getId());
+        UserAccount userAccount = registerUserAccount(request);
+        fileTool.createUserDir(userAccount.getId());
+        userStatisticsService.createStartStatistics(userAccount);
         return login(request);
     }
 
     //Register Goods Seller
     public AuthenticationResponse registerGoodsSeller(AccountLoginRequest request) throws IOException {
-        fileTool.createUserDir(registerGoodsSellerAccount(request).getId());
+        GoodsSellerAccount seller = registerGoodsSellerAccount(request);
+        fileTool.createUserDir(seller.getId());
+        goodsSellerStatisticsService.createStartStatistics(seller);
         return login(request);
     }
 
-    public void updateAccountData(AccountDataRequest request){
+    public void updateAccountData(AccountDataRequest request) {
         Account account = getAccountBySecurityContextHolder();
-        if (request.getCountryCode() != null) account.setCountry(countryService.findCountryByCountryCode(request.getCountryCode()));
-        else if (request.getCountryId() != null) account.setCountry(countryService.findCountryById(request.getCountryId()));
+        if (request.getCountryCode() != null)
+            account.setCountry(countryService.findCountryByCountryCode(request.getCountryCode()));
+        else if (request.getCountryId() != null)
+            account.setCountry(countryService.findCountryById(request.getCountryId()));
         accountRepository.save(account);
     }
 
@@ -83,7 +107,7 @@ public class AccountService implements UserDetailsService {
         return new JwtUser(account.getLogin(), account.getUserRole(), account.getPassword());
     }
 
-    public  Account findByLogin(String login) {
+    public Account findByLogin(String login) {
         return accountRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User with login " + login + " not exists"));
     }
 
@@ -91,11 +115,11 @@ public class AccountService implements UserDetailsService {
         return accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not exists"));
     }
 
-    public Account getAccountBySecurityContextHolder(){
+    public Account getAccountBySecurityContextHolder() {
         return findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
-    public Long getIdBySecurityContextHolder(){
+    public Long getIdBySecurityContextHolder() {
         return findByLogin((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 
@@ -110,12 +134,11 @@ public class AccountService implements UserDetailsService {
         Long id = account.getId();
 
 
-
-        return new AuthenticationResponse(token, id,account.getUserRole());
+        return new AuthenticationResponse(token, id, account.getUserRole());
     }
 
 
-    private GoodsSellerAccount registerGoodsSellerAccount(AccountLoginRequest request){
+    private GoodsSellerAccount registerGoodsSellerAccount(AccountLoginRequest request) {
         if (accountRepository.existsByLogin(request.getLogin())) {
             throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
         }
@@ -123,11 +146,12 @@ public class AccountService implements UserDetailsService {
         GoodsSellerAccount goodsSellerAccount = new GoodsSellerAccount();
         goodsSellerAccount.setLogin(request.getLogin());
         goodsSellerAccount.setPassword(encoder.encode(request.getPassword()));
+        goodsSellerAccount.setStatistics(new GoodsSellerStatistics());
 
         return accountRepository.save(goodsSellerAccount);
     }
 
-    private UserAccount registerUserAccount(AccountLoginRequest request){
+    private UserAccount registerUserAccount(AccountLoginRequest request) {
 
         if (accountRepository.existsByLogin(request.getLogin())) {
             throw new BadCredentialsException("User with username " + request.getLogin() + " already exists");
@@ -138,10 +162,11 @@ public class AccountService implements UserDetailsService {
         userAccount.setPassword(encoder.encode(request.getPassword()));
         userAccount.setCart(new Cart());
         userAccount.setSettings(new UserSettings());
+        userAccount.setUserStatistics(new UserStatistics());
         return accountRepository.save(userAccount);
     }
 
-    public <T extends AccountResponse>AccountResponse getAccountResponse(Long id) {
+    public <T extends AccountResponse> AccountResponse getAccountResponse(Long id) {
         if (id == null) {
             return getAccountBySecurityContextHolder().mapToResponse();
         } else {

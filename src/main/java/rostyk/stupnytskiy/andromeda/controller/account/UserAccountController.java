@@ -23,4 +23,9 @@ public class UserAccountController {
     public void changeUserSettings(@RequestBody UserSettingsRequest request) {
         userAccountService.changeUserSettings(request);
     }
+
+    @PostMapping
+    private void add() {
+        userAccountService.addStatisticsToAll();
+    }
 }

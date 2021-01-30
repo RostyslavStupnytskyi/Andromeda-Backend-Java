@@ -23,6 +23,16 @@ public class UserDeliveryAddressController {
         return new UserDeliveryAddressResponse(addressService.saveAddressToUser(request));
     }
 
+    @PutMapping
+    private UserDeliveryAddressResponse updateAddress(@Valid @RequestBody UserDeliveryAddressRequest request, Long id){
+        return new UserDeliveryAddressResponse(addressService.updateUserAddress(request, id));
+    }
+
+    @DeleteMapping
+    private void deleteDeliveryAddress(Long id) {
+        addressService.deleteAddress(id);
+    }
+
     @GetMapping("user")
     private List<UserDeliveryAddressResponse> getUserDeliveryAddresses(){
         return addressService.getUserAddresses();

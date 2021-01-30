@@ -23,6 +23,11 @@ public class AccountController {
     @Autowired
     private AccountStatisticsService accountStatisticsService;
 
+    @GetMapping
+    private String test() {
+        return accountService.testAuth();
+    }
+
     @PostMapping("/login")
     public AuthenticationResponse login(@Valid @RequestBody AccountLoginRequest request) {
         return accountService.login(request);

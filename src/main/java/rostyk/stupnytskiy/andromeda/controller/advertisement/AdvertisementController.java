@@ -10,8 +10,10 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,6 +28,9 @@ public class AdvertisementController {
 
     @Autowired
     private GoodsAdvertisementService goodsAdvertisementService;
+
+    @Autowired
+    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
 
     @GetMapping
     private <T extends AdvertisementResponse> AdvertisementResponse findOneById(Long id) {
@@ -78,7 +83,7 @@ public class AdvertisementController {
     }
 
     @PutMapping("change-description")
-    public void changeGoodsAdvertisementDescription(Long id, @RequestBody String description) {
+    public void changeGoodsAdvertisementDescription(Long id, @RequestBody(required = false) String description) {
         goodsAdvertisementService.changeAdvertisementDescription(id, description);
     }
 
@@ -92,6 +97,45 @@ public class AdvertisementController {
         goodsAdvertisementService.changeAdvertisementDeliveries(id, deliveryIds);
     }
 
+    @PutMapping("change-sellerDelivery")
+    public void changeGoodsAdvertisementOnlySeller(Long id, Boolean isOnly) {
+        goodsAdvertisementService.changeAdvertisementOnlySellerCountry(id, isOnly);
+    }
+
+    @PutMapping("add-image")
+    public String addImageToGoodsAdvertisement(Long id, @RequestBody String image) {
+        return goodsAdvertisementService.addImageToGoodsAdvertisement(id, image);
+    }
+
+    @PutMapping("delete-image")
+    public void deleteGoodsAdvertisementImage(Long id, String image) {
+        goodsAdvertisementService.deleteGoodsAdvertisementImage(id, image);
+    }
+
+    @PutMapping("main-image")
+    public void makeMainImageGoodsAdvertisement(Long id, String image) {
+        goodsAdvertisementService.makeMainImageToGoodsAdvertisement(id, image);
+    }
+
+    @GetMapping("statistics")
+    public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id){
+        return new GoodsAdvertisementStatisticsResponse(goodsAdvertisementStatisticsService.findOneByGoodsAdvertisementId(id));
+    }
+
+    @PutMapping("add-to-favorites")
+    public void addToFavorites(Long id) {
+        goodsAdvertisementService.addToFavorites(id);
+    }
+
+    @PutMapping("remove-from-favorites")
+    public void removeFromFavorites(Long id) {
+        goodsAdvertisementService.removeFromFavorites(id);
+    }
+
+    @GetMapping("is-in-favorites")
+    public Boolean isInFavorites(Long id) {
+        return goodsAdvertisementService.isInFavorites(id);
+    }
 
 
 

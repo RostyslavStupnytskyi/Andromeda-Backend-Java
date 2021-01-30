@@ -31,6 +31,8 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private Long sellerId;
 
+    private String countryCode;
+
 
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
 
@@ -43,5 +45,6 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
         this.seller = advertisement.getSeller().getShopName();
         this.sellerId = advertisement.getSeller().getId();
+        this.countryCode = advertisement.getSeller().getCountry().getCountryCode();
     }
 }

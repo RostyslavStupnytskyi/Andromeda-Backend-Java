@@ -1,7 +1,8 @@
-package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
+package rostyk.stupnytskiy.andromeda.entity.statistics.advertisement;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,11 +27,16 @@ public class GoodsAdvertisementStatistics {
 
     private Integer views = 0;
 
-    private Integer numberOfOrders = 0;
-
     private Long sold = 0L;
+    private Long orders = 0L;
+
+    private Integer feedbacks = 0;
+
+    private Integer inLikesList = 0;
 
     private LocalDateTime creationDate;
+
+
 
 }
 

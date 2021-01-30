@@ -34,6 +34,12 @@ public class FileTool {
         return saveImage(img,userDir);
     }
 
+    public void deleteAdvertisementImage(String img, Long userId) {
+        String fileName = PROJECT_DIR + "user_" + userId + File.separator + "advertisements" + File.separator + img;
+        deleteImage(fileName);
+    }
+
+
     public String saveAdvertisementImage(String img, Long userId) throws IOException {
         String userDir = PROJECT_DIR + "user_" + userId + File.separator + "advertisements" + File.separator;
         return saveImage(img,userDir);
@@ -42,6 +48,13 @@ public class FileTool {
     public String saveFeedbackImage(String img, Long id) throws IOException {
         String userDir = PROJECT_DIR + "user_" + id + File.separator + "feedback" + File.separator;
         return saveImage(img,userDir);
+    }
+
+    private void deleteImage(String fileName) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     private String saveImage(String img, String dir) throws IOException {

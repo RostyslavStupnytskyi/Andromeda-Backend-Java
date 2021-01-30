@@ -39,6 +39,10 @@ public class UserDeliveryAddressService {
         return address;
     }
 
+    public UserDeliveryAddress updateUserAddress(UserDeliveryAddressRequest request, Long id) {
+        return save(addressRequestToAddress(request, findByUserAndId(id)));
+    }
+
     public UserDeliveryAddress save(UserDeliveryAddress address) {
         return addressRepository.save(address);
     }
@@ -80,5 +84,10 @@ public class UserDeliveryAddressService {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         user.setDefaultAddress(address);
         userAccountService.save(user);
+    }
+
+
+    public void deleteAddress(Long id) {
+        addressRepository.delete(findByUserAndId(id));
     }
 }

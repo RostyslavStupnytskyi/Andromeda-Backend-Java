@@ -3,14 +3,13 @@ package rostyk.stupnytskiy.andromeda.service.advertisement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementSearchRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisementStatistics;
+import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
@@ -79,9 +78,9 @@ public class AdvertisementService {
         goodsAdvertisementRepository.findAll().forEach((a) -> {
             if (a.getStatistics() == null) a.setStatistics(GoodsAdvertisementStatistics.builder()
                     .creationDate(LocalDateTime.now())
-                    .numberOfOrders(0)
                     .views(0)
                     .sold(0L)
+                    .inLikesList(0)
                     .build());
             goodsAdvertisementRepository.save(a);
         });

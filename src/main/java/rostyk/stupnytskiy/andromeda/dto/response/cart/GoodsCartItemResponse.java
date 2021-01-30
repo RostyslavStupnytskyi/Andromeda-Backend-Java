@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
+import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 
 import java.time.LocalDateTime;
@@ -20,10 +22,23 @@ public class GoodsCartItemResponse {
     private Integer count;
     private Long sellerId;
     private Long advertisementId;
+
     @JsonIgnore
     private LocalDateTime date;
 
     private Integer max;
+
+    public GoodsCartItemResponse(GoodsAdvertisement advertisement, DeliveryType deliveryType,  Integer count){
+        this.sellerId = advertisement.getSeller().getId();
+        this.title = advertisement.getTitle();
+        this.max = advertisement.getCount();
+        this.count = count;
+        this.price = advertisement.getPriceForCart(advertisement.getCount());
+        this.image = advertisement.getMainImage();
+        this.advertisementId = advertisement.getId();
+        this.date = LocalDateTime.now();
+        this.deliveryType = new DeliveryTypeResponse(deliveryType);
+    }
 
     public GoodsCartItemResponse(GoodsCartItem item){
         this.id = item.getId();

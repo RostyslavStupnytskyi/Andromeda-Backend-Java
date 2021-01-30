@@ -1,5 +1,6 @@
 package rostyk.stupnytskiy.andromeda.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -24,10 +25,18 @@ public class JwtTokenFilter extends GenericFilterBean {
             throws IOException, ServletException {
 
         String token = jwtTokenTool.getTokenByBody((HttpServletRequest) req);
+
         if (token != null && jwtTokenTool.isTokenValid(token)) {
-            Authentication auth = jwtTokenTool.getAuthentication(token);
+            Authentication auth = null;
+//            try {
+            auth = jwtTokenTool.getAuthentication(token);
+//            } catch (ExpiredJwtException e) {
+//                System.out.println("expired");
+//            }
+
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
+//                SecurityContextHolder.getContext().
             }
         }
         filterChain.doFilter(req, res);

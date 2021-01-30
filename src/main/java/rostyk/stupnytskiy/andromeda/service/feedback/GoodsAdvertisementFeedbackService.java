@@ -1,17 +1,27 @@
 package rostyk.stupnytskiy.andromeda.service.feedback;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.feedback.GoodsAdvertisementFeedbackRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.feedback.GoodsAdvertisementFeedbackResponse;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementFeedbackRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderItemService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GoodsAdvertisementFeedbackService {
@@ -29,12 +39,41 @@ public class GoodsAdvertisementFeedbackService {
     private GoodsAdvertisementService goodsAdvertisementService;
 
     @Autowired
+    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
+
+    @Autowired
+    private GoodsSellerStatisticsService goodsSellerStatisticsService;
+
+    @Autowired
     private FileTool fileTool;
 
 
-    public void save(GoodsAdvertisementFeedbackRequest request){
-        goodsAdvertisementFeedbackRepository.save(goodsAdvertisementFeedbackRequestToGoodsAdvertisementFeedback(request));
+    public void save(GoodsAdvertisementFeedbackRequest request) {
+        GoodsAdvertisementFeedback feedback = goodsAdvertisementFeedbackRequestToGoodsAdvertisementFeedback(request);
+        goodsAdvertisementFeedbackRepository.save(feedback);
+        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementFeedbacksNumber(feedback.getGoodsAdvertisement().getId());
+        goodsSellerStatisticsService.incrementMonthStatisticsOrderFeedbacks(feedback.getGoodsAdvertisement().getSeller());
     }
+
+    public PageResponse<GoodsAdvertisementFeedbackResponse> getGoodsAdvertisementFeedbacksPage(Long id, PaginationRequest request) {
+        final Page<GoodsAdvertisementFeedback> page = goodsAdvertisementFeedbackRepository.findPageByGoodsAdvertisementId(id, request.mapToPageable());
+
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisementFeedbackResponse::new)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages());
+    }
+
+    public List<GoodsAdvertisementFeedback> findAllGoodsAdvertisementFeedbacksByGoodsAdvertisementId(Long id) {
+        return goodsAdvertisementFeedbackRepository.findAllByGoodsAdvertisementId(id);
+    }
+
+    public List<GoodsAdvertisementFeedback> findAllGoodsAdvertisementFeedbacksByGoodsAdvertisementSeller(GoodsSellerAccount seller) {
+        return goodsAdvertisementFeedbackRepository.findAllByGoodsAdvertisementSeller(seller);
+    }
+
 
     private GoodsAdvertisementFeedback goodsAdvertisementFeedbackRequestToGoodsAdvertisementFeedback(GoodsAdvertisementFeedbackRequest request) {
         GoodsAdvertisementFeedback feedback = new GoodsAdvertisementFeedback();
@@ -46,6 +85,7 @@ public class GoodsAdvertisementFeedbackService {
                 ));
         feedback.setGoodsAdvertisement(feedback.getGoodsOrderItem().getGoodsAdvertisement());
         feedback.setUserAccount(userAccount);
+        feedback.setCreationDate(LocalDateTime.now());
         feedback.setCountry(feedback.getGoodsOrderItem().getGoodsOrder().getDeliveryDetails().getCountry());
 
         if (request.getImages() != null) {

@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +59,20 @@ public class JwtTokenTool {
                 .compact();
     }
 
-    public boolean isTokenValid(String token) {
-        Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+    public boolean isTokenValid(String token)  {
+//    public boolean isTokenValid(String token) throws ExpiredJwtException{
+//        try {
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+//        } catch (ExpiredJwtException e) {
+//
+//        }
         return true;
     }
 
     public String getTokenByBody(HttpServletRequest servletRequest) {
         String token = servletRequest.getHeader("Authorization");
 
-        if (token != null && token.startsWith("Bearer ")){
+        if (token != null && token.startsWith("Bearer ")) {
             return token.substring(7, token.length());
         }
         return null;

@@ -48,6 +48,11 @@ public class CartController {
         return cartService.getItemsForOrder(id);
     }
 
+    @GetMapping("/form-position")
+    private CartSellerPositionResponse formSellerPosition(Long advertisementId, Long deliveryId, Integer count){
+        return cartService.formSellerPosition(advertisementId, deliveryId, count);
+    }
+
     @PutMapping("/price")
     private Double countPrice(@RequestBody List<GoodsCartItemForCountingPriceRequest> items) {
         return cartService.countCartPrice(items);
