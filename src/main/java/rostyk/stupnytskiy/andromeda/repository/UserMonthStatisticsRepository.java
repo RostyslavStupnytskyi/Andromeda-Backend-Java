@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface UserMonthStatisticsRepository extends JpaRepository<UserMonthStatistics, Long> {
 
     Optional<UserMonthStatistics> findOneByUserStatisticsUserAndMonthAndYear(UserAccount userAccount, Month month, Integer year);
+    Optional<UserMonthStatistics> findOneByUserStatisticsAndMonthAndYear(UserStatistics statistics, Month month, Integer year);
 }

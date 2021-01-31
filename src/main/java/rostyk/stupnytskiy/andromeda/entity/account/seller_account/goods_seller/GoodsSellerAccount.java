@@ -23,19 +23,19 @@ public class GoodsSellerAccount extends SellerAccount {
 
     private Boolean onlySellerCountryDelivery = false;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<GoodsAdvertisement> advertisements;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<DeliveryType> deliveryTypes;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<GoodsSellerFeedback> feedbacks;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<GoodsOrder> goodsOrders;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private GoodsSellerStatistics statistics;
 
     @Override
@@ -46,7 +46,7 @@ public class GoodsSellerAccount extends SellerAccount {
                 '}';
     }
 
-    public GoodsSellerResponse mapToResponse(){
+    public GoodsSellerResponse mapToResponse() {
         return new GoodsSellerResponse(this);
     }
 }

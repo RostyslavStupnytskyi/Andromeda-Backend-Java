@@ -37,7 +37,7 @@ public class Account {
     @Column(nullable = false)
     private UserRole userRole;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
     public AccountResponse mapToResponse(){

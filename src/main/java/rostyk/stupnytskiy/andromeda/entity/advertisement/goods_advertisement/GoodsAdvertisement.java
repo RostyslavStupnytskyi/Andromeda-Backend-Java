@@ -32,28 +32,28 @@ public class GoodsAdvertisement extends Advertisement implements AdvertisementEn
 
     private Double priceToSort;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Subcategory subcategory;
 
     @ElementCollection
     private List<String> images = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsSellerAccount seller;
 
-    @OneToMany(mappedBy = "advertisement")
+    @OneToMany(mappedBy = "advertisement", fetch = FetchType.LAZY)
     private List<Property> properties = new ArrayList<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<DeliveryType> deliveryTypes = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private GoodsAdvertisementStatistics statistics;
 
-    @OneToMany(mappedBy = "goodsAdvertisement")
+    @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<GoodsAdvertisementFeedback> feedbacks;
 
-    @ManyToMany(mappedBy = "favoriteAdvertisements")
+    @ManyToMany(mappedBy = "favoriteAdvertisements", fetch = FetchType.LAZY)
     private List<UserAccount> users;
 
     @Override

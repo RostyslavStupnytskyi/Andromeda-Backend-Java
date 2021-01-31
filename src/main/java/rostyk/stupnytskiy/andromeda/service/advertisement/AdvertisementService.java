@@ -76,13 +76,7 @@ public class AdvertisementService {
 
     public void addStatisticsToAll() {
         goodsAdvertisementRepository.findAll().forEach((a) -> {
-            if (a.getStatistics() == null) a.setStatistics(GoodsAdvertisementStatistics.builder()
-                    .creationDate(LocalDateTime.now())
-                    .views(0)
-                    .sold(0L)
-                    .inLikesList(0)
-                    .build());
-            goodsAdvertisementRepository.save(a);
+//            goodsAdvertisementRepository.save(a);
         });
     }
 

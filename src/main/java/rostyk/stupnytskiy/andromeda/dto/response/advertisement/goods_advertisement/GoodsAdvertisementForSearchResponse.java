@@ -30,7 +30,7 @@ public class GoodsAdvertisementForSearchResponse {
         this.image = advertisement.getMainImage();
         this.seller = advertisement.getSeller().getShopName();
         this.sellerId = advertisement.getSeller().getId();
-        this.sold = advertisement.getStatistics().getSold();
+        this.sold = advertisement.getStatistics().getSoldSum();
         this.date = advertisement.getStatistics().getCreationDate();
         this.type = advertisement.getDiscriminatorValue();
         this.rating = advertisement.getStatistics().getRating();

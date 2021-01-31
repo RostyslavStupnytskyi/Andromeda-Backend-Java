@@ -24,25 +24,25 @@ public class UserAccount extends Account {
 
     private String username;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Cart cart;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<GoodsOrder> goodsOrders;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private UserDeliveryAddress defaultAddress;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<UserDeliveryAddress> addresses;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<GoodsAdvertisement> favoriteAdvertisements;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private UserSettings settings;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private UserStatistics userStatistics;
 
     public UserAccount() {

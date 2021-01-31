@@ -28,6 +28,9 @@ import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
+import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
+import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
@@ -72,6 +75,15 @@ public class GoodsAdvertisementService {
     @Autowired
     private PropertyService propertyService;
 
+    @Autowired
+    private UserStatisticsService userStatisticsService;
+
+    @Autowired
+    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
+
+    @Autowired
+    private GoodsSellerStatisticsService goodsSellerStatisticsService;
+
 
     public GoodsAdvertisement findById(Long id) {
         return goodsAdvertisementRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -88,6 +100,7 @@ public class GoodsAdvertisementService {
         RetailPrice price = retailGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
         advertisement.setPriceToSort(price.getPrice());
         advertisementRepository.save(advertisement);
+        goodsAdvertisementStatisticsService.createStartStatistics(advertisement);
     }
 
     public void saveWholesaleGoodsAdvertisement(WholesaleGoodsAdvertisementRequest request) {
@@ -97,6 +110,13 @@ public class GoodsAdvertisementService {
         WholesalePrice price = wholesaleGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
         advertisement.setPriceToSort(price.getMinPrice());
         advertisementRepository.save(advertisement);
+        goodsAdvertisementStatisticsService.createStartStatistics(advertisement);
+    }
+
+    public void setAdvertisementView(Long id) {
+        userStatisticsService.saveUserAdvertisementViewRequest(findById(id));
+        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementViews(id);
+        goodsSellerStatisticsService.incrementMonthStatisticsAdvertisementViews(findById(id).getSeller());
     }
 
     public void exchangePriceForAll() {
@@ -120,15 +140,7 @@ public class GoodsAdvertisementService {
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
         advertisement.setCount(request.getCount());
-
-        advertisement.setStatistics(GoodsAdvertisementStatistics.builder()
-                .creationDate(LocalDateTime.now())
-                .views(0)
-                .sold(0L)
-                .orders(0L)
-                .feedbacks(0)
-                .inLikesList(0)
-                .build());
+        advertisement.setStatistics(new GoodsAdvertisementStatistics());
 
         if (request.getDeliveryTypes() != null)
             request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
@@ -257,6 +269,8 @@ public class GoodsAdvertisementService {
             user.getFavoriteAdvertisements().add(goodsAdvertisement);
             userAccountService.save(user);
         }
+
+        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementInLikeLists(id);
     }
 
     public void removeFromFavorites (Long id) {
@@ -264,6 +278,7 @@ public class GoodsAdvertisementService {
         GoodsAdvertisement goodsAdvertisement = findById(id);
         user.getFavoriteAdvertisements().remove(goodsAdvertisement);
         userAccountService.save(user);
+        goodsAdvertisementStatisticsService.decrementGoodsAdvertisementInLikeLists(id);
     }
 
     public Boolean isInFavorites (Long id) {

@@ -4,12 +4,13 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 
 @Entity
@@ -19,13 +20,24 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Account account;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account receiver;
 
     @Lob
     private String text;
 
     private NotificationType type;
 
-    private LocalDateTime dateTime;
+    private LocalDate date;
+
+    private LocalTime time;
+
+    private Boolean isRead;
+
+    public Notification() {
+//        dateTime = LocalDateTime.now();
+        time = LocalTime.now();
+        date = LocalDate.now();
+        isRead = false;
+    }
 }

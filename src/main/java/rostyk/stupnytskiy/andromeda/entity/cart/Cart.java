@@ -20,9 +20,9 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "cart")
+    @OneToOne(mappedBy = "cart", fetch = FetchType.LAZY)
     private UserAccount user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
     private List<GoodsCartItem> cartItems;
 }

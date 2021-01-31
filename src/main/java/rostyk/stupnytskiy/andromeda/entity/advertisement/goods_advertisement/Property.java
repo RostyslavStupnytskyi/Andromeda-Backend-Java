@@ -22,7 +22,7 @@ public class Property {
 
     private String value;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsAdvertisement advertisement;
 
     @Override

@@ -71,8 +71,9 @@ public class AccountService implements UserDetailsService {
 
     public String testAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getCredentials());
-        return (String) auth.getPrincipal();
+        System.out.println(auth.getPrincipal() == "anonymousUser");
+//        System.out.println(auth == null);
+        return "a";
     }
 
     // Register User

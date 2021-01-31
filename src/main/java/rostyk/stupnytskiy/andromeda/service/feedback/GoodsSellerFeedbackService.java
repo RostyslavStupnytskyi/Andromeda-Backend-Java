@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -47,6 +48,7 @@ public class GoodsSellerFeedbackService {
         feedback.setUser(userAccountService.findBySecurityContextHolder());
         feedback.setCommunicationRating(request.getCommunicationRating());
         feedback.setServiceRating(request.getServiceRating());
+        feedback.setDateTime(LocalDateTime.now());
         feedback.setText(request.getText());
         goodsOrderService.makeGoodsOrderClosed(feedback.getGoodsOrder());
         // TODO recount the average rating of seller statistics

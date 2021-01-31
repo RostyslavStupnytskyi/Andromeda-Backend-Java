@@ -23,6 +23,7 @@ import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.notification.NotificationService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
@@ -64,6 +65,9 @@ public class GoodsOrderService {
     @Autowired
     private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
 
+    @Autowired
+    private NotificationService notificationService;
+
 
     public PageResponse<GoodsOrderResponse> getAllOrdersPageForSeller(PaginationRequest paginationRequest) {
         Page<GoodsOrder> page = goodsOrderRepository.findPageBySeller(goodsSellerAccountService.findBySecurityContextHolder(), paginationRequest.mapToPageable());
@@ -77,12 +81,13 @@ public class GoodsOrderService {
 
     public void createGoodsOrder(GoodsOrderRequest request) {
         validateGoodsOrderRequest(request);
-        GoodsOrder goodsOrder = goodsOrderRequestToGoodsOrder(request);
+        GoodsOrder goodsOrder = goodsOrderRequestToGoodsOrderAndSave(request);
         request.getItems().forEach((i) -> goodsOrderItemService.save(i, goodsOrder));
         goodsSellerStatisticsService.incrementMonthStatisticsOrders(goodsOrder.getSeller());
+        notificationService.createNewOrderNotification(goodsOrder);
     }
 
-    private GoodsOrder goodsOrderRequestToGoodsOrder(GoodsOrderRequest request) {
+    private GoodsOrder goodsOrderRequestToGoodsOrderAndSave(GoodsOrderRequest request) {
         GoodsOrder goodsOrder = new GoodsOrder();
         goodsOrder.setCreationDate(LocalDateTime.now());
         goodsOrder.setOrderStatus(GoodsOrderStatus.WAITING_FOR_SENDING);
@@ -99,6 +104,7 @@ public class GoodsOrderService {
         goodsOrder.getOrderItems().forEach((i) -> goodsOrderItemService.confirmGoodsOrderItemSending(i));
         goodsOrderDeliveryDetailsService.updateGoodsOrderDeliveryDetailsToShipment(request, goodsOrder.getDeliveryDetails());
         goodsOrderRepository.save(goodsOrder);
+        notificationService.createOrderSendNotification(goodsOrder);
     }
 
     private GoodsSellerAccount getSellerAccountFromGoodsItemRequest(GoodsOrderItemRequest request) {
@@ -132,8 +138,10 @@ public class GoodsOrderService {
         );
         if (goodsOrder.didAllGoodsOrderItemsDelivered()) {
             goodsOrder.setOrderStatus(WAITING_FOR_FEEDBACK);
+//            goodsOrder.setClosingDate(LocalDateTime.now());
             goodsOrderRepository.save(goodsOrder);
         }
+        notificationService.createOrderReceivedNotification(goodsOrder);
 
     }
 

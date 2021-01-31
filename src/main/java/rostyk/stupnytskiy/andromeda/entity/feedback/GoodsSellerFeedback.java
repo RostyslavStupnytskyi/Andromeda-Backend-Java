@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,16 +26,18 @@ public class GoodsSellerFeedback {
 
     private Double serviceRating;
 
+    private LocalDateTime dateTime;
+
     @Lob
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsSellerAccount seller;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserAccount user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private GoodsOrder goodsOrder;
 
 }

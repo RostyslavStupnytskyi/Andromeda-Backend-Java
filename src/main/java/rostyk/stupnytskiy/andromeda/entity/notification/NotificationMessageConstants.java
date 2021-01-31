@@ -8,5 +8,11 @@ public class NotificationMessageConstants {
 //                    "<b>If you have not registered in the Andromeda store, ignore this message.</b></h3>";
 
     public static final String NEW_ORDER_FOR_SELLER_NOTIFICATION_MESSAGE =
-            "Ви отримали нове замовлення! <a href=\"/client/seller/order-data?orderId=%s\"  target=\"_blank\">Переглянути</a>";
+            "Ви отримали нове замовлення! <a class=\"notification-link\" href=\"/client/seller/order-data?orderId=%s\"  target=\"_blank\">Переглянути</a>";
+
+    public static final String ORDER_SEND_FOR_USER_NOTIFICATION_MESSAGE =
+            "Замовлення №%s вже у дорозі! <a class=\"notification-link\" href=\"/client/user/order-data?orderId=%s\"  target=\"_blank\">Переглянути</a>";
+
+    public static final String ORDER_RECEIVED_FOR_SELLER_NOTIFICATION_MESSAGE =
+            "Покупець підтвердив отримання замовлення №%s <a class=\"notification-link\" href=\"/client/seller/order-data?orderId=%s\"  target=\"_blank\">Переглянути</a>";
 }

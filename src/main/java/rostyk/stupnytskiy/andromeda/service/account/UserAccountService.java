@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.service.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSettingsRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
@@ -34,7 +35,12 @@ public class UserAccountService {
     private UserStatisticsService userStatisticsService;
 
     public UserAccount findBySecurityContextHolder() {
-        return findById(accountService.getIdBySecurityContextHolder());
+        try {
+            return findById(accountService.getIdBySecurityContextHolder());
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     public UserDataResponse getDataResponseForUser() {
@@ -46,7 +52,7 @@ public class UserAccountService {
     }
 
     public UserAccount findById(Long id) {
-        return userRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
     public void changeUserSettings(UserSettingsRequest request) {

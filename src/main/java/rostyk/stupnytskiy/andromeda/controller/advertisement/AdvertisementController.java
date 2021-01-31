@@ -137,6 +137,11 @@ public class AdvertisementController {
         return goodsAdvertisementService.isInFavorites(id);
     }
 
+    @PutMapping("view")
+    public void setAdvertisementView(Long id) {
+        goodsAdvertisementService.setAdvertisementView(id);
+    }
+
 
 
 //    @PutMapping

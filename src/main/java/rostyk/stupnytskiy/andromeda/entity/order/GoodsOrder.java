@@ -35,19 +35,19 @@ public class GoodsOrder {
 
     private Boolean isViewed;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserAccount user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsSellerAccount seller;
 
-    @OneToMany(mappedBy = "goodsOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "goodsOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GoodsOrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private GoodsOrderDeliveryDetails deliveryDetails;
 
-    @OneToOne(mappedBy = "goodsOrder")
+    @OneToOne(mappedBy = "goodsOrder", fetch = FetchType.LAZY)
     private GoodsSellerFeedback goodsSellerFeedback;
 
     public boolean didAllGoodsOrderItemsDelivered() {

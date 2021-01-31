@@ -23,7 +23,7 @@ public class GoodsAdvertisementFeedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsAdvertisement goodsAdvertisement;
 
     @OneToOne
@@ -33,7 +33,7 @@ public class GoodsAdvertisementFeedback {
 
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserAccount userAccount;
 
     private LocalDateTime creationDate;
@@ -41,6 +41,6 @@ public class GoodsAdvertisementFeedback {
     @ElementCollection
     private List<String> images = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 }

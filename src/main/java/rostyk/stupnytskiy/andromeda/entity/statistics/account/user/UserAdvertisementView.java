@@ -12,7 +12,6 @@ import java.time.LocalTime;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 
 @Entity
 public class UserAdvertisementView {
@@ -27,5 +26,9 @@ public class UserAdvertisementView {
 
     @ManyToOne
     private UserMonthStatistics monthStatistics;
+
+    public UserAdvertisementView() {
+        this.dateTime = LocalDateTime.now();
+    }
 
 }

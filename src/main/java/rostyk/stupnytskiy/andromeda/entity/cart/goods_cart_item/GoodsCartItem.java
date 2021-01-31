@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.cart.CartItem;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -25,10 +26,10 @@ public class GoodsCartItem extends CartItem {
 
     private LocalDateTime date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsAdvertisement goodsAdvertisement;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private DeliveryType deliveryType;
 
     @NotNull

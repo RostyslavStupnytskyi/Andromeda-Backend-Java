@@ -40,6 +40,6 @@ public class GoodsOrderDeliveryDetails {
     @Lob
     private String sellerMessage;
 
-    @OneToOne(mappedBy = "deliveryDetails")
+    @OneToOne(mappedBy = "deliveryDetails", fetch = FetchType.LAZY)
     private GoodsOrder goodsOrder;
 }

@@ -31,10 +31,10 @@ public class GoodsOrderItem {
 
     private String descriptionFromUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private DeliveryType deliveryType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsOrder goodsOrder;
 
     @OneToOne(mappedBy = "goodsOrderItem")

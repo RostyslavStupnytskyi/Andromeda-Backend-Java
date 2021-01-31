@@ -13,12 +13,12 @@ public class GoodsAdvertisementStatisticsResponse {
 
     private Long id;
     private Double rating;
-    private Integer views;
+    private Long views;
 
     private Long sold;
     private Long orders;
-    private Integer feedbacks;
-    private Integer likes;
+    private Long feedbacks;
+    private Long likes;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime creationDate;
@@ -26,11 +26,11 @@ public class GoodsAdvertisementStatisticsResponse {
     public GoodsAdvertisementStatisticsResponse(GoodsAdvertisementStatistics statistics) {
         this.id = statistics.getId();
         this.rating = statistics.getRating();
-        this.views = statistics.getViews();
-        this.sold = statistics.getSold();
+        this.views = statistics.getViewsSum();
+        this.sold = statistics.getSoldSum();
         this.creationDate = statistics.getCreationDate();
-        this.feedbacks = statistics.getFeedbacks();
-        this.likes = statistics.getInLikesList();
-        this.orders = statistics.getOrders();
+        this.feedbacks = statistics.getFeedbacksSum();
+        this.likes = statistics.getInLikeListSum();
+        this.orders = statistics.getOrdersSum();
     }
 }
