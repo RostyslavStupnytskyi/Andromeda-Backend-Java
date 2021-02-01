@@ -47,6 +47,11 @@ public class AdvertisementController {
         return goodsAdvertisementService.findAllSellerAdvertisementsPage(id, request);
     }
 
+    @GetMapping("favorites")
+    private PageResponse<AdvertisementResponse> getUserFavoriteAdvertisementsPage(PaginationRequest request) {
+        return goodsAdvertisementService.findAllFavoriteAdvertisementPage(request);
+    }
+
     @PostMapping("retail")
     private void createRetail(@Valid @RequestBody RetailGoodsAdvertisementRequest request) {
         goodsAdvertisementService.saveRetailGoodsAdvertisement(request);

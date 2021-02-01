@@ -36,6 +36,7 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -285,5 +286,18 @@ public class GoodsAdvertisementService {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         GoodsAdvertisement goodsAdvertisement = findById(id);
         return  user.getFavoriteAdvertisements().contains(goodsAdvertisement);
+    }
+
+    public PageResponse<AdvertisementResponse> findAllFavoriteAdvertisementPage(PaginationRequest request) {
+        UserAccount user = userAccountService.findBySecurityContextHolder();
+        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllAdvertisementByUserId(user.getId(), request.mapToPageable());
+
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisement::mapToResponse)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 }

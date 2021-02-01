@@ -1,8 +1,14 @@
 package rostyk.stupnytskiy.andromeda.service.statistics.account.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.statistics.adviertisement_views.UserAdvertisementViewResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.statistics.adviertisement_views.UserAdvertisementsViewsResponse;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
@@ -14,8 +20,10 @@ import rostyk.stupnytskiy.andromeda.repository.UserStatisticsRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.stream.Collectors;
 
 @Service
 public class UserStatisticsService {
@@ -74,4 +82,26 @@ public class UserStatisticsService {
 
     }
 
+    public UserAdvertisementsViewsResponse getViews(LocalDate startDate, LocalDate endDate, PaginationRequest request) {
+
+        UserAccount userAccount = userAccountService.findBySecurityContextHolder();
+
+        final Page<UserAdvertisementView> page;
+
+        if (startDate != null && endDate != null) {
+            page = userAdvertisementViewRepository.findAllByMonthStatisticsUserStatisticsAndDateBetweenOrderByDateDescTimeDesc(userAccount.getUserStatistics(), startDate, endDate, request.mapToPageable());
+        } else if (startDate != null) {
+            page = userAdvertisementViewRepository.findAllByMonthStatisticsUserStatisticsAndDateOrderByDateDescTimeDesc(userAccount.getUserStatistics(), startDate, request.mapToPageable());
+        } else {
+            page = userAdvertisementViewRepository.findAllByMonthStatisticsUserStatisticsOrderByDateDescTimeDesc(userAccount.getUserStatistics(), request.mapToPageable());
+        }
+
+        return new UserAdvertisementsViewsResponse(new PageResponse<>(
+                page.get()
+                        .map(UserAdvertisementViewResponse::new)
+                        .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        ));
+    }
 }

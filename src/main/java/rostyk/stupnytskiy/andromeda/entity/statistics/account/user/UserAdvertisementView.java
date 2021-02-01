@@ -22,13 +22,15 @@ public class UserAdvertisementView {
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
-    private LocalDateTime dateTime;
+    private LocalDate date;
+    private LocalTime time;
 
     @ManyToOne
     private UserMonthStatistics monthStatistics;
 
     public UserAdvertisementView() {
-        this.dateTime = LocalDateTime.now();
+        this.date = LocalDate.now();
+        this.time = LocalTime.now();
     }
 
 }
