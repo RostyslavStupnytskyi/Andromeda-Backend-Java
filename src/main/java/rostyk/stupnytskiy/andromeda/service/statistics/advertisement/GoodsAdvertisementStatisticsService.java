@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdverti
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementMonthStatisticsRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.feedback.GoodsAdvertisementFeedbackService;
 
 import java.time.LocalDateTime;
@@ -48,7 +49,14 @@ public class GoodsAdvertisementStatisticsService {
         try {
             Month month = LocalDateTime.now().getMonth();
             Integer year = LocalDateTime.now().getYear();
+            return getByGoodsAdvertisementAndMonthAndYear(statistics, month, year);
+        } catch (IllegalArgumentException e) {
+            return saveForNewMonthStatistics(statistics);
+        }
+    }
 
+    public GoodsAdvertisementMonthStatistics getMonthStatisticsByGoodsAdvertisementStatisticsAndMonthAndYear(GoodsAdvertisementStatistics statistics, Month month, Integer year) {
+        try {
             return getByGoodsAdvertisementAndMonthAndYear(statistics, month, year);
         } catch (IllegalArgumentException e) {
             return saveForNewMonthStatistics(statistics);
@@ -102,6 +110,7 @@ public class GoodsAdvertisementStatisticsService {
         statistics.setRating( Math.round(feedbacks.stream().mapToDouble( GoodsAdvertisementFeedback::getRating).sum()/feedbacks.size() * 100.0) / 100.0 );
         goodsAdvertisementStatisticsRepository.save(statistics);
     }
+
 
 
 }

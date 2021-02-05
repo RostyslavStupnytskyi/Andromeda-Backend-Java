@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
@@ -25,6 +26,10 @@ public interface GoodsAdvertisementRepository extends JpaRepository<GoodsAdverti
 
     @Query("select distinct a from GoodsAdvertisement a join a.users u where u.id = :id")
     Page<GoodsAdvertisement> getAllAdvertisementByUserId(@Param("id") Long id, Pageable pageable);
+
+    @Query("select distinct a from GoodsAdvertisement a join a.subcategory s where s.category.title = :category order by rand()")
+    Page<GoodsAdvertisement> getAllBySubcategoryCategory(@Param("category")String category, Pageable pageable);
+//    Page<GoodsAdvertisement> findR(Category category, Pageable pageable);
 
     Page<GoodsAdvertisement> findAllByUsers_Id(Long id, Pageable pageable);
 }

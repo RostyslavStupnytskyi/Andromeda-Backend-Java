@@ -10,4 +10,5 @@ public class UserDataRequest  {
 
     private String username;
 
+    private String avatar;
 }

@@ -14,4 +14,12 @@ public class GoodsSellerDataRequest {
     private List<String> countryCodes;
 
     private List<Long> deliveryTypesId;
+
+    private String shopName;
+
+    private String avatar;
+
+    private Boolean sendNewOrderNotifications;
+
+    private Boolean sendOrderReceivedNotifications;
 }

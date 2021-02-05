@@ -38,6 +38,10 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private GoodsSellerStatistics statistics;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private GoodsSellerSettings settings;
+
+
     @Override
     public String toString() {
         return "GoodsSellerAccount{" +

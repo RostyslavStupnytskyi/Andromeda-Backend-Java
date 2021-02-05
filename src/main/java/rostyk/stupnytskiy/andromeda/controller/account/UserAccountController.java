@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.controller.account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSettingsRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.adviertisement_views.UserAdvertisementsViewsResponse;
@@ -31,6 +32,16 @@ public class UserAccountController {
     @PutMapping("settings")
     public void changeUserSettings(@RequestBody UserSettingsRequest request) {
         userAccountService.changeUserSettings(request);
+    }
+
+    @PutMapping("change-data")
+    public void changeUserData(@RequestBody UserDataRequest request) {
+        userAccountService.changeUserData(request);
+    }
+
+    @DeleteMapping("delete-avatar")
+    public void deleteUserAvatar() {
+        userAccountService.deleteUserAvatar();
     }
 
     @PostMapping

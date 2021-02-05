@@ -33,6 +33,7 @@ public class AccountController {
         return accountService.login(request);
     }
 
+
     @PostMapping("/register/user")
     public AuthenticationResponse registerUser(@Valid @RequestBody AccountLoginRequest request) throws IOException {
         return accountService.registerUser(request);

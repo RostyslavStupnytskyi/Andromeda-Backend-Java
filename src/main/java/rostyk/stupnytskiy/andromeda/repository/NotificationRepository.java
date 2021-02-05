@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.entity.notification.Notification;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,4 +22,8 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
     Page<Notification> findPageByReceiverAndDate(Account account, Pageable pageable, LocalDate date);
 
     Optional<Notification> findByReceiverAndId(Account account, Long id);
+
+    List<Notification> findAllByReceiver(Account account);
+
+    Notification findLastByReceiver(Account accountBySecurityContextHolder);
 }

@@ -27,6 +27,16 @@ public class NotificationController {
         return notificationService.getPageForAccount(request);
     }
 
+    @GetMapping("/count")
+    private Long getNotificationsCount() {
+        return notificationService.getNotificationsCount();
+    }
+
+    @GetMapping("/last")
+    private NotificationResponse getLastNotification() {
+        return new NotificationResponse(notificationService.getLastNewNotification());
+    }
+
     @PutMapping("read")
     private void makeNotificationRead(Long id) {
         notificationService.makeNotificationRead(id);

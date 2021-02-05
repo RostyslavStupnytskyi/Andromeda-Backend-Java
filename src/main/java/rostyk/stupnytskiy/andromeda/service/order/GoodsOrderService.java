@@ -28,6 +28,9 @@ import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvert
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus.*;
@@ -218,7 +221,8 @@ public class GoodsOrderService {
     }
 
     public PageResponse<GoodsOrderResponse> getAllClosedOrdersPageForSeller(PaginationRequest request) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageBySellerAndOrderStatusOrOrderStatus(goodsSellerAccountService.findBySecurityContextHolder(),WAITING_FOR_FEEDBACK, CLOSED, request.mapToPageable());
+        Set<GoodsOrderStatus> statusSet = new HashSet<>(Arrays.asList(WAITING_FOR_FEEDBACK, CLOSED));
+        Page<GoodsOrder> page = goodsOrderRepository.findAllBySellerAndOrderStatusIn(goodsSellerAccountService.findBySecurityContextHolder(),statusSet, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
                 .map(GoodsOrderResponse::new)

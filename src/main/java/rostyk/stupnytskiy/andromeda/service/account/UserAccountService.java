@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSettingsRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
@@ -21,7 +22,9 @@ import rostyk.stupnytskiy.andromeda.repository.UserSettingsRepository;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
+import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
@@ -46,6 +49,9 @@ public class UserAccountService {
     @Autowired
     private UserStatisticsService userStatisticsService;
 
+    @Autowired
+    private FileTool fileTool;
+
 
     public UserAccount findBySecurityContextHolder() {
         try {
@@ -60,7 +66,7 @@ public class UserAccountService {
         return new UserDataResponse(findBySecurityContextHolder());
     }
 
-    public void save(UserAccount userAccount){
+    public void save(UserAccount userAccount) {
         accountService.save(userAccount);
     }
 
@@ -74,15 +80,38 @@ public class UserAccountService {
             user.getSettings().setCountry(countryService.findCountryByCountryCode(request.getCountryCode()));
         if (request.getCurrencyCode() != null)
             user.getSettings().setCurrency(currencyService.findCurrencyByCurrencyCode(request.getCurrencyCode()));
+        if (request.getGetSendOrdersNotifications() != null)
+            user.getSettings().setGetSendOrderNotifications(request.getGetSendOrdersNotifications());
         userSettingsRepository.save(user.getSettings());
     }
 
-    public void addStatisticsToAll(){
+    public void addStatisticsToAll() {
         userRepository.findAll().forEach((u) -> {
             u.setUserStatistics(new UserStatistics());
             userStatisticsService.createStartStatistics(u);
         });
     }
 
+    public void changeUserData(UserDataRequest request) {
+        UserAccount userAccount = findBySecurityContextHolder();
+        if (request.getUsername() != null && !request.getUsername().isEmpty()) userAccount.setUsername(request.getUsername());
 
+        if (request.getAvatar() != null) {
+            try {
+                userAccount.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), userAccount.getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        userRepository.save(userAccount);
+    }
+
+    public void deleteUserAvatar() {
+        UserAccount userAccount = findBySecurityContextHolder();
+
+        userAccount.setAvatar(null);
+
+        userRepository.save(userAccount);
+    }
 }

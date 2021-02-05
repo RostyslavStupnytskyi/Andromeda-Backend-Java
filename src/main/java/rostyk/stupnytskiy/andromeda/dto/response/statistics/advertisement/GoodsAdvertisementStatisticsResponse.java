@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement;
+package rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

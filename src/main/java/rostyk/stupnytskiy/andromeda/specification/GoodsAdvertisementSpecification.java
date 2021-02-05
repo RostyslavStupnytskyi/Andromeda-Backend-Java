@@ -31,6 +31,7 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
     public Predicate toPredicate(Root<GoodsAdvertisement> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
         final List<Predicate> predicates = new ArrayList<>();
         predicates.add(findByTitleLike(root, cb));
+//        predicates.add(findByDescriptionLike(root, cb));
         predicates.add(findByCountry(root, cb));
         predicates.add(findByRating(root, cb));
         predicates.add(findByImage(root, cb));
@@ -43,6 +44,16 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
             predicate = cb.conjunction();
         } else {
             predicate = cb.like(r.get("title"), '%' + title + '%');
+        }
+        return predicate;
+    }
+
+    private Predicate findByDescriptionLike(Root<GoodsAdvertisement> r, CriteriaBuilder cb) {
+        Predicate predicate;
+        if (title == null || title.trim().isEmpty()) {
+            predicate = cb.conjunction();
+        } else {
+            predicate = cb.like(r.get("description"), '%' + title + '%');
         }
         return predicate;
     }

@@ -4,9 +4,12 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -22,15 +25,14 @@ public class UserAdvertisementView {
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime dateTime;
+
 
     @ManyToOne
     private UserMonthStatistics monthStatistics;
 
     public UserAdvertisementView() {
-        this.date = LocalDate.now();
-        this.time = LocalTime.now();
+        this.dateTime = LocalDateTime.now();
     }
 
 }

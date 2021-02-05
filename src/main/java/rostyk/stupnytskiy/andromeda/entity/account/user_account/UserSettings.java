@@ -21,6 +21,8 @@ public class UserSettings {
     @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
+    private Boolean getSendOrderNotifications = true;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Currency currency;
 

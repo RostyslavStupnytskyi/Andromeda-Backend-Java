@@ -24,7 +24,7 @@ public class UserAdvertisementViewResponse {
 
     public UserAdvertisementViewResponse(UserAdvertisementView view) {
         this.advertisement = new GoodsAdvertisementResponse(view.getGoodsAdvertisement());
-        this.date = view.getDate();
-        this.time = view.getTime();
+        this.date = view.getDateTime().toLocalDate();
+        this.time = view.getDateTime().toLocalTime();
     }
 }

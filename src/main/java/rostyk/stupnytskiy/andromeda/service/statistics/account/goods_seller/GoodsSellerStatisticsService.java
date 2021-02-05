@@ -42,8 +42,14 @@ public class GoodsSellerStatisticsService {
         return goodsSellerMonthStatisticsRepository.save(statistics);
     }
 
-    public GoodsSellerMonthStatistics getBySellerAndMonth(GoodsSellerAccount seller, Month month, Integer year) {
-        return goodsSellerMonthStatisticsRepository.findOneBySellerStatisticsSellerIdAndMonthAndYear(seller.getId(), month, year).orElseThrow(IllegalArgumentException::new);
+
+
+    public GoodsSellerMonthStatistics getBySellerAndMonthAndYear(GoodsSellerAccount seller, Month month, Integer year) {
+        try {
+            return goodsSellerMonthStatisticsRepository.findOneBySellerStatisticsSellerIdAndMonthAndYear(seller.getId(), month, year).orElseThrow(IllegalArgumentException::new);
+        } catch (Exception e) {
+            return saveForNewMonthStatistics(seller.getStatistics());
+        }
     }
 
     public GoodsSellerMonthStatistics getMonthStatisticsForSellerByCurrentMonth(GoodsSellerAccount seller) {

@@ -13,6 +13,7 @@ import rostyk.stupnytskiy.andromeda.repository.NotificationRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static rostyk.stupnytskiy.andromeda.entity.notification.NotificationMessageConstants.*;
@@ -61,27 +62,33 @@ public class NotificationService {
     }
 
     public void createNewOrderNotification(GoodsOrder order) {
-        Notification notification = new Notification();
-        notification.setType(NEW_ORDER_NOTIFICATION);
-        notification.setReceiver(order.getSeller());
-        notification.setText(String.format(NEW_ORDER_FOR_SELLER_NOTIFICATION_MESSAGE, order.getId()));
-        notificationRepository.save(notification);
+        if (order.getSeller().getSettings().getSendNewOrderNotifications()) {
+            Notification notification = new Notification();
+            notification.setType(NEW_ORDER_NOTIFICATION);
+            notification.setReceiver(order.getSeller());
+            notification.setText(String.format(NEW_ORDER_FOR_SELLER_NOTIFICATION_MESSAGE, order.getId()));
+            notificationRepository.save(notification);
+        }
     }
 
     public void createOrderSendNotification(GoodsOrder order) {
-        Notification notification = new Notification();
-        notification.setType(ORDER_SEND_NOTIFICATION);
-        notification.setReceiver(order.getUser());
-        notification.setText(String.format(ORDER_SEND_FOR_USER_NOTIFICATION_MESSAGE, String.format("%09d", order.getId()), order.getId()));
-        notificationRepository.save(notification);
+        if (order.getUser().getSettings().getGetSendOrderNotifications()) {
+            Notification notification = new Notification();
+            notification.setType(ORDER_SEND_NOTIFICATION);
+            notification.setReceiver(order.getUser());
+            notification.setText(String.format(ORDER_SEND_FOR_USER_NOTIFICATION_MESSAGE, String.format("%09d", order.getId()), order.getId()));
+            notificationRepository.save(notification);
+        }
     }
 
     public void createOrderReceivedNotification(GoodsOrder order) {
-        Notification notification = new Notification();
-        notification.setType(ORDER_RECEIVED_NOTIFICATION);
-        notification.setReceiver(order.getSeller());
-        notification.setText(String.format(ORDER_RECEIVED_FOR_SELLER_NOTIFICATION_MESSAGE, String.format("%09d", order.getId()), order.getId()));
-        notificationRepository.save(notification);
+        if (order.getSeller().getSettings().getSendOrderReceivedNotifications()) {
+            Notification notification = new Notification();
+            notification.setType(ORDER_RECEIVED_NOTIFICATION);
+            notification.setReceiver(order.getSeller());
+            notification.setText(String.format(ORDER_RECEIVED_FOR_SELLER_NOTIFICATION_MESSAGE, String.format("%09d", order.getId()), order.getId()));
+            notificationRepository.save(notification);
+        }
     }
 
 
@@ -94,5 +101,19 @@ public class NotificationService {
     private Notification findByIdAndAccount(Long id) {
         Account account = accountService.getAccountBySecurityContextHolder();
         return notificationRepository.findByReceiverAndId(account, id).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public List<Notification> findAllByReceiver() {
+
+        return notificationRepository.findAllByReceiver(accountService.getAccountBySecurityContextHolder());
+    }
+
+    public Notification getLastNewNotification() {
+        return notificationRepository.findLastByReceiver(accountService.getAccountBySecurityContextHolder());
+    }
+
+
+    public Long getNotificationsCount() {
+        return findAllByReceiver().stream().filter((n) -> !n.getIsRead()).count();
     }
 }

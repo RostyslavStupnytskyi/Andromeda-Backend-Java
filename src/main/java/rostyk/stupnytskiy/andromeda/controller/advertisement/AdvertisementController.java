@@ -10,7 +10,9 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementStatisticsResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsAdvertisementMonthStatisticsResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsAdvertisementStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
@@ -50,6 +52,11 @@ public class AdvertisementController {
     @GetMapping("favorites")
     private PageResponse<AdvertisementResponse> getUserFavoriteAdvertisementsPage(PaginationRequest request) {
         return goodsAdvertisementService.findAllFavoriteAdvertisementPage(request);
+    }
+
+    @GetMapping("get-for-main")
+    private GoodsAdvertisementsForMainPageResponse getMainPageAdvertisements(PaginationRequest request) {
+        return goodsAdvertisementService.getGoodsAdvertisementsForMainPage(request);
     }
 
     @PostMapping("retail")
@@ -125,6 +132,11 @@ public class AdvertisementController {
     @GetMapping("statistics")
     public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id){
         return new GoodsAdvertisementStatisticsResponse(goodsAdvertisementStatisticsService.findOneByGoodsAdvertisementId(id));
+    }
+
+    @GetMapping("month-statistics")
+    public GoodsAdvertisementMonthStatisticsResponse getGoodsAdvertisementStatistics(Long id, Integer month, Integer year){
+        return new GoodsAdvertisementMonthStatisticsResponse(goodsAdvertisementService.findMonthStatisticsByIdAndMonthAndYear(id, month, year));
     }
 
     @PutMapping("add-to-favorites")

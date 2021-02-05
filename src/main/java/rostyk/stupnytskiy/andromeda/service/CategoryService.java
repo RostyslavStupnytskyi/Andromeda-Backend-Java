@@ -13,6 +13,7 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +49,12 @@ public class CategoryService {
                 page.getTotalElements(),
                 page.getTotalPages()
         );
+    }
+
+    public Category getRandomCategory() {
+        List<Category> categories  = categoryRepository.findAll();
+        Random random = new Random();
+        return categories.get(random.nextInt(categories.size()));
     }
 
     public void delete(Long id) {

@@ -17,4 +17,6 @@ public class UserSettingsRequest {
 
     @JsonProperty("currency")
     private String currencyCode;
+
+    private Boolean getSendOrdersNotifications;
 }

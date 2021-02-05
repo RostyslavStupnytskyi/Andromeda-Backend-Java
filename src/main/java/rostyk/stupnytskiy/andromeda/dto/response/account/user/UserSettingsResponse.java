@@ -12,9 +12,11 @@ public class UserSettingsResponse {
 
     private String countryCode;
     private CurrencyResponse currency;
+    private Boolean getSendOrdersNotifications;
 
     public UserSettingsResponse(UserSettings settings) {
         this.countryCode = settings.getCountry().getCountryCode();
         this.currency = new CurrencyResponse(settings.getCurrency());
+        this.getSendOrdersNotifications = settings.getGetSendOrderNotifications();
     }
 }

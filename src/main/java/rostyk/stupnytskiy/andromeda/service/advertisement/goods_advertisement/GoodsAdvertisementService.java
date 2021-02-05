@@ -10,9 +10,14 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
+import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementMonthStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
@@ -21,6 +26,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.who
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.service.CategoryService;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
@@ -34,9 +40,8 @@ import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvert
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +62,9 @@ public class GoodsAdvertisementService {
 
     @Autowired
     private SubcategoryService subcategoryService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private CurrencyService currencyService;
@@ -274,7 +282,7 @@ public class GoodsAdvertisementService {
         goodsAdvertisementStatisticsService.incrementGoodsAdvertisementInLikeLists(id);
     }
 
-    public void removeFromFavorites (Long id) {
+    public void removeFromFavorites(Long id) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         GoodsAdvertisement goodsAdvertisement = findById(id);
         user.getFavoriteAdvertisements().remove(goodsAdvertisement);
@@ -282,10 +290,10 @@ public class GoodsAdvertisementService {
         goodsAdvertisementStatisticsService.decrementGoodsAdvertisementInLikeLists(id);
     }
 
-    public Boolean isInFavorites (Long id) {
+    public Boolean isInFavorites(Long id) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         GoodsAdvertisement goodsAdvertisement = findById(id);
-        return  user.getFavoriteAdvertisements().contains(goodsAdvertisement);
+        return user.getFavoriteAdvertisements().contains(goodsAdvertisement);
     }
 
     public PageResponse<AdvertisementResponse> findAllFavoriteAdvertisementPage(PaginationRequest request) {
@@ -300,4 +308,39 @@ public class GoodsAdvertisementService {
                 page.getTotalPages()
         );
     }
+
+    public GoodsAdvertisementMonthStatistics findMonthStatisticsByIdAndMonthAndYear(Long id, Integer month, Integer year) {
+        Month m = Month.of(month + 1);
+        return goodsAdvertisementStatisticsService.getMonthStatisticsByGoodsAdvertisementStatisticsAndMonthAndYear(findById(id).getStatistics(), m, year);
+    }
+
+    public GoodsAdvertisementsForMainPageResponse getGoodsAdvertisementsForMainPage(PaginationRequest request) {
+        UserAccount userAccount = userAccountService.findBySecurityContextHolder();
+        GoodsAdvertisementsForMainPageResponse response = new GoodsAdvertisementsForMainPageResponse();
+        Category category;
+        if (userAccount != null) {
+            category = userStatisticsService.defineMostCommonCategoryOfLastTwentyViews();
+            if (category == null) category = categoryService.getRandomCategory();
+        } else {
+            category = categoryService.getRandomCategory();
+            category = categoryService.findById(4L);
+        }
+        response.setCategory(new CategoryResponse(category));
+        response.setResponses(getAdvertisementsResponsePageByCategory(category, request));
+        return response;
+    }
+
+    private PageResponse<GoodsAdvertisementForSearchResponse> getAdvertisementsResponsePageByCategory(Category category, PaginationRequest request) {
+        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllBySubcategoryCategory(category.getTitle(), request.mapToPageable());
+
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisement::mapToSearchResponse)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+
 }

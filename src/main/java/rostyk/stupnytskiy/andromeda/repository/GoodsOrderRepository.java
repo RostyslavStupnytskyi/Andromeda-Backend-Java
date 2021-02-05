@@ -13,6 +13,7 @@ import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface GoodsOrderRepository extends JpaRepository<GoodsOrder, Long> {
@@ -34,6 +35,8 @@ public interface GoodsOrderRepository extends JpaRepository<GoodsOrder, Long> {
     Page<GoodsOrder> findPageByUserAndOrderStatusOrOrderStatus(UserAccount user, GoodsOrderStatus orderStatus1, GoodsOrderStatus orderStatus2, Pageable pageable);
 
     Page<GoodsOrder> findPageBySellerAndOrderStatusOrOrderStatus(GoodsSellerAccount sellerAccount, GoodsOrderStatus orderStatus1, GoodsOrderStatus orderStatus2, Pageable pageable);
+
+    Page<GoodsOrder> findAllBySellerAndOrderStatusIn(GoodsSellerAccount sellerAccount, Set<GoodsOrderStatus> orderStatus, Pageable pageable);
 
     List<GoodsOrder> findAllByUserAndOrderStatus(UserAccount user, GoodsOrderStatus orderStatus);
 

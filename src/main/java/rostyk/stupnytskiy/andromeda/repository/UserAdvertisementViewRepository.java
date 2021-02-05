@@ -9,13 +9,19 @@ import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertise
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface UserAdvertisementViewRepository extends JpaRepository<UserAdvertisementView, Long> {
 
-    Page<UserAdvertisementView> findAllByMonthStatisticsUserStatisticsOrderByDateDescTimeDesc(UserStatistics statistics, Pageable pageable);
 
-    Page<UserAdvertisementView> findAllByMonthStatisticsUserStatisticsAndDateOrderByDateDescTimeDesc(UserStatistics statistics, LocalDate date, Pageable pageable);
+    Page<UserAdvertisementView> findAllByMonthStatisticsUserStatisticsOrderByDateTimeDesc(UserStatistics statistics, Pageable pageable);
 
-    Page<UserAdvertisementView> findAllByMonthStatisticsUserStatisticsAndDateBetweenOrderByDateDescTimeDesc(UserStatistics statistics,  LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
+    Page<UserAdvertisementView> findAllByMonthStatisticsUserStatisticsAndDateTimeBetweenOrderByDateTimeDesc(UserStatistics statistics, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
+
+    Page<UserAdvertisementView> findPageByMonthStatisticsUserStatistics(UserStatistics statistics,Pageable pageable);
+
+    Optional<UserAdvertisementView> findTopByMonthStatisticsUserStatisticsOrderByIdDesc(UserStatistics statistics);
+
 }
