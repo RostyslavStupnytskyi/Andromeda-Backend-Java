@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "advertisement_type")
-public class Advertisement implements AdvertisementEntity{
+public class Advertisement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +26,6 @@ public class Advertisement implements AdvertisementEntity{
     private String description;
 
     private String mainImage;
-
-    @Override
-    public <T extends AdvertisementResponse> AdvertisementResponse mapToResponse() {
-        return new AdvertisementResponse(this);
-    }
 
     @Transient
     public String getDiscriminatorValue() {
