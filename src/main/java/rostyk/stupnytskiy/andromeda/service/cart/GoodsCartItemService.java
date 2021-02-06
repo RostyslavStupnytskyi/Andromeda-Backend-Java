@@ -38,10 +38,10 @@ public class GoodsCartItemService {
     }
 
     public void auditIfItemCountLessOrEqualThanGoodsCountAndChangeIfBigger(GoodsCartItem item){
-        if (item.getCount() > item.getGoodsAdvertisement().getCount()){
-            item.setCount(item.getGoodsAdvertisement().getCount());
-            goodsCartItemRepository.save(item);
-        }
+//        if (item.getCount() > item.getGoodsAdvertisement().getCount()){
+//            item.setCount(item.getGoodsAdvertisement().getCount());
+//            goodsCartItemRepository.save(item);
+//        }
     }
 
     public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long deliveryId) {
@@ -56,11 +56,11 @@ public class GoodsCartItemService {
     public Integer updateCartItemCount(Long id,Cart cart, Integer count){
         GoodsCartItem goodsCartItem = findByIdAndCart(id, cart);
         if (count < 1) return 1;
-        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
-            goodsCartItem.setCount(count);
-        } else {
-            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
-        }
+//        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
+//            goodsCartItem.setCount(count);
+//        } else {
+//            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
+//        }
         save(goodsCartItem);
         return goodsCartItem.getCount();
     }
@@ -68,11 +68,11 @@ public class GoodsCartItemService {
     public Integer checkCartItemCount(Long id,Cart cart, Integer count){
         GoodsCartItem goodsCartItem = findByIdAndCart(id, cart);
         if (count < 1) return 1;
-        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
-            goodsCartItem.setCount(count);
-        } else {
-            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
-        }
+//        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
+//            goodsCartItem.setCount(count);
+//        } else {
+//            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
+//        }
         return goodsCartItem.getCount();
     }
 

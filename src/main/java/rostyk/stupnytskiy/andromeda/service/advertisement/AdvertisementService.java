@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
@@ -56,7 +57,7 @@ public class AdvertisementService {
         goodsAdvertisementRepository.findAll().forEach((a) -> System.out.println(a.getClass().getName()));
         return goodsAdvertisementRepository.findAll()
                 .stream()
-                .map(GoodsAdvertisement::mapToResponse)
+                .map(GoodsAdvertisementResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +68,7 @@ public class AdvertisementService {
         );
 
         return new PageResponse<>(page.get()
-                .map(GoodsAdvertisement::mapToSearchResponse)
+                .map(GoodsAdvertisementForSearchResponse::new)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages());

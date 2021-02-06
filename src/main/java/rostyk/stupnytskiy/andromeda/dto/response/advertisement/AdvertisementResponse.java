@@ -2,8 +2,6 @@ package rostyk.stupnytskiy.andromeda.dto.response.advertisement;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.retail.RetailPriceResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.wholesale.WholesalePriceResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.category.SubcategoryResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;

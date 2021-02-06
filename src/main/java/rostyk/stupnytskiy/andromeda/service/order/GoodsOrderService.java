@@ -119,8 +119,8 @@ public class GoodsOrderService {
         request.getItems().forEach((i) -> {
             if (sellerAccount != getSellerAccountFromGoodsItemRequest(i))
                 throw new IllegalArgumentException("Non one seller in order request");
-            if (i.getCount() > goodsAdvertisementService.findById(i.getGoodsAdvertisementId()).getCount())
-                throw new IllegalArgumentException("you want to by more than seller have");
+//            if (i.getCount() > goodsAdvertisementService.findById(i.getGoodsAdvertisementId()).getCount())
+//                throw new IllegalArgumentException("you want to by more than seller have");
         });
     }
 

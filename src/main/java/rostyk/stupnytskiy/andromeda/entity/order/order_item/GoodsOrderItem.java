@@ -3,6 +3,7 @@ package rostyk.stupnytskiy.andromeda.entity.order.order_item;
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 
@@ -29,6 +30,9 @@ public class GoodsOrderItem {
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
+    @ManyToOne
+    private ParametersValuesPriceCount valuesPriceCount;
+
     private String descriptionFromUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,8 +43,4 @@ public class GoodsOrderItem {
 
     @OneToOne(mappedBy = "goodsOrderItem")
     private GoodsAdvertisementFeedback goodsAdvertisementFeedback;
-
-    public Double getPriceByDateAndCount(LocalDateTime date) {
-        return goodsAdvertisement.getPriceByDateAndForCount(date, count);
-    }
 }

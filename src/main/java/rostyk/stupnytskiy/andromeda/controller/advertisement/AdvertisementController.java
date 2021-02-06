@@ -36,12 +36,12 @@ public class AdvertisementController {
 
     @GetMapping
     private <T extends AdvertisementResponse> AdvertisementResponse findOneById(Long id) {
-        return advertisementService.findById(id).mapToResponse();
+        return new AdvertisementResponse(advertisementService.findById(id));
     }
 
     @GetMapping("editing")
     private <T extends AdvertisementResponse> AdvertisementResponse findForEditing(Long id) {
-        return goodsAdvertisementService.findByIdAndSeller(id).mapToResponse();
+        return new AdvertisementResponse(goodsAdvertisementService.findByIdAndSeller(id));
     }
 
     @GetMapping("seller")
@@ -59,15 +59,6 @@ public class AdvertisementController {
         return goodsAdvertisementService.getGoodsAdvertisementsForMainPage(request);
     }
 
-    @PostMapping("retail")
-    private void createRetail(@Valid @RequestBody RetailGoodsAdvertisementRequest request) {
-        goodsAdvertisementService.saveRetailGoodsAdvertisement(request);
-    }
-
-    @PostMapping("/wholesale")
-    public void createWholesale(@Valid @RequestBody WholesaleGoodsAdvertisementRequest request) {
-        goodsAdvertisementService.saveWholesaleGoodsAdvertisement(request);
-    }
 
     @GetMapping("/filter")
     public PageResponse<GoodsAdvertisementForSearchResponse> findForSearch(GoodsAdvertisementSearchRequest request) {
@@ -76,7 +67,8 @@ public class AdvertisementController {
 
     @GetMapping("/count")
     private Integer getAdvertisementCount(Long id) {
-        return goodsAdvertisementService.findById(id).getCount();
+//        return goodsAdvertisementService.findById(id).getCount();
+        return 1;
     }
 
 //    @PutMapping
@@ -130,12 +122,12 @@ public class AdvertisementController {
     }
 
     @GetMapping("statistics")
-    public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id){
+    public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id) {
         return new GoodsAdvertisementStatisticsResponse(goodsAdvertisementStatisticsService.findOneByGoodsAdvertisementId(id));
     }
 
     @GetMapping("month-statistics")
-    public GoodsAdvertisementMonthStatisticsResponse getGoodsAdvertisementStatistics(Long id, Integer month, Integer year){
+    public GoodsAdvertisementMonthStatisticsResponse getGoodsAdvertisementStatistics(Long id, Integer month, Integer year) {
         return new GoodsAdvertisementMonthStatisticsResponse(goodsAdvertisementService.findMonthStatisticsByIdAndMonthAndYear(id, month, year));
     }
 
@@ -158,7 +150,6 @@ public class AdvertisementController {
     public void setAdvertisementView(Long id) {
         goodsAdvertisementService.setAdvertisementView(id);
     }
-
 
 
 //    @PutMapping

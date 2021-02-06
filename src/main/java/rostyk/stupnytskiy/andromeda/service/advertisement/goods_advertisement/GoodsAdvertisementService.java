@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
 import rostyk.stupnytskiy.andromeda.entity.Category;
@@ -20,10 +21,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Goo
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementMonthStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailGoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.retail.RetailPrice;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.wholesale.WholesalePrice;
+
 import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
@@ -32,8 +30,6 @@ import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
-import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementService;
-import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
@@ -53,12 +49,6 @@ public class GoodsAdvertisementService {
 
     @Autowired
     private AdvertisementRepository advertisementRepository;
-
-    @Autowired
-    private WholesaleGoodsAdvertisementService wholesaleGoodsAdvertisementService;
-
-    @Autowired
-    private RetailGoodsAdvertisementService retailGoodsAdvertisementService;
 
     @Autowired
     private SubcategoryService subcategoryService;
@@ -101,42 +91,11 @@ public class GoodsAdvertisementService {
     public GoodsAdvertisement findByIdAndSeller(Long id) {
         return goodsAdvertisementRepository.findByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder()).orElseThrow(IllegalArgumentException::new);
     }
-
-
-    public void saveRetailGoodsAdvertisement(RetailGoodsAdvertisementRequest request) {
-        RetailGoodsAdvertisement advertisement =
-                advertisementRepository.save(new RetailGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
-        RetailPrice price = retailGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
-        advertisement.setPriceToSort(price.getPrice());
-        advertisementRepository.save(advertisement);
-        goodsAdvertisementStatisticsService.createStartStatistics(advertisement);
-    }
-
-    public void saveWholesaleGoodsAdvertisement(WholesaleGoodsAdvertisementRequest request) {
-        wholesaleGoodsAdvertisementService.validWholesaleUnit(request.getPrice());
-        WholesaleGoodsAdvertisement advertisement =
-                advertisementRepository.save(new WholesaleGoodsAdvertisement(goodsAdvertisementFromRequest(request)));
-        WholesalePrice price = wholesaleGoodsAdvertisementService.finishAdvertisementCreation(advertisement, request);
-        advertisement.setPriceToSort(price.getMinPrice());
-        advertisementRepository.save(advertisement);
-        goodsAdvertisementStatisticsService.createStartStatistics(advertisement);
-    }
-
     public void setAdvertisementView(Long id) {
         userStatisticsService.saveUserAdvertisementViewRequest(findById(id));
         goodsAdvertisementStatisticsService.incrementGoodsAdvertisementViews(id);
         goodsSellerStatisticsService.incrementMonthStatisticsAdvertisementViews(findById(id).getSeller());
     }
-
-    public void exchangePriceForAll() {
-        goodsAdvertisementRepository.findAll().forEach((a) -> {
-            a.setPriceToSort(
-                    Math.round(a.getPriceForSort() * 100) / 100.0
-            );
-            goodsAdvertisementRepository.save(a);
-        });
-    }
-
 
     public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
         GoodsAdvertisement advertisement = new GoodsAdvertisement();
@@ -148,7 +107,7 @@ public class GoodsAdvertisementService {
         advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
-        advertisement.setCount(request.getCount());
+//        advertisement.setCount(request.getCount());
         advertisement.setStatistics(new GoodsAdvertisementStatistics());
 
         if (request.getDeliveryTypes() != null)
@@ -178,7 +137,7 @@ public class GoodsAdvertisementService {
 
     public void minusAdvertisementCount(Long goodsAdvertisementId, Integer minus) {
         GoodsAdvertisement advertisement = findById(goodsAdvertisementId);
-        advertisement.setCount(advertisement.getCount() - minus);
+//        advertisement.setCount(advertisement.getCount() - minus);
         goodsAdvertisementRepository.save(advertisement);
     }
 
@@ -189,7 +148,7 @@ public class GoodsAdvertisementService {
         Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findPageBySellerId(id, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisement::mapToResponse)
+                .map(GoodsAdvertisementResponse::new)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
@@ -204,7 +163,7 @@ public class GoodsAdvertisementService {
 
     public void changeAdvertisementCount(Long id, Integer count) {
         GoodsAdvertisement advertisement = findByIdAndSeller(id);
-        advertisement.setCount(count);
+//        advertisement.setCount(count);
         goodsAdvertisementRepository.save(advertisement);
     }
 
@@ -302,7 +261,7 @@ public class GoodsAdvertisementService {
 
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisement::mapToResponse)
+                .map(GoodsAdvertisementResponse::new)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
@@ -335,7 +294,7 @@ public class GoodsAdvertisementService {
 
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisement::mapToSearchResponse)
+                .map(GoodsAdvertisementForSearchResponse::new)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()

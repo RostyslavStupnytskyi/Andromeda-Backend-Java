@@ -36,8 +36,7 @@ public class Advertisement {
     public String toString() {
         return "Advertisement{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", title='" + title +
                 ", mainImage='" + mainImage + '\'' +
                 '}';
     }

@@ -59,9 +59,9 @@ public class GoodsOrder {
 
     public Double getPrice() {
         Double sum = 0.0;
-        for (GoodsOrderItem i : orderItems) {
-            sum += i.getPriceByDateAndCount(creationDate);
-        }
+//        for (GoodsOrderItem i : orderItems) {
+//            sum += i.getPriceByDateAndCount(creationDate);
+//        }
         return sum;
     }
 }

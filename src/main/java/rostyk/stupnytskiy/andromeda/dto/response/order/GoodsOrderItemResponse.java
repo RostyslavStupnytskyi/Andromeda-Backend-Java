@@ -36,6 +36,6 @@ public class GoodsOrderItemResponse {
      this.delivery = new DeliveryTypeResponse(item.getDeliveryType());
      this.title = item.getGoodsAdvertisement().getTitle();
      this.image = item.getGoodsAdvertisement().getMainImage();
-     this.price = item.getGoodsAdvertisement().getPriceByDateAndForUnitCount(item.getGoodsOrder().getCreationDate(), this.count);
+//     this.price = item.getGoodsAdvertisement().getPriceByDateAndForUnitCount(item.getGoodsOrder().getCreationDate(), this.count);
     }
 }

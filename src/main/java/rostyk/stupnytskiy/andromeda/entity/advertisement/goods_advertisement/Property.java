@@ -27,8 +27,7 @@ public class Property {
 
     @Override
     public String toString() {
-        return "Property{" +
-                "id=" + id +
-                '}';
+        return "Property{name='" + name + '\'' +
+                ", value='" + value + '}';
     }
 }

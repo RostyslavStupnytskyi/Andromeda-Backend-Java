@@ -31,9 +31,9 @@ public class GoodsCartItemResponse {
     public GoodsCartItemResponse(GoodsAdvertisement advertisement, DeliveryType deliveryType,  Integer count){
         this.sellerId = advertisement.getSeller().getId();
         this.title = advertisement.getTitle();
-        this.max = advertisement.getCount();
+//        this.max = advertisement.getCount();
         this.count = count;
-        this.price = advertisement.getPriceForCart(advertisement.getCount());
+//        this.price = advertisement.getPriceForCart(advertisement.getCount());
         this.image = advertisement.getMainImage();
         this.advertisementId = advertisement.getId();
         this.date = LocalDateTime.now();
@@ -45,11 +45,11 @@ public class GoodsCartItemResponse {
         this.sellerId = item.getGoodsAdvertisement().getSeller().getId();
         this.title = item.getGoodsAdvertisement().getTitle();
         this.deliveryType = new DeliveryTypeResponse(item.getDeliveryType());
-        this.price = item.getGoodsAdvertisement().getPriceForCart(item.getCount());
+//        this.price = item.getGoodsAdvertisement().getPriceForCart(item.getCount());
         this.count = item.getCount();
         this.image = item.getGoodsAdvertisement().getMainImage();
         this.advertisementId = item.getGoodsAdvertisement().getId();
         this.date = item.getDate();
-        this.max = item.getGoodsAdvertisement().getCount();
+//        this.max = item.getGoodsAdvertisement().getCount();
     }
 }

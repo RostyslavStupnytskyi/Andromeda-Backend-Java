@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.G
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 
@@ -24,12 +25,13 @@ public class GoodsAdvertisement extends Advertisement {
 
     private Boolean onlySellerCountry;
 
-    private Integer count;
-
     private Double priceToSort;
 
-    @OneToMany(mappedBy = "goodsAdvertisement")
+    @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<Parameter> parameters;
+
+    @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
+    private List<ParametersValuesPriceCount> valuesPriceCounts;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Subcategory subcategory;
@@ -59,7 +61,7 @@ public class GoodsAdvertisement extends Advertisement {
     public String toString() {
         return "GoodsAdvertisement{" +
                 "onlySellerCountry=" + onlySellerCountry +
-                ", images=" + images +
+                ", priceToSort=" + priceToSort +
                 '}';
     }
 }

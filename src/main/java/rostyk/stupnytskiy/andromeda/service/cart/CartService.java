@@ -60,7 +60,10 @@ public class CartService {
     public ChangeGoodsCartItemCountResponse updateGoodsCartItemCount(Long cartItemId, Integer count) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         count = goodsCartItemService.updateCartItemCount(cartItemId, user.getCart(), count);
-        return new ChangeGoodsCartItemCountResponse(count, goodsCartItemService.findByIdAndCart(cartItemId, user.getCart()).getGoodsAdvertisement().getPriceForCart(count));
+        return new ChangeGoodsCartItemCountResponse(count,
+//                goodsCartItemService.findByIdAndCart(cartItemId, user.getCart()).getGoodsAdvertisement().getPriceForCart(count)
+                1.0
+        );
     }
 
     public CartResponse getCartResponse() {
@@ -74,7 +77,7 @@ public class CartService {
         double sum = 0.0;
         for (GoodsCartItemForCountingPriceRequest item : items) {
             GoodsAdvertisement advertisement = goodsAdvertisementService.findById(item.getAdvertisementId());
-            sum += advertisement.getPriceByCount(item.getCount());
+//            sum += advertisement.getPriceByCount(item.getCount());
         }
         return sum;
     }
@@ -105,7 +108,10 @@ public class CartService {
     public ChangeGoodsCartItemCountResponse checkGoodsCartItemCount(Long id, Integer count) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
         count = goodsCartItemService.checkCartItemCount(id, user.getCart(), count);
-        return new ChangeGoodsCartItemCountResponse(count, goodsCartItemService.findByIdAndCart(id, user.getCart()).getGoodsAdvertisement().getPriceForCart(count));
+        return new ChangeGoodsCartItemCountResponse(count,
+//                goodsCartItemService.findByIdAndCart(id, user.getCart()).getGoodsAdvertisement().getPriceForCart(count)
+                1.0
+        );
     }
 
     public CartSellerPositionResponse formSellerPosition(Long advertisementId, Long deliveryId, Integer count) {

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.cart.CartItem;
 
 import javax.persistence.DiscriminatorValue;
@@ -28,6 +29,9 @@ public class GoodsCartItem extends CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private GoodsAdvertisement goodsAdvertisement;
+
+    @ManyToOne
+    private ParametersValuesPriceCount valuesPriceCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private DeliveryType deliveryType;

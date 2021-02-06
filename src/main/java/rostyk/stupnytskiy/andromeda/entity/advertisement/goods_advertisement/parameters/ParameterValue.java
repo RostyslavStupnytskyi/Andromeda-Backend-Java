@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -23,4 +24,7 @@ public class ParameterValue {
 
     @ManyToOne
     private Parameter parameter;
+
+    @ManyToMany(mappedBy = "values")
+    private List<ParametersValuesPriceCount> valuesPriceCounts;
 }
