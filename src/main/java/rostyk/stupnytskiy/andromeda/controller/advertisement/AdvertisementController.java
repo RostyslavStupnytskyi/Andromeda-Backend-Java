@@ -3,10 +3,9 @@ package rostyk.stupnytskiy.andromeda.controller.advertisement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.PropertyRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.retail.RetailGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementSearchRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.wholesale.WholesaleGoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
@@ -71,10 +70,10 @@ public class AdvertisementController {
         return 1;
     }
 
-//    @PutMapping
-//    public void test() {
-//        goodsAdvertisementService.exchangePriceForAll();
-//    }
+    @PostMapping
+    private void createGoodsAdvertisement(@RequestBody GoodsAdvertisementRequest request) {
+
+    }
 
     @PutMapping("change-title")
     public void changeGoodsAdvertisementTitle(Long id, @RequestBody String title) {

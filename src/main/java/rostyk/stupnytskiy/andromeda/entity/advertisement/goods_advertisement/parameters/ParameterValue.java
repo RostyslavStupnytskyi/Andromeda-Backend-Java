@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 @Setter
 @Getter
@@ -20,7 +21,9 @@ public class ParameterValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String value;
+    private String title;
+
+    private String image;
 
     @ManyToOne
     private Parameter parameter;
