@@ -2,16 +2,12 @@ package rostyk.stupnytskiy.andromeda.service.statistics.advertisement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserMonthStatistics;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementMonthStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
-import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementMonthStatisticsRepository;
-import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementStatisticsRepository;
-import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.repository.statistics.advertisement.GoodsAdvertisementMonthStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.advertisement.GoodsAdvertisementStatisticsRepository;
 import rostyk.stupnytskiy.andromeda.service.feedback.GoodsAdvertisementFeedbackService;
 
 import java.time.LocalDateTime;

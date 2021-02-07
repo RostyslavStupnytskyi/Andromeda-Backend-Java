@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.country.CountryRequest;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.entity.country.Region;
-import rostyk.stupnytskiy.andromeda.repository.CountryRepository;
+import rostyk.stupnytskiy.andromeda.repository.country.CountryRepository;
 
 import java.util.HashSet;
 import java.util.List;

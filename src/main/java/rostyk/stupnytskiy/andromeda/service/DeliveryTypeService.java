@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.delivery.DeliveryTypeRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
-import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
-import rostyk.stupnytskiy.andromeda.repository.DeliveryTypeRepository;
+import rostyk.stupnytskiy.andromeda.repository.country.DeliveryTypeRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 

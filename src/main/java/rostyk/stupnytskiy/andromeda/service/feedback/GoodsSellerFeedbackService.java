@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.feedback.GoodsSellerFeedbackRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
-import rostyk.stupnytskiy.andromeda.repository.GoodsSellerFeedbackRepository;
+import rostyk.stupnytskiy.andromeda.repository.feedback.GoodsSellerFeedbackRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;

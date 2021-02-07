@@ -17,7 +17,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.G
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
-import rostyk.stupnytskiy.andromeda.repository.GoodsOrderRepository;
+import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;

@@ -15,9 +15,9 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Goo
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserMonthStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
-import rostyk.stupnytskiy.andromeda.repository.UserAdvertisementViewRepository;
-import rostyk.stupnytskiy.andromeda.repository.UserMonthStatisticsRepository;
-import rostyk.stupnytskiy.andromeda.repository.UserStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.advertisement.UserAdvertisementViewRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.account.UserMonthStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.account.UserStatisticsRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 
 import java.time.LocalDate;

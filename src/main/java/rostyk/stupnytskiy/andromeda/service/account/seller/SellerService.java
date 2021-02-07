@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.SellerDataRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.repository.SellerAccountRepository;
+import rostyk.stupnytskiy.andromeda.repository.account.seller.SellerAccountRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
-import rostyk.stupnytskiy.andromeda.service.AccountStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 

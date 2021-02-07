@@ -12,15 +12,13 @@ import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
-import rostyk.stupnytskiy.andromeda.repository.CartItemRepository;
-import rostyk.stupnytskiy.andromeda.repository.CartRepository;
+import rostyk.stupnytskiy.andromeda.repository.cart.CartItemRepository;
+import rostyk.stupnytskiy.andromeda.repository.cart.CartRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
-import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CartService {

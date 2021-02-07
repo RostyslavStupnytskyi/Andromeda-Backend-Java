@@ -7,8 +7,8 @@ import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.Goods
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
-import rostyk.stupnytskiy.andromeda.repository.GoodsSellerMonthStatisticsRepository;
-import rostyk.stupnytskiy.andromeda.repository.GoodsSellerStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.account.GoodsSellerMonthStatisticsRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.account.GoodsSellerStatisticsRepository;
 import rostyk.stupnytskiy.andromeda.service.feedback.GoodsAdvertisementFeedbackService;
 import rostyk.stupnytskiy.andromeda.service.feedback.GoodsSellerFeedbackService;
 

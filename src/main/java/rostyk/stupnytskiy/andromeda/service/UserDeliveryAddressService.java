@@ -6,7 +6,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.UserDeliveryAddressRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.UserDeliveryAddressResponse;
 import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
-import rostyk.stupnytskiy.andromeda.repository.AddressRepository;
+import rostyk.stupnytskiy.andromeda.repository.country.AddressRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 
 import java.util.List;

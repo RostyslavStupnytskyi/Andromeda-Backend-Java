@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
-import rostyk.stupnytskiy.andromeda.repository.GoodsCartItemRepository;
+import rostyk.stupnytskiy.andromeda.repository.cart.GoodsCartItemRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 

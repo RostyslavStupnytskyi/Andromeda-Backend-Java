@@ -7,11 +7,8 @@ import org.springframework.web.client.RestTemplate;
 import rostyk.stupnytskiy.andromeda.dto.request.country.CurrencyRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
 import rostyk.stupnytskiy.andromeda.entity.country.Currency;
-import rostyk.stupnytskiy.andromeda.repository.CurrencyRepository;
-import springfox.documentation.spring.web.json.Json;
+import rostyk.stupnytskiy.andromeda.repository.country.CurrencyRepository;
 
-import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

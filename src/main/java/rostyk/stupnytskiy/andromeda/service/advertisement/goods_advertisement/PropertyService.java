@@ -9,7 +9,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.PropertyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
-import rostyk.stupnytskiy.andromeda.repository.PropertyRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.PropertyRepository;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 
 import java.util.List;

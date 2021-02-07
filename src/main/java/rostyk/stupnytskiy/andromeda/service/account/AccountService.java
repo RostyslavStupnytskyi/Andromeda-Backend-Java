@@ -24,7 +24,7 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.G
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
-import rostyk.stupnytskiy.andromeda.repository.AccountRepository;
+import rostyk.stupnytskiy.andromeda.repository.account.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
 import rostyk.stupnytskiy.andromeda.service.CountryService;

@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.Goo
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerMonthStatistics;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
-import rostyk.stupnytskiy.andromeda.repository.GoodsSellerRepository;
+import rostyk.stupnytskiy.andromeda.repository.account.seller.goods_seller.GoodsSellerAccountRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
@@ -21,7 +21,7 @@ import java.time.Month;
 public class GoodsSellerAccountService {
 
     @Autowired
-    private GoodsSellerRepository goodsSellerRepository;
+    private GoodsSellerAccountRepository goodsSellerRepository;
 
     @Autowired
     private AccountService accountService;

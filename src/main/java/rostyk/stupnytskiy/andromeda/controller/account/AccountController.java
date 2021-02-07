@@ -7,7 +7,6 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
-import rostyk.stupnytskiy.andromeda.service.AccountStatisticsService;
 
 import javax.validation.Valid;
 import java.io.IOException;
