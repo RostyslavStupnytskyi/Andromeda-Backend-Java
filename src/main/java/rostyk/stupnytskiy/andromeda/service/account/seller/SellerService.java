@@ -19,9 +19,6 @@ public class SellerService {
     private AccountService accountService;
 
     @Autowired
-    private AccountStatisticsService accountStatisticsService;
-
-    @Autowired
     private DeliveryTypeService deliveryTypeService;
 
     @Autowired

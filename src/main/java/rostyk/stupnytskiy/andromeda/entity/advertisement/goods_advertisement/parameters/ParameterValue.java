@@ -29,5 +29,5 @@ public class ParameterValue {
     private Parameter parameter;
 
     @ManyToMany(mappedBy = "values")
-    private List<ParametersValuesPriceCount> valuesPriceCounts;
+    private List<ParametersValuesPriceCount> parametersValuesPriceCounts;
 }

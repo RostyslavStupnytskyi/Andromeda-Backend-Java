@@ -28,6 +28,7 @@ import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
@@ -55,9 +56,6 @@ public class GoodsAdvertisementService {
     private CategoryService categoryService;
 
     @Autowired
-    private CurrencyService currencyService;
-
-    @Autowired
     private GoodsSellerAccountService goodsSellerAccountService;
 
     @Autowired
@@ -81,12 +79,8 @@ public class GoodsAdvertisementService {
     @Autowired
     private GoodsSellerStatisticsService goodsSellerStatisticsService;
 
-
-//    public void test() {
-//        GoodsAdvertisement advertisement = new GoodsAdvertisement();
-//        advertisement.setTitle("test");
-//        advertisement.set
-//    }
+    @Autowired
+    private ParameterService parameterService;
 
     public GoodsAdvertisement findById(Long id) {
         return goodsAdvertisementRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -95,46 +89,56 @@ public class GoodsAdvertisementService {
     public GoodsAdvertisement findByIdAndSeller(Long id) {
         return goodsAdvertisementRepository.findByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder()).orElseThrow(IllegalArgumentException::new);
     }
+
     public void setAdvertisementView(Long id) {
         userStatisticsService.saveUserAdvertisementViewRequest(findById(id));
         goodsAdvertisementStatisticsService.incrementGoodsAdvertisementViews(id);
         goodsSellerStatisticsService.incrementMonthStatisticsAdvertisementViews(findById(id).getSeller());
     }
 
+    public void saveGoodsAdvertisement(GoodsAdvertisementRequest request) {
+        GoodsAdvertisement goodsAdvertisement = goodsAdvertisementRepository.save(goodsAdvertisementFromRequest(request));
+        request.getProperties().forEach((p) -> propertyService.save(p, goodsAdvertisement));
+        request.getParameters().forEach((p) -> parameterService.saveParameter(p, goodsAdvertisement));
+        request.getValuesPriceCounts().forEach((p) -> parameterService.saveParametersValuePriceCount(p, goodsAdvertisement));
+    }
+
     public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
         GoodsAdvertisement advertisement = new GoodsAdvertisement();
-        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
+//        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
 
         advertisement.setTitle(request.getTitle());
         if (!request.getDescription().isEmpty()) advertisement.setDescription(request.getDescription());
 
-        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
+//        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
+
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
-        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
-//        advertisement.setCount(request.getCount());
+
+//        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
+
         advertisement.setStatistics(new GoodsAdvertisementStatistics());
 
         if (request.getDeliveryTypes() != null)
             request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
 
-        if (request.getMainImage() != null) {
-            try {
-                advertisement.setMainImage(fileTool.saveAdvertisementImage(
-                        request.getMainImage(), seller.getId())
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (request.getImages() != null) {
-            request.getImages().forEach(img -> {
-                try {
-                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+//        if (request.getMainImage() != null) {
+//            try {
+//                advertisement.setMainImage(fileTool.saveAdvertisementImage(
+//                        request.getMainImage(), seller.getId())
+//                );
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if (request.getImages() != null) {
+//            request.getImages().forEach(img -> {
+//                try {
+//                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
         return advertisement;
     }
 

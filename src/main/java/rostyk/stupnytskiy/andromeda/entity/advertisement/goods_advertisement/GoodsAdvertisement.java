@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
+@DiscriminatorValue("goods_advertisement")
 public class GoodsAdvertisement extends Advertisement {
 
     private Boolean onlySellerCountry;

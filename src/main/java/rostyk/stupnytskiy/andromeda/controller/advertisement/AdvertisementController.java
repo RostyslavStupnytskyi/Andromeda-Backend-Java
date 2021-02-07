@@ -72,7 +72,7 @@ public class AdvertisementController {
 
     @PostMapping
     private void createGoodsAdvertisement(@RequestBody GoodsAdvertisementRequest request) {
-
+        goodsAdvertisementService.saveGoodsAdvertisement(request);
     }
 
     @PutMapping("change-title")

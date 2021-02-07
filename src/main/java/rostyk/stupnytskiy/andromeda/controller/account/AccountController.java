@@ -19,8 +19,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private AccountStatisticsService accountStatisticsService;
 
 //    @GetMapping
 //    private String test() {
@@ -48,10 +46,10 @@ public class AccountController {
         accountService.updateAccountData(request);
     }
 
-    @PutMapping("/confirm")
-    public Boolean confirmCode(String code){
-        return accountStatisticsService.confirmRegistrationCode(code);
-    }
+//    @PutMapping("/confirm")
+//    public Boolean confirmCode(String code){
+//        return accountStatisticsService.confirmRegistrationCode(code);
+//    }
 
     @GetMapping("/checkToken")
     public void checkToken() {
