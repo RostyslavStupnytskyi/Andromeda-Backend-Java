@@ -20,8 +20,8 @@ import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdverti
 import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 
-import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
-import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.AdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
@@ -81,6 +81,12 @@ public class GoodsAdvertisementService {
     @Autowired
     private GoodsSellerStatisticsService goodsSellerStatisticsService;
 
+
+//    public void test() {
+//        GoodsAdvertisement advertisement = new GoodsAdvertisement();
+//        advertisement.setTitle("test");
+//        advertisement.set
+//    }
 
     public GoodsAdvertisement findById(Long id) {
         return goodsAdvertisementRepository.findById(id).orElseThrow(IllegalArgumentException::new);

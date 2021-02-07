@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.repository;
+package rostyk.stupnytskiy.andromeda.repository.advertisement;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

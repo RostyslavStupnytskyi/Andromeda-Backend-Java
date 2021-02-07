@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.repository;
+package rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -10,16 +10,14 @@ import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertiseme
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
-import rostyk.stupnytskiy.andromeda.repository.AdvertisementRepository;
-import rostyk.stupnytskiy.andromeda.repository.GoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.AdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.GoodsAdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.specification.GoodsAdvertisementSpecification;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

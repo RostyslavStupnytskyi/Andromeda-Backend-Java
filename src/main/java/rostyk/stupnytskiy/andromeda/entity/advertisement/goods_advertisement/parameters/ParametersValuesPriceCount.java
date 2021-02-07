@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 @Setter
 @Getter
@@ -23,8 +24,12 @@ public class ParametersValuesPriceCount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @ManyToMany
+//    private List<ParameterValue> values;
+
     @ManyToMany
-    private List<ParameterValue> values;
+    @MapKeyJoinColumn(name = "parameter_id")
+    private Map<Parameter, ParameterValue> values;
 
     @OneToMany(mappedBy = "valuesPriceCount")
     private List<GoodsCartItem> goodsCartItems;
