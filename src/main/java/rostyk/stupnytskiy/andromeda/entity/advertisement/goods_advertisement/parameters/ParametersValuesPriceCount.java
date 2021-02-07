@@ -9,6 +9,8 @@ import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +31,13 @@ public class ParametersValuesPriceCount {
 
     @ManyToMany
     @MapKeyJoinColumn(name = "parameter_id")
-    private Map<Parameter, ParameterValue> values;
+    private Map<Parameter, ParameterValue> values = new HashMap<>();
 
     @OneToMany(mappedBy = "valuesPriceCount")
-    private List<GoodsCartItem> goodsCartItems;
+    private List<GoodsCartItem> goodsCartItems = new ArrayList<>();;
 
     @OneToMany(mappedBy = "valuesPriceCount")
-    private List<GoodsOrderItem> goodsOrderItems;
+    private List<GoodsOrderItem> goodsOrderItems = new ArrayList<>();;
 
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;

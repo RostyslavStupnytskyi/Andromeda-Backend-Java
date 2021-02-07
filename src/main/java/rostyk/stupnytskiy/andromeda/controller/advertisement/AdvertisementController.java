@@ -9,6 +9,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsAdvertisementMonthStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsAdvertisementStatisticsResponse;
@@ -34,8 +35,8 @@ public class AdvertisementController {
     private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
 
     @GetMapping
-    private <T extends AdvertisementResponse> AdvertisementResponse findOneById(Long id) {
-        return new AdvertisementResponse(advertisementService.findById(id));
+    private GoodsAdvertisementResponse findOneById(Long id) {
+        return new GoodsAdvertisementResponse(goodsAdvertisementService.findById(id));
     }
 
     @GetMapping("editing")

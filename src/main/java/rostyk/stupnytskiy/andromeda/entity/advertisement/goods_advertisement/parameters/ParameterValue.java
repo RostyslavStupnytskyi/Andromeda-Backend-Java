@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,5 +30,5 @@ public class ParameterValue {
     private Parameter parameter;
 
     @ManyToMany(mappedBy = "values")
-    private List<ParametersValuesPriceCount> parametersValuesPriceCounts;
+    private List<ParametersValuesPriceCount> parametersValuesPriceCounts = new ArrayList<>();;
 }

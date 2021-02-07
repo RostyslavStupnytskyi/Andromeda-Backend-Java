@@ -7,6 +7,7 @@ import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -29,6 +30,6 @@ public class Parameter {
     private Boolean priceDependence;
 
     @OneToMany(mappedBy = "parameter")
-    private List<ParameterValue> values;
+    private List<ParameterValue> values = new ArrayList<>();;
 
 }

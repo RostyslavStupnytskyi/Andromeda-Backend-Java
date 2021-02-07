@@ -55,6 +55,7 @@ public class ParameterService {
         Map<Parameter, ParameterValue> parameterValueMap = new HashMap<>();
         Parameter parameter;
         ParameterValue parameterValue;
+
         for (Map.Entry<String, String> paramValue : request.getValueParam().entrySet()) {
             parameter = findParameterByTitleAndAdvertisementId(paramValue.getKey(), goodsAdvertisement);
             parameterValue = findParameterValueByTitleAndParameter(paramValue.getValue(), parameter);

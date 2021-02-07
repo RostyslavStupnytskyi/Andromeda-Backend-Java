@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParameterResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.category.SubcategoryResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
@@ -25,6 +27,10 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
 
     private List<PropertyResponse> properties;
 
+    private List<ParameterResponse> parameters;
+
+    private List<ParametersValuesPriceCountResponse> valuesPriceCounts;
+
     private Integer count;
 
     private String seller;
@@ -34,17 +40,16 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
     private String countryCode;
 
 
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-
     public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
         super(advertisement);
         this.onlySellerCountry = advertisement.getOnlySellerCountry();
-        this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
+//        this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
         this.images = advertisement.getImages();
-//        this.count = advertisement.getCount();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
-        this.seller = advertisement.getSeller().getShopName();
-        this.sellerId = advertisement.getSeller().getId();
-        this.countryCode = advertisement.getSeller().getCountry().getCountryCode();
+//        this.seller = advertisement.getSeller().getShopName();
+//        this.sellerId = advertisement.getSeller().getId();
+//        this.countryCode = advertisement.getSeller().getCountry().getCountryCode();
+        this.parameters = advertisement.getParameters().stream().map(ParameterResponse::new).collect(Collectors.toList());
+        this.valuesPriceCounts = advertisement.getValuesPriceCounts().stream().map(ParametersValuesPriceCountResponse::new).collect(Collectors.toList());
     }
 }
