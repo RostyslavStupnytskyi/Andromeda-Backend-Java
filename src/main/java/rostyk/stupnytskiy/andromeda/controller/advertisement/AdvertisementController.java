@@ -17,7 +17,6 @@ import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin

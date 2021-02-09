@@ -13,14 +13,12 @@ import javax.persistence.*;
 @Setter
 public class CountryResponse {
 
-    private Long id;
     private String countryCode;
     private Long apiId;
     private Region region;
     private String englishName;
 
     public CountryResponse(Country country){
-        this.id = country.getId();
         this.countryCode = country.getCountryCode();
         this.apiId = country.getApiId();
         this.region = country.getRegion();

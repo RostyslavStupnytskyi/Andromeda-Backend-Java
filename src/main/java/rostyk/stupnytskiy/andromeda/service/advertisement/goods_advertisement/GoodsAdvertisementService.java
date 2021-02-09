@@ -100,45 +100,52 @@ public class GoodsAdvertisementService {
         GoodsAdvertisement goodsAdvertisement = goodsAdvertisementRepository.save(goodsAdvertisementFromRequest(request));
         request.getProperties().forEach((p) -> propertyService.save(p, goodsAdvertisement));
         request.getParameters().forEach((p) -> parameterService.saveParameter(p, goodsAdvertisement));
-        request.getValuesPriceCounts().forEach((p) -> parameterService.saveParametersValuePriceCount(p, goodsAdvertisement));
+
+        if (request.getHasParameters()) {
+            request.getValuesPriceCounts().forEach((p) -> parameterService.saveParametersValuePriceCount(p, goodsAdvertisement));
+        } else {
+            parameterService.saveParametersValuePriceCountWithoutParameters(request.getValuesPriceCounts().get(0), goodsAdvertisement);
+        }
     }
 
     public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
         GoodsAdvertisement advertisement = new GoodsAdvertisement();
-//        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
+        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
 
         advertisement.setTitle(request.getTitle());
         if (!request.getDescription().isEmpty()) advertisement.setDescription(request.getDescription());
 
-//        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
+        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
 
         advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
 
-//        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
+        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
 
         advertisement.setStatistics(new GoodsAdvertisementStatistics());
+
+        advertisement.setHasParameters(request.getHasParameters());
 
         if (request.getDeliveryTypes() != null)
             request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
 
-//        if (request.getMainImage() != null) {
-//            try {
-//                advertisement.setMainImage(fileTool.saveAdvertisementImage(
-//                        request.getMainImage(), seller.getId())
-//                );
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        if (request.getImages() != null) {
-//            request.getImages().forEach(img -> {
-//                try {
-//                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }
+        if (request.getMainImage() != null) {
+            try {
+                advertisement.setMainImage(fileTool.saveAdvertisementImage(
+                        request.getMainImage(), seller.getId())
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (request.getImages() != null) {
+            request.getImages().forEach(img -> {
+                try {
+                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
         return advertisement;
     }
 

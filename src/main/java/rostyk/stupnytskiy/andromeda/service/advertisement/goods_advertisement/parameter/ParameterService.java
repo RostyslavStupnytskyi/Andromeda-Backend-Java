@@ -106,4 +106,11 @@ public class ParameterService {
         return parameterValue;
     }
 
+    public ParametersValuesPriceCount saveParametersValuePriceCountWithoutParameters(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
+        ParametersValuesPriceCount parametersValuesPriceCount = new ParametersValuesPriceCount();
+        parametersValuesPriceCount.setCount(request.getCount());
+        parametersValuesPriceCount.setPrice(request.getPrice());
+        parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
+        return parametersValuesPriceCount;
+    }
 }

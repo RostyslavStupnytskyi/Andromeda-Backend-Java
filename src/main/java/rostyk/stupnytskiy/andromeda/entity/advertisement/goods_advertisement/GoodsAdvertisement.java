@@ -28,6 +28,8 @@ public class GoodsAdvertisement extends Advertisement {
 
     private Double priceToSort;
 
+    private Boolean hasParameters;
+
     @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<Parameter> parameters;
 

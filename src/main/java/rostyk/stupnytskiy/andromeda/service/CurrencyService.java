@@ -23,9 +23,7 @@ public class CurrencyService {
     public void reloadCurrencyValues() {
         String url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
         String response = this.restTemplate.getForObject(url, String.class);
-        System.out.println("Get = " + response);
         response = response.substring(2, response.length() - 2);
-        System.out.println("Cut = " + response);
         String[] currencies = response.split("},\\{");
         String[][][] result = new String[4][4][2];
         for (int i = 0; i < currencies.length; i++) {
