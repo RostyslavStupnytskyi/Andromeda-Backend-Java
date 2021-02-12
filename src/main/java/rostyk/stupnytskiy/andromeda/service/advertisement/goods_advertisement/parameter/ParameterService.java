@@ -38,8 +38,11 @@ public class ParameterService {
 
     public void saveParameter(ParameterRequest request, GoodsAdvertisement goodsAdvertisement) {
         Parameter parameter = parameterRepository.save(parameterRequestToParameter(request, goodsAdvertisement));
+        System.out.println("Saved parameter " + parameter.getTitle());
 
         request.getValues().forEach((pv) -> saveParameterValue(pv, parameter));
+
+
     }
 
     public void saveParametersValuePriceCount(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
@@ -51,6 +54,11 @@ public class ParameterService {
         parametersValuesPriceCount.setCount(request.getCount());
         parametersValuesPriceCount.setPrice(request.getPrice());
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
+        System.out.println("Saving map values size + " + request.getValueParam().size());
+//        System.out.println();
+        request.getValueParam().forEach((a,b) -> {
+            System.out.println(a + "  " + b);
+        });
 
         Map<Parameter, ParameterValue> parameterValueMap = new HashMap<>();
         Parameter parameter;
@@ -59,10 +67,11 @@ public class ParameterService {
         for (Map.Entry<String, String> paramValue : request.getValueParam().entrySet()) {
             parameter = findParameterByTitleAndAdvertisementId(paramValue.getKey(), goodsAdvertisement);
             parameterValue = findParameterValueByTitleAndParameter(paramValue.getValue(), parameter);
+            System.out.println("Put param " + parameter.getTitle() + " with value " + parameterValue.getTitle());
             parameterValueMap.put(parameter, parameterValue);
         }
         parametersValuesPriceCount.setValues(parameterValueMap);
-
+        System.out.println(parametersValuesPriceCount);
         return parametersValuesPriceCount;
 //        parameterValueMap.put();
 //        parametersValuesPriceCount.set
@@ -85,6 +94,7 @@ public class ParameterService {
     }
 
     private ParameterValue saveParameterValue(ParameterValueRequest request, Parameter parameter) {
+        System.out.println("Saved param " + parameter.getTitle() + " value " + request.getTitle());
         return parameterValueRepository.save(parameterValueRequestToParameterValue(request, parameter));
     }
 
@@ -111,6 +121,6 @@ public class ParameterService {
         parametersValuesPriceCount.setCount(request.getCount());
         parametersValuesPriceCount.setPrice(request.getPrice());
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
-        return parametersValuesPriceCount;
+        return parametersValuePriceCountRepository.save(parametersValuesPriceCount);
     }
 }

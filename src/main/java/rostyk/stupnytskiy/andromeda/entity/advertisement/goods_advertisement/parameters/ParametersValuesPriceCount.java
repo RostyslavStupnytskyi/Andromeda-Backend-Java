@@ -45,4 +45,14 @@ public class ParametersValuesPriceCount {
     private Double price;
 
     private Integer count;
+
+    @Override
+    public String toString() {
+        return "ParametersValuesPriceCount{" +
+                "id=" + id +
+                ", goodsAdvertisement=" + goodsAdvertisement.getId() +
+                ", price=" + price +
+                ", count=" + count +
+                '}';
+    }
 }

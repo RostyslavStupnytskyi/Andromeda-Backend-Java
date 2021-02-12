@@ -44,7 +44,7 @@ public class AdvertisementController {
     }
 
     @GetMapping("seller")
-    private PageResponse<AdvertisementResponse> getAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
+    private PageResponse<GoodsAdvertisementForSearchResponse> getAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
         return goodsAdvertisementService.findAllSellerAdvertisementsPage(id, request);
     }
 

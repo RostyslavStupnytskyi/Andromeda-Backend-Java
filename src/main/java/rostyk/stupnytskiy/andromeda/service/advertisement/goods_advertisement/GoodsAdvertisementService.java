@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.PropertyRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
@@ -98,10 +99,11 @@ public class GoodsAdvertisementService {
 
     public void saveGoodsAdvertisement(GoodsAdvertisementRequest request) {
         GoodsAdvertisement goodsAdvertisement = goodsAdvertisementRepository.save(goodsAdvertisementFromRequest(request));
-        request.getProperties().forEach((p) -> propertyService.save(p, goodsAdvertisement));
-        request.getParameters().forEach((p) -> parameterService.saveParameter(p, goodsAdvertisement));
-
+        if (request.getProperties() != null) {
+            request.getProperties().forEach((p) -> propertyService.save(p, goodsAdvertisement));
+        }
         if (request.getHasParameters()) {
+            request.getParameters().forEach((p) -> parameterService.saveParameter(p, goodsAdvertisement));
             request.getValuesPriceCounts().forEach((p) -> parameterService.saveParametersValuePriceCount(p, goodsAdvertisement));
         } else {
             parameterService.saveParametersValuePriceCountWithoutParameters(request.getValuesPriceCounts().get(0), goodsAdvertisement);
@@ -124,6 +126,10 @@ public class GoodsAdvertisementService {
         advertisement.setStatistics(new GoodsAdvertisementStatistics());
 
         advertisement.setHasParameters(request.getHasParameters());
+
+        if (request.getHasParameters())
+            advertisement.setPriceToSort(request.getValuesPriceCounts().stream().mapToDouble(ParametersValuesPriceCountRequest::getPrice).min().getAsDouble());
+        else advertisement.setPriceToSort(request.getValuesPriceCounts().get(0).getPrice());
 
         if (request.getDeliveryTypes() != null)
             request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
@@ -156,14 +162,14 @@ public class GoodsAdvertisementService {
         goodsAdvertisementRepository.save(advertisement);
     }
 
-    public PageResponse<AdvertisementResponse> findAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
+    public PageResponse<GoodsAdvertisementForSearchResponse> findAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
         if (id == null) {
             id = goodsSellerAccountService.findBySecurityContextHolder().getId();
         }
         Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findPageBySellerId(id, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisementResponse::new)
+                .map(GoodsAdvertisementForSearchResponse::new)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
