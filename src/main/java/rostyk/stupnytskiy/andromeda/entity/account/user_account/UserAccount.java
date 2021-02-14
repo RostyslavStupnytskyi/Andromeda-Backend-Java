@@ -10,6 +10,7 @@ import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,16 +29,16 @@ public class UserAccount extends Account {
     private Cart cart;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<GoodsOrder> goodsOrders;
+    private List<GoodsOrder> goodsOrders = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     private UserDeliveryAddress defaultAddress;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private List<UserDeliveryAddress> addresses;
+    private List<UserDeliveryAddress> addresses = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<GoodsAdvertisement> favoriteAdvertisements;
+    private List<GoodsAdvertisement> favoriteAdvertisements = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private UserSettings settings;

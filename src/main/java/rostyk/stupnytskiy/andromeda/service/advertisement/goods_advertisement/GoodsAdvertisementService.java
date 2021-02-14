@@ -272,8 +272,11 @@ public class GoodsAdvertisementService {
 
     public Boolean isInFavorites(Long id) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
-        GoodsAdvertisement goodsAdvertisement = findById(id);
-        return user.getFavoriteAdvertisements().contains(goodsAdvertisement);
+        if (user != null) {
+            GoodsAdvertisement goodsAdvertisement = findById(id);
+            return user.getFavoriteAdvertisements().contains(goodsAdvertisement);
+        }
+        return false;
     }
 
     public PageResponse<AdvertisementResponse> findAllFavoriteAdvertisementPage(PaginationRequest request) {

@@ -39,9 +39,6 @@ public class AdvertisementService {
     @Autowired
     private GoodsSellerAccountService goodsSellerAccountService;
 
-    @Autowired
-    private FileTool fileTool;
-
     public Advertisement findById(Long id) {
         return advertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
     }
@@ -65,21 +62,18 @@ public class AdvertisementService {
                 request.getPaginationRequest().mapToPageable()
         );
 
+        request.setCurrencyCode(currencyService.auditUserCurrency(request.getCurrencyCode()));
+
         return new PageResponse<>(page.get()
                 .map(GoodsAdvertisementForSearchResponse::new)
+                .peek((r) -> {
+                    r.setMinPrice(currencyService.exchangeCurrencyFromDollar(r.getMinPrice(), request.getCurrencyCode()));
+                    r.setMaxPrice(currencyService.exchangeCurrencyFromDollar(r.getMaxPrice(), request.getCurrencyCode()));
+                    r.setCurrencyCode(request.getCurrencyCode());
+                })
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages());
     }
 
-
-    public void addStatisticsToAll() {
-        goodsAdvertisementRepository.findAll().forEach((a) -> {
-//            goodsAdvertisementRepository.save(a);
-        });
-    }
-
-    public void changeAdvertisementTitle(Long id, String title) {
-
-    }
 }

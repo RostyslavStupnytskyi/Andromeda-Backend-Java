@@ -50,6 +50,24 @@ public class CurrencyService {
     }
 
 
+    public String auditUserCurrency(String currency) {
+        try {
+            return findCurrencyByCurrencyCode(currency).getCode();
+        } catch (IllegalArgumentException e) {
+            return "USD";
+        }
+    }
+
+    public Double exchangeCurrencyFromDollar(Double value, String currencyTo) {
+        if (currencyTo.equals("USD")) return value;
+        return Math.round(exchangeDollarsToHryvnia(value) / findCurrencyByCurrencyCode(currencyTo).getPriceInHryvnia() * 100.0) / 100.0;
+    }
+
+    private Double exchangeDollarsToHryvnia(Double value) {
+        return Math.round(value * findCurrencyByCurrencyCode("USD").getPriceInHryvnia() * 100.0) / 100.0;
+    }
+
+
     public void save(CurrencyRequest request) {
         currencyRepository.save(currencyRequestToCurrency(request, null));
     }
