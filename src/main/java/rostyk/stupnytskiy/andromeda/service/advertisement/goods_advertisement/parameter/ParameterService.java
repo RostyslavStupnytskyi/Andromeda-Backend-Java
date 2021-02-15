@@ -56,7 +56,7 @@ public class ParameterService {
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
         System.out.println("Saving map values size + " + request.getValueParam().size());
 //        System.out.println();
-        request.getValueParam().forEach((a,b) -> {
+        request.getValueParam().forEach((a, b) -> {
             System.out.println(a + "  " + b);
         });
 
@@ -114,6 +114,10 @@ public class ParameterService {
         parameterValue.setParameter(parameter);
 
         return parameterValue;
+    }
+
+    public ParametersValuesPriceCount findParametersValuesPriceCountById(Long paramsValuesId) {
+        return parametersValuePriceCountRepository.findById(paramsValuesId).orElseThrow(IllegalArgumentException::new);
     }
 
     public ParametersValuesPriceCount saveParametersValuePriceCountWithoutParameters(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {

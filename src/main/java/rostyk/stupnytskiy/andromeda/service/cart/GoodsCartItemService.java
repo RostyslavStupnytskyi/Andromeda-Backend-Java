@@ -7,6 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 import rostyk.stupnytskiy.andromeda.repository.cart.GoodsCartItemRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
 
 import java.time.LocalDateTime;
 
@@ -22,9 +23,12 @@ public class GoodsCartItemService {
     @Autowired
     private DeliveryTypeService deliveryTypeService;
 
-    public void addGoodsItemToCart(Cart cart, Long id, Long deliveryId) {
-        if (!isExits(cart, id)) {
-            GoodsCartItem goodsCartItem = createNewGoodsCartItem(cart, id, deliveryId);
+    @Autowired
+    private ParameterService parameterService;
+
+    public void addGoodsItemToCart(Cart cart, Long id, Long deliveryId, Long paramsValuesId) {
+        if (!isExits(cart, id, paramsValuesId)) {
+            GoodsCartItem goodsCartItem = createNewGoodsCartItem(cart, id, deliveryId, paramsValuesId);
             save(goodsCartItem);
         }
     }
@@ -33,8 +37,8 @@ public class GoodsCartItemService {
         goodsCartItemRepository.save(cartItem);
     }
 
-    public boolean isExits(Cart cart, Long id) {
-        return goodsCartItemRepository.existsByCartAndGoodsAdvertisementId(cart, id);
+    public boolean isExits(Cart cart, Long id, Long paramsValuesId) {
+        return goodsCartItemRepository.existsByCartAndGoodsAdvertisementIdAndAndValuesPriceCountId(cart, id, paramsValuesId);
     }
 
     public void auditIfItemCountLessOrEqualThanGoodsCountAndChangeIfBigger(GoodsCartItem item){
@@ -44,11 +48,12 @@ public class GoodsCartItemService {
 //        }
     }
 
-    public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long deliveryId) {
+    public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long deliveryId, Long paramsValuesId) {
         GoodsCartItem goodsCartItem = new GoodsCartItem();
         goodsCartItem.setCart(cart);
         goodsCartItem.setDate(LocalDateTime.now());
         goodsCartItem.setGoodsAdvertisement(advertisementService.findGoodsAdvertisementById(advertisementId));
+        goodsCartItem.setValuesPriceCount(parameterService.findParametersValuesPriceCountById(paramsValuesId));
         goodsCartItem.setDeliveryType(deliveryTypeService.findById(deliveryId));
         return goodsCartItem;
     }

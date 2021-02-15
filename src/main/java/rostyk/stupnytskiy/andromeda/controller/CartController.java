@@ -19,8 +19,8 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    private void addGoodsItemToCart(Long id, Long deliveryId) {
-        cartService.addGoodsItemToCart(id, deliveryId);
+    private void addGoodsItemToCart(Long id, Long deliveryId, Long paramsValuesId) {
+        cartService.addGoodsItemToCart(id, deliveryId, paramsValuesId);
     }
 
     @PutMapping
@@ -44,12 +44,12 @@ public class CartController {
     }
 
     @GetMapping("/items")
-    private List<CartSellerPositionResponse> getItemsForOrder(Long[] id){
+    private List<CartSellerPositionResponse> getItemsForOrder(Long[] id) {
         return cartService.getItemsForOrder(id);
     }
 
     @GetMapping("/form-position")
-    private CartSellerPositionResponse formSellerPosition(Long advertisementId, Long deliveryId, Integer count){
+    private CartSellerPositionResponse formSellerPosition(Long advertisementId, Long deliveryId, Integer count) {
         return cartService.formSellerPosition(advertisementId, deliveryId, count);
     }
 

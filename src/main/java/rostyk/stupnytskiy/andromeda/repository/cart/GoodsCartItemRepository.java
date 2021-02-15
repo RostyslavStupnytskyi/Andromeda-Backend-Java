@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface GoodsCartItemRepository extends JpaRepository<GoodsCartItem, Long> {
-    boolean existsByCartAndGoodsAdvertisementId(Cart cart, Long id);
+
+    boolean existsByCartAndGoodsAdvertisementIdAndAndValuesPriceCountId(Cart cart, Long id, Long priceCountId);
+
     Optional<GoodsCartItem> findOneByIdAndCart(Long id, Cart cart);
 }

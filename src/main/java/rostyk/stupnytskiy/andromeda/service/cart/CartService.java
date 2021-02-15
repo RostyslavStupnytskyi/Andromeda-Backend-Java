@@ -45,9 +45,10 @@ public class CartService {
 //    private GoodsSellerAccountService goodsSellerAccountService;
 
 
-    public void addGoodsItemToCart(Long advertisementId, Long deliveryTypeId) {
+    public void addGoodsItemToCart(Long advertisementId, Long deliveryTypeId, Long paramsValuesId) {
         UserAccount user = userAccountService.findBySecurityContextHolder();
-        goodsCartItemService.addGoodsItemToCart(user.getCart(), advertisementId, deliveryTypeId);
+        if (advertisementId != null && deliveryTypeId != null && paramsValuesId != null)
+            goodsCartItemService.addGoodsItemToCart(user.getCart(), advertisementId, deliveryTypeId, paramsValuesId);
     }
 
     public void deleteGoodsItemFromCart(Long cartItemId) {
