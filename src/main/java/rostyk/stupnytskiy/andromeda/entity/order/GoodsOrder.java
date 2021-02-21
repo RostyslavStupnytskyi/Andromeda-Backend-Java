@@ -56,12 +56,4 @@ public class GoodsOrder {
         }
         return true;
     }
-
-    public Double getPrice() {
-        Double sum = 0.0;
-//        for (GoodsOrderItem i : orderItems) {
-//            sum += i.getPriceByDateAndCount(creationDate);
-//        }
-        return sum;
-    }
 }

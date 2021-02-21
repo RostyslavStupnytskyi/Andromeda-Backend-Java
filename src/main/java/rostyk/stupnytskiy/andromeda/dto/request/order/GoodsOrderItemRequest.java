@@ -20,6 +20,8 @@ public class GoodsOrderItemRequest {
     @JsonProperty("advertisement")
     private Long goodsAdvertisementId;
 
+    private Long paramsValuesId;
+
     @JsonProperty("delivery")
     private Long deliveryTypeId;
 

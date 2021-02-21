@@ -36,8 +36,8 @@ public class ParametersValuesPriceCount {
     @OneToMany(mappedBy = "valuesPriceCount")
     private List<GoodsCartItem> goodsCartItems = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "valuesPriceCount")
-    private List<GoodsOrderItem> goodsOrderItems = new ArrayList<>();;
+//    @OneToMany(mappedBy = "valuesPriceCount")
+//    private List<GoodsOrderItem> goodsOrderItems = new ArrayList<>();;
 
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;

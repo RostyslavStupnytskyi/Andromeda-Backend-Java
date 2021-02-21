@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
@@ -18,22 +19,18 @@ public class GoodsCartItemResponse {
     private String image;
     private String title;
     private DeliveryTypeResponse deliveryType;
-    private Double price;
     private Integer count;
     private Long sellerId;
     private Long advertisementId;
-
+    private ParametersValuesPriceCountResponse priceCountResponse;
     @JsonIgnore
     private LocalDateTime date;
 
-    private Integer max;
 
     public GoodsCartItemResponse(GoodsAdvertisement advertisement, DeliveryType deliveryType,  Integer count){
         this.sellerId = advertisement.getSeller().getId();
         this.title = advertisement.getTitle();
-//        this.max = advertisement.getCount();
         this.count = count;
-//        this.price = advertisement.getPriceForCart(advertisement.getCount());
         this.image = advertisement.getMainImage();
         this.advertisementId = advertisement.getId();
         this.date = LocalDateTime.now();
@@ -45,11 +42,10 @@ public class GoodsCartItemResponse {
         this.sellerId = item.getGoodsAdvertisement().getSeller().getId();
         this.title = item.getGoodsAdvertisement().getTitle();
         this.deliveryType = new DeliveryTypeResponse(item.getDeliveryType());
-//        this.price = item.getGoodsAdvertisement().getPriceForCart(item.getCount());
         this.count = item.getCount();
         this.image = item.getGoodsAdvertisement().getMainImage();
         this.advertisementId = item.getGoodsAdvertisement().getId();
         this.date = item.getDate();
-//        this.max = item.getGoodsAdvertisement().getCount();
+        this.priceCountResponse = new ParametersValuesPriceCountResponse(item.getValuesPriceCount());
     }
 }

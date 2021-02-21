@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
 
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountResponse;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 
@@ -22,6 +23,8 @@ public class GoodsOrderItemResponse {
     private String descriptionFromUser;
     private DeliveryTypeResponse delivery;
 
+    private ParametersValuesPriceCountResponse priceCountResponse;
+
     private String image;
     private String title;
     private Double price;
@@ -36,6 +39,7 @@ public class GoodsOrderItemResponse {
      this.delivery = new DeliveryTypeResponse(item.getDeliveryType());
      this.title = item.getGoodsAdvertisement().getTitle();
      this.image = item.getGoodsAdvertisement().getMainImage();
-//     this.price = item.getGoodsAdvertisement().getPriceByDateAndForUnitCount(item.getGoodsOrder().getCreationDate(), this.count);
+     this.price = item.getPrice();
+     this.priceCountResponse = new ParametersValuesPriceCountResponse(item.getParametersValuesPriceCount());
     }
 }

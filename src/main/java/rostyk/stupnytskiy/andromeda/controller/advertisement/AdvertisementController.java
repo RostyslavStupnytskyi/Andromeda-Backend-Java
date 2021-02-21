@@ -15,6 +15,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsA
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsAdvertisementStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public class AdvertisementController {
 
     @Autowired
     private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
+
+    @Autowired
+    private ParameterService parameterService;
 
     @GetMapping
     private GoodsAdvertisementResponse findOneById(Long id) {
@@ -65,9 +69,8 @@ public class AdvertisementController {
     }
 
     @GetMapping("/count")
-    private Integer getAdvertisementCount(Long id) {
-//        return goodsAdvertisementService.findById(id).getCount();
-        return 1;
+    private Integer getAdvertisementCount(Long paramsId) {
+        return parameterService.findParametersValuesPriceCountById(paramsId).getCount();
     }
 
     @PostMapping

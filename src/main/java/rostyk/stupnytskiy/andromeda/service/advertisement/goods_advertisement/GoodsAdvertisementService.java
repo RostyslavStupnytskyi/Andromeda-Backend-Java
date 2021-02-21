@@ -155,13 +155,6 @@ public class GoodsAdvertisementService {
         return advertisement;
     }
 
-
-    public void minusAdvertisementCount(Long goodsAdvertisementId, Integer minus) {
-        GoodsAdvertisement advertisement = findById(goodsAdvertisementId);
-//        advertisement.setCount(advertisement.getCount() - minus);
-        goodsAdvertisementRepository.save(advertisement);
-    }
-
     public PageResponse<GoodsAdvertisementForSearchResponse> findAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
         if (id == null) {
             id = goodsSellerAccountService.findBySecurityContextHolder().getId();

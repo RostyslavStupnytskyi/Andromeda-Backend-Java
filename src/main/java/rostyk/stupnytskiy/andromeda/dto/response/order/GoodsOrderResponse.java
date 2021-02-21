@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
+import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -27,7 +29,7 @@ public class GoodsOrderResponse {
 
     private Boolean isViewed;
 
-    private List<GoodsOrderItemResponse> items = new ArrayList<>();
+    private List<GoodsOrderItemResponse> items;
 
     private GoodsOrderDeliveryDetailsResponse deliveryDetails;
 
@@ -44,8 +46,10 @@ public class GoodsOrderResponse {
         this.deliveryDetails = new GoodsOrderDeliveryDetailsResponse(goodsOrder.getDeliveryDetails());
         this.seller = goodsOrder.getSeller().getShopName();
         this.sellerId = goodsOrder.getSeller().getId();
-        goodsOrder.getOrderItems().forEach((i) -> this.items.add(new GoodsOrderItemResponse(i)));
-        this.price = goodsOrder.getPrice();
+        this.items = goodsOrder.getOrderItems().stream().map(GoodsOrderItemResponse::new).collect(Collectors.toList());
+
+        this.price = goodsOrder.getOrderItems().stream().mapToDouble((i) -> i.getPrice() * i.getCount()).sum();
+
         this.closingDate = goodsOrder.getClosingDate();
     }
 

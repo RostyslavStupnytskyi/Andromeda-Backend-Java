@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderItemRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderItemRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
 import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 
 @Service
@@ -27,11 +29,13 @@ public class GoodsOrderItemService {
     @Autowired
     private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
 
+    @Autowired
+    private ParameterService parameterService;
+
 
     public void save(GoodsOrderItemRequest request, GoodsOrder goodsOrder) {
-//        GoodsOrderItem orderItem = ;
         goodsOrderItemRepository.save(goodsOrderItemRequestToGoodsOrderItem(request, goodsOrder));
-        goodsAdvertisementService.minusAdvertisementCount(request.getGoodsAdvertisementId(), request.getCount());
+        parameterService.minusParamsValuesCount(request.getParamsValuesId(), request.getCount());
         goodsAdvertisementStatisticsService.incrementGoodsAdvertisementSoldNumber(request.getGoodsAdvertisementId(), request.getCount());
         goodsAdvertisementStatisticsService.incrementGoodsAdvertisementOrdersNumber(request.getGoodsAdvertisementId());
     }
@@ -53,6 +57,8 @@ public class GoodsOrderItemService {
         goodsOrderItem.setDeliveryType(deliveryTypeService.findById(request.getDeliveryTypeId()));
         goodsOrderItem.setStatus(GoodsOrderItemStatus.WAITING_FOR_SENDING);
         goodsOrderItem.setGoodsAdvertisement(goodsAdvertisementService.findById(request.getGoodsAdvertisementId()));
+        goodsOrderItem.setParametersValuesPriceCount(parameterService.findParametersValuesPriceCountById(request.getParamsValuesId()));
+        goodsOrderItem.setPrice(goodsOrderItem.getParametersValuesPriceCount().getPrice());
         goodsOrderItem.setGoodsOrder(goodsOrder);
         return goodsOrderItem;
     }

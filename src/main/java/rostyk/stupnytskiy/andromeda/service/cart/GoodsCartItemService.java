@@ -61,11 +61,11 @@ public class GoodsCartItemService {
     public Integer updateCartItemCount(Long id,Cart cart, Integer count){
         GoodsCartItem goodsCartItem = findByIdAndCart(id, cart);
         if (count < 1) return 1;
-//        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
-//            goodsCartItem.setCount(count);
-//        } else {
-//            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
-//        }
+        if (goodsCartItem.getValuesPriceCount().getCount() >= count) {
+            goodsCartItem.setCount(count);
+        } else {
+            goodsCartItem.setCount(goodsCartItem.getValuesPriceCount().getCount());
+        }
         save(goodsCartItem);
         return goodsCartItem.getCount();
     }
@@ -73,11 +73,11 @@ public class GoodsCartItemService {
     public Integer checkCartItemCount(Long id,Cart cart, Integer count){
         GoodsCartItem goodsCartItem = findByIdAndCart(id, cart);
         if (count < 1) return 1;
-//        if (goodsCartItem.getGoodsAdvertisement().getCount() >= count) {
-//            goodsCartItem.setCount(count);
-//        } else {
-//            goodsCartItem.setCount(goodsCartItem.getGoodsAdvertisement().getCount());
-//        }
+        if (goodsCartItem.getValuesPriceCount().getCount() >= count) {
+            goodsCartItem.setCount(count);
+        } else {
+            goodsCartItem.setCount(goodsCartItem.getValuesPriceCount().getCount());
+        }
         return goodsCartItem.getCount();
     }
 

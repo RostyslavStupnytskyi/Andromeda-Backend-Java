@@ -30,8 +30,10 @@ public class GoodsOrderItem {
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
+    private Double price;
+
     @ManyToOne
-    private ParametersValuesPriceCount valuesPriceCount;
+    private ParametersValuesPriceCount parametersValuesPriceCount;
 
     private String descriptionFromUser;
 

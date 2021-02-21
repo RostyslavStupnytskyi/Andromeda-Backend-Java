@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 
 @Entity
@@ -21,11 +20,15 @@ public class UserSettings {
     @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
-    private Boolean getSendOrderNotifications = true;
+    private Boolean getSendOrderNotifications;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Currency currency;
 
     @OneToOne(mappedBy = "settings")
     private UserAccount user;
+
+    public UserSettings() {
+        this.getSendOrderNotifications = true;
+    }
 }

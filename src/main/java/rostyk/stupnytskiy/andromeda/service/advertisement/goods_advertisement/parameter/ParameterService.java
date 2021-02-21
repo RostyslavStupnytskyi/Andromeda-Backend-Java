@@ -127,4 +127,10 @@ public class ParameterService {
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
         return parametersValuePriceCountRepository.save(parametersValuesPriceCount);
     }
+
+    public void minusParamsValuesCount(Long paramsValuesId, Integer count) {
+        ParametersValuesPriceCount parametersValuesPriceCount = findParametersValuesPriceCountById(paramsValuesId);
+        parametersValuesPriceCount.setCount(parametersValuesPriceCount.getCount() - count);
+        parametersValuePriceCountRepository.save(parametersValuesPriceCount);
+    }
 }

@@ -11,5 +11,4 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChangeGoodsCartItemCountResponse {
     private Integer count;
-    private Double price;
 }
