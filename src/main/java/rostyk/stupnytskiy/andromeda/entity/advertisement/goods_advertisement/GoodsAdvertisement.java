@@ -6,6 +6,7 @@ import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
@@ -59,6 +60,9 @@ public class GoodsAdvertisement extends Advertisement {
 
     @ManyToMany(mappedBy = "favoriteAdvertisements", fetch = FetchType.LAZY)
     private List<UserAccount> users;
+
+    @OneToMany(mappedBy = "goodsAdvertisement")
+    private List<Discount> discounts;
 
     @Override
     public String toString() {
