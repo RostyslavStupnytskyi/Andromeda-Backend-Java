@@ -5,6 +5,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.discount.DiscountRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.discounts.CheckDiscountCreatingResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.discounts.DiscountResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.DiscountType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
@@ -15,6 +17,7 @@ import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.pa
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class DiscountService {
@@ -33,6 +36,7 @@ public class DiscountService {
         validateDiscount(discount);
         discountRepository.save(discount);
     }
+
 
     private void validateDiscount(Discount discount) {
         if (discount.getForAllParameters()) {
@@ -66,14 +70,11 @@ public class DiscountService {
         Discount discount = new Discount();
         discount.setDiscountType(request.getDiscountType());
         discount.setDiscountValue(request.getDiscountValue());
-        discount.setGoodsAdvertisement(goodsAdvertisementService.findById(request.getGoodsAdvertisementId()));
 
-        if (request.getForAllParameters()) {
-            discount.setForAllParameters(true);
-        } else {
-            discount.setValuesPriceCount(parameterService.findParametersValuesPriceCountById(request.getValuesPriceCountId()));
-            discount.setForAllParameters(false);
-        }
+        discount.setValuesPriceCount(parameterService.findParametersValuesPriceCountById(request.getValuesPriceCountId()));
+        discount.setGoodsAdvertisement(discount.getValuesPriceCount().getGoodsAdvertisement());
+
+        discount.setForAllParameters(request.getForAllParameters());
 
         if (request.getStartDate() == null) {
             discount.setStartDate(LocalDateTime.now());
@@ -83,7 +84,7 @@ public class DiscountService {
             );
         }
 
-        if (request.getEndDate() != null) {
+        if (request.getEndDate() != null && !request.getEndDate().equals("")) {
             discount.setEndDate(
                     LocalDateTime.of(LocalDate.parse(request.getEndDate()), LocalTime.of(23, 59, 59))
             );
@@ -92,5 +93,36 @@ public class DiscountService {
         }
 
         return discount;
+    }
+
+    public CheckDiscountCreatingResponse checkDiscountForCreating(DiscountRequest request) {
+        Discount discount = discountRequestToDiscount(request);
+        CheckDiscountCreatingResponse response = new CheckDiscountCreatingResponse();
+        List<Discount> conflicts = discountRepository.findConflictDiscounts(discount.getValuesPriceCount().getId(), discount.getStartDate(), discount.getEndDate());
+        response.setCanCreate(conflicts.size() == 0);
+        if (!response.getCanCreate()) {
+            response.setConflictDiscount(new DiscountResponse(conflicts.get(0)));
+        }
+
+        return response;
+    }
+
+    public Discount findById(Long id) {
+        return discountRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public boolean closeDiscount(Long id) {
+        Discount discount = findById(id);
+        if (!discount.isActive()) return false;
+        else {
+            discount.setEndDate(LocalDateTime.now());
+            discountRepository.save(discount);
+            return true;
+        }
+    }
+
+    public void deleteDiscount(Long id) {
+        Discount discount = findById(id);
+        if (!discount.isActive()) discountRepository.delete(findById(id));
     }
 }

@@ -37,4 +37,15 @@ public class Discount {
 
     @ManyToOne
     private ParametersValuesPriceCount valuesPriceCount;
+
+    public boolean isActive() {
+        return (this.startDate.isBefore(LocalDateTime.now()) && this.endDate.isAfter(LocalDateTime.now()));
+    }
+
+    public Double getPriceWithDiscount(Double price) {
+        if (this.discountType == DiscountType.DISCOUNT_NEW_PRICE) return discountValue;
+        else {
+            return Math.round(price * (100.0 - this.discountValue)) / 100.0;
+        }
+    }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParameterRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParameterValueRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.discounts.DiscountsForParametersValuesPriceCountResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountResponse;
 import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
@@ -13,12 +15,12 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.par
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParameterRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParameterValueRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParametersValuePriceCountRepository;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ParameterService {
@@ -33,16 +35,15 @@ public class ParameterService {
     private ParametersValuePriceCountRepository parametersValuePriceCountRepository;
 
     @Autowired
+    private GoodsAdvertisementService goodsAdvertisementService;
+
+    @Autowired
     private FileTool fileTool;
 
 
     public void saveParameter(ParameterRequest request, GoodsAdvertisement goodsAdvertisement) {
         Parameter parameter = parameterRepository.save(parameterRequestToParameter(request, goodsAdvertisement));
-        System.out.println("Saved parameter " + parameter.getTitle());
-
         request.getValues().forEach((pv) -> saveParameterValue(pv, parameter));
-
-
     }
 
     public void saveParametersValuePriceCount(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
@@ -54,11 +55,6 @@ public class ParameterService {
         parametersValuesPriceCount.setCount(request.getCount());
         parametersValuesPriceCount.setPrice(request.getPrice());
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
-        System.out.println("Saving map values size + " + request.getValueParam().size());
-//        System.out.println();
-        request.getValueParam().forEach((a, b) -> {
-            System.out.println(a + "  " + b);
-        });
 
         Map<Parameter, ParameterValue> parameterValueMap = new HashMap<>();
         Parameter parameter;
@@ -67,14 +63,12 @@ public class ParameterService {
         for (Map.Entry<String, String> paramValue : request.getValueParam().entrySet()) {
             parameter = findParameterByTitleAndAdvertisementId(paramValue.getKey(), goodsAdvertisement);
             parameterValue = findParameterValueByTitleAndParameter(paramValue.getValue(), parameter);
-            System.out.println("Put param " + parameter.getTitle() + " with value " + parameterValue.getTitle());
             parameterValueMap.put(parameter, parameterValue);
         }
         parametersValuesPriceCount.setValues(parameterValueMap);
-        System.out.println(parametersValuesPriceCount);
+
         return parametersValuesPriceCount;
-//        parameterValueMap.put();
-//        parametersValuesPriceCount.set
+
     }
 
     private Parameter findParameterByTitleAndAdvertisementId(String title, GoodsAdvertisement goodsAdvertisement) {
@@ -94,7 +88,6 @@ public class ParameterService {
     }
 
     private ParameterValue saveParameterValue(ParameterValueRequest request, Parameter parameter) {
-        System.out.println("Saved param " + parameter.getTitle() + " value " + request.getTitle());
         return parameterValueRepository.save(parameterValueRequestToParameterValue(request, parameter));
     }
 
@@ -132,5 +125,14 @@ public class ParameterService {
         ParametersValuesPriceCount parametersValuesPriceCount = findParametersValuesPriceCountById(paramsValuesId);
         parametersValuesPriceCount.setCount(parametersValuesPriceCount.getCount() - count);
         parametersValuePriceCountRepository.save(parametersValuesPriceCount);
+    }
+
+    public List<DiscountsForParametersValuesPriceCountResponse> getParametersValuesPriceCountResponseWithDiscount(Long id) {
+        return goodsAdvertisementService.findById(id).getValuesPriceCounts()
+                .stream()
+                .filter((p) -> p.getDiscounts().size() > 0)
+//                .sorted(Comparator.comparingLong(ParametersValuesPriceCount::getId).reversed())
+                .map(DiscountsForParametersValuesPriceCountResponse::new)
+                .collect(Collectors.toList());
     }
 }

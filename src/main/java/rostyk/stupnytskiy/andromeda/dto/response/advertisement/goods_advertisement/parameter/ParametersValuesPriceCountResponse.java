@@ -13,6 +13,7 @@ public class ParametersValuesPriceCountResponse {
 
     private Long id;
     private Double price;
+    private Double priceWithDiscount;
     private Integer count;
 
     private Map<String, String> values = new HashMap<>();
@@ -22,7 +23,10 @@ public class ParametersValuesPriceCountResponse {
         this.id = valuesPriceCount.getId();
         this.price = valuesPriceCount.getPrice();
         this.count = valuesPriceCount.getCount();
+        if (valuesPriceCount.hasDiscount()) {
+            this.priceWithDiscount = valuesPriceCount.getCurrentDiscount().getPriceWithDiscount(this.price);
 
+        }
         valuesPriceCount.getValues().forEach((par, parVal) -> this.values.put(par.getTitle(), parVal.getTitle()));
     }
 

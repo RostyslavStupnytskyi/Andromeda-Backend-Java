@@ -71,5 +71,45 @@ public class GoodsAdvertisement extends Advertisement {
                 ", priceToSort=" + priceToSort +
                 '}';
     }
+
+
+    public Double getMaxPrice() {
+        return valuesPriceCounts
+                .stream()
+                .mapToDouble(ParametersValuesPriceCount::getPrice)
+                .max()
+                .getAsDouble();
+    }
+
+    public Double getMinPrice() {
+        return valuesPriceCounts
+                .stream()
+                .mapToDouble(ParametersValuesPriceCount::getPrice)
+                .min()
+                .getAsDouble();
+    }
+
+    public Double getMaxPriceWithDiscounts() {
+        return valuesPriceCounts
+                .stream()
+                .mapToDouble(ParametersValuesPriceCount::getPriceWithCurrentDiscount)
+                .max()
+                .getAsDouble();
+    }
+
+    public Double getMinPriceWithDiscounts() {
+        return valuesPriceCounts
+                .stream()
+                .mapToDouble(ParametersValuesPriceCount::getPriceWithCurrentDiscount)
+                .min()
+                .getAsDouble();
+    }
+
+    public boolean hasDiscount() {
+        for (ParametersValuesPriceCount valuesPriceCount : valuesPriceCounts)
+            if (valuesPriceCount.hasDiscount()) return true;
+        return false;
+    }
+
 }
 

@@ -29,6 +29,7 @@ import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
+import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.discount.DiscountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
@@ -83,6 +84,10 @@ public class GoodsAdvertisementService {
     @Autowired
     private ParameterService parameterService;
 
+    @Autowired
+    private DiscountService discountService;
+
+
     public GoodsAdvertisement findById(Long id) {
         return goodsAdvertisementRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
@@ -110,50 +115,7 @@ public class GoodsAdvertisementService {
         }
     }
 
-    public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
-        GoodsAdvertisement advertisement = new GoodsAdvertisement();
-        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
 
-        advertisement.setTitle(request.getTitle());
-        if (!request.getDescription().isEmpty()) advertisement.setDescription(request.getDescription());
-
-        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
-
-        advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
-
-        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
-
-        advertisement.setStatistics(new GoodsAdvertisementStatistics());
-
-        advertisement.setHasParameters(request.getHasParameters());
-
-        if (request.getHasParameters())
-            advertisement.setPriceToSort(request.getValuesPriceCounts().stream().mapToDouble(ParametersValuesPriceCountRequest::getPrice).min().getAsDouble());
-        else advertisement.setPriceToSort(request.getValuesPriceCounts().get(0).getPrice());
-
-        if (request.getDeliveryTypes() != null)
-            request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
-
-        if (request.getMainImage() != null) {
-            try {
-                advertisement.setMainImage(fileTool.saveAdvertisementImage(
-                        request.getMainImage(), seller.getId())
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (request.getImages() != null) {
-            request.getImages().forEach(img -> {
-                try {
-                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        return advertisement;
-    }
 
     public PageResponse<GoodsAdvertisementForSearchResponse> findAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
         if (id == null) {
@@ -163,6 +125,42 @@ public class GoodsAdvertisementService {
         return new PageResponse<>(page
                 .get()
                 .map(GoodsAdvertisementForSearchResponse::new)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+    public PageResponse<GoodsAdvertisementResponse> findAllFavoriteAdvertisementPage(PaginationRequest request) {
+        UserAccount user = userAccountService.findBySecurityContextHolder();
+        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllAdvertisementByUserId(user.getId(), request.mapToPageable());
+
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisementResponse::new)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+    private PageResponse<GoodsAdvertisementForSearchResponse> getAdvertisementsResponsePageByCategory(Category category, PaginationRequest request) {
+        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllBySubcategoryCategory(category.getTitle(), request.mapToPageable());
+
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisementForSearchResponse::new)
+                .collect(Collectors.toList()),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+    private PageResponse<GoodsAdvertisementForSearchResponse> mapPageToSearchPageResponse(Page<GoodsAdvertisement> page) {
+        return new PageResponse<>(page
+                .get()
+                .map(GoodsAdvertisementForSearchResponse::new)
+//                .peek((d) -> d.setHasDiscount())
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
@@ -272,18 +270,7 @@ public class GoodsAdvertisementService {
         return false;
     }
 
-    public PageResponse<AdvertisementResponse> findAllFavoriteAdvertisementPage(PaginationRequest request) {
-        UserAccount user = userAccountService.findBySecurityContextHolder();
-        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllAdvertisementByUserId(user.getId(), request.mapToPageable());
 
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsAdvertisementResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-    }
 
     public GoodsAdvertisementMonthStatistics findMonthStatisticsByIdAndMonthAndYear(Long id, Integer month, Integer year) {
         Month m = Month.of(month + 1);
@@ -306,16 +293,49 @@ public class GoodsAdvertisementService {
         return response;
     }
 
-    private PageResponse<GoodsAdvertisementForSearchResponse> getAdvertisementsResponsePageByCategory(Category category, PaginationRequest request) {
-        Page<GoodsAdvertisement> page = goodsAdvertisementRepository.getAllBySubcategoryCategory(category.getTitle(), request.mapToPageable());
+    public GoodsAdvertisement goodsAdvertisementFromRequest(GoodsAdvertisementRequest request) {
+        GoodsAdvertisement advertisement = new GoodsAdvertisement();
+        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
 
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsAdvertisementForSearchResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
+        advertisement.setTitle(request.getTitle());
+        if (!request.getDescription().isEmpty()) advertisement.setDescription(request.getDescription());
+
+        advertisement.setSubcategory(subcategoryService.findOneById(request.getSubcategoryId()));
+
+        advertisement.setOnlySellerCountry(request.getOnlySellerCountry());
+
+        advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
+
+        advertisement.setStatistics(new GoodsAdvertisementStatistics());
+
+        advertisement.setHasParameters(request.getHasParameters());
+
+        if (request.getHasParameters())
+            advertisement.setPriceToSort(request.getValuesPriceCounts().stream().mapToDouble(ParametersValuesPriceCountRequest::getPrice).min().getAsDouble());
+        else advertisement.setPriceToSort(request.getValuesPriceCounts().get(0).getPrice());
+
+        if (request.getDeliveryTypes() != null)
+            request.getDeliveryTypes().forEach((t) -> advertisement.getDeliveryTypes().add(deliveryTypeService.findById(t)));
+
+        if (request.getMainImage() != null) {
+            try {
+                advertisement.setMainImage(fileTool.saveAdvertisementImage(
+                        request.getMainImage(), seller.getId())
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (request.getImages() != null) {
+            request.getImages().forEach(img -> {
+                try {
+                    advertisement.getImages().add(fileTool.saveAdvertisementImage(img, seller.getId()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        return advertisement;
     }
 
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,11 @@ public class GoodsAdvertisementForSearchResponse {
     private Double minPrice;
     private Double maxPrice;
 
+    private Double minPriceWithDiscount;
+    private Double maxPriceWithDiscount;
+
+    private Boolean hasDiscount = false;
+
     private Long sold;
 
     private String currencyCode;
@@ -42,22 +48,13 @@ public class GoodsAdvertisementForSearchResponse {
         this.sold = advertisement.getStatistics().getSoldSum();
         this.date = advertisement.getStatistics().getCreationDate();
 
-        if (advertisement.getHasParameters()) {
-            this.maxPrice = advertisement.getValuesPriceCounts()
-                    .stream()
-                    .mapToDouble(ParametersValuesPriceCount::getPrice)
-                    .max()
-                    .getAsDouble();
+        this.maxPrice = advertisement.getMaxPrice();
+        this.minPrice = advertisement.getMinPrice();
 
-            this.minPrice = advertisement.getValuesPriceCounts()
-                    .stream()
-                    .mapToDouble(ParametersValuesPriceCount::getPrice)
-                    .min()
-                    .getAsDouble();
-        } else {
-         this.maxPrice = advertisement.getValuesPriceCounts().get(0).getPrice();
-         this.minPrice = advertisement.getValuesPriceCounts().get(0).getPrice();
-        }
+
+        this.hasDiscount = advertisement.hasDiscount();
+        this.maxPriceWithDiscount = advertisement.getMaxPriceWithDiscounts();
+        this.minPriceWithDiscount = advertisement.getMinPriceWithDiscounts();
 
         this.rating = advertisement.getStatistics().getRating();
     }

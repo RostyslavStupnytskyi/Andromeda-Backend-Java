@@ -53,7 +53,7 @@ public class AdvertisementController {
     }
 
     @GetMapping("favorites")
-    private PageResponse<AdvertisementResponse> getUserFavoriteAdvertisementsPage(PaginationRequest request) {
+    private PageResponse<GoodsAdvertisementResponse> getUserFavoriteAdvertisementsPage(PaginationRequest request) {
         return goodsAdvertisementService.findAllFavoriteAdvertisementPage(request);
     }
 
