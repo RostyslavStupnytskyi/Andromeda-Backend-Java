@@ -4,6 +4,7 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
@@ -41,6 +42,8 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private GoodsSellerSettings settings;
 
+    @OneToMany(mappedBy = "goodsSeller")
+    private List<GoodsSellerAdvertisementCategory> categories;
 
     @Override
     public String toString() {
