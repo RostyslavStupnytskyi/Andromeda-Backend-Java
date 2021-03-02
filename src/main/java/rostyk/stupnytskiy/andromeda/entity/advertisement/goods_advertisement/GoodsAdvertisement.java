@@ -4,6 +4,7 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
@@ -63,6 +64,9 @@ public class GoodsAdvertisement extends Advertisement {
 
     @OneToMany(mappedBy = "goodsAdvertisement")
     private List<Discount> discounts;
+
+    @ManyToOne
+    private GoodsSellerAdvertisementCategory sellerCategory;
 
     @Override
     public String toString() {

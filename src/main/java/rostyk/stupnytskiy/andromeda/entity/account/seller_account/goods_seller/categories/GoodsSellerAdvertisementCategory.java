@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,12 +25,23 @@ public class GoodsSellerAdvertisementCategory {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsSellerAdvertisementCategory parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private List<GoodsSellerAdvertisementCategory> childCategories;
+    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY)
+    private List<GoodsSellerAdvertisementCategory> childrenCategories = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<GoodsAdvertisement> advertisements;
 
     @ManyToOne
     private GoodsSellerAccount goodsSeller;
+
+    public boolean isRootLevelCategory() {
+        return this.parentCategory == null;
+    }
+
+    public boolean hasChildren() {
+        return this.childrenCategories.size() > 0;
+    }
 }
