@@ -34,6 +34,11 @@ public class FileTool {
         return saveImage(img,userDir);
     }
 
+    public String saveShopImage(String img, Long userId) throws IOException {
+        String userDir = PROJECT_DIR + "user_" + userId + File.separator;
+        return saveImage(img,userDir);
+    }
+
     public void deleteAdvertisementImage(String img, Long userId) {
         String fileName = PROJECT_DIR + "user_" + userId + File.separator + "advertisements" + File.separator + img;
         deleteImage(fileName);

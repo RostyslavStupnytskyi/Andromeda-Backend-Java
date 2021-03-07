@@ -76,7 +76,6 @@ public class GoodsAdvertisement extends Advertisement {
                 '}';
     }
 
-
     public Double getMaxPrice() {
         return valuesPriceCounts
                 .stream()

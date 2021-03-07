@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.Goods
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.GoodsSellerStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAdvertisementCategoryService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,6 +26,9 @@ public class GoodsSellerAccountController {
 
     @Autowired
     private GoodsSellerAdvertisementCategoryService goodsSellerAdvertisementCategoryService;
+
+    @Autowired
+    private GoodsShopMarkupService goodsShopMarkupService;
 
 
     @PutMapping("/update")
@@ -73,7 +77,12 @@ public class GoodsSellerAccountController {
     }
 
     @GetMapping("category-tree")
-    public List<GoodsSellerAdvertisementCategoryWithChildrenResponse> getCategoriesTree(Long sellerId) {
-        return goodsSellerAdvertisementCategoryService.getSellerCategoriesTree(sellerId);
+    public List<GoodsSellerAdvertisementCategoryWithChildrenResponse> getCategoriesTree(Long id) {
+        return goodsSellerAdvertisementCategoryService.getSellerCategoriesTree(id);
+    }
+
+    @PutMapping("create-markup")
+    public void createFollAllSellers() {
+        goodsSellerAccountService.createMarkupForAll();
     }
 }

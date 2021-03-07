@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.repository.account.seller.goods_seller.Goods
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
@@ -34,6 +35,9 @@ public class GoodsSellerAccountService {
 
     @Autowired
     private DeliveryTypeService deliveryTypeService;
+
+    @Autowired
+    private GoodsShopMarkupService goodsShopMarkupService;
 
     @Autowired
     private FileTool fileTool;
@@ -96,5 +100,11 @@ public class GoodsSellerAccountService {
         GoodsSellerAccount sellerAccount = findBySecurityContextHolder();
         Month m = Month.of(month + 1);
         return goodsSellerStatisticsService.getBySellerAndMonthAndYear(sellerAccount, m, year);
+    }
+
+    public void createMarkupForAll() {
+        goodsSellerRepository.findAll().forEach((s) -> {
+            if (s.getMarkup() == null) goodsShopMarkupService.createDefaultMarkup(s);
+        });
     }
 }

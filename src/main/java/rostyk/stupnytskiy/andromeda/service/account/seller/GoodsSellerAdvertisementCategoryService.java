@@ -35,6 +35,9 @@ public class GoodsSellerAdvertisementCategoryService {
     }
 
 
+    public void delete(Long id) {
+
+    }
 
     public List<GoodsSellerAdvertisementCategoryResponse> getRootCategories() {
         List<GoodsSellerAdvertisementCategory> categories = goodsSellerAdvertisementCategoryRepository.findAllByGoodsSeller(goodsSellerAccountService.findBySecurityContextHolder());
@@ -67,7 +70,7 @@ public class GoodsSellerAdvertisementCategoryService {
     private GoodsSellerAdvertisementCategory goodsSellerAdvertisementCategoryRequestToGoodsSellerAdvertisementCategory(GoodsSellerAdvertisementCategoryRequest request, GoodsSellerAdvertisementCategory category) {
         if (category == null) {
             category = new GoodsSellerAdvertisementCategory();
-            if (request.getParentId() != null) {
+            if (request.getParentId() != null && request.getParentId() != 0L) {
                 category.setParentCategory(findById(request.getParentId()));
             }
         }

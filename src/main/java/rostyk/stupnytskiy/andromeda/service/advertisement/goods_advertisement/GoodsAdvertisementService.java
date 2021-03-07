@@ -39,6 +39,7 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 import java.io.IOException;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,6 @@ public class GoodsAdvertisementService {
             parameterService.saveParametersValuePriceCountWithoutParameters(request.getValuesPriceCounts().get(0), goodsAdvertisement);
         }
     }
-
 
 
     public PageResponse<GoodsAdvertisementForSearchResponse> findAllSellerAdvertisementsPage(Long id, PaginationRequest request) {
@@ -271,7 +271,6 @@ public class GoodsAdvertisementService {
     }
 
 
-
     public GoodsAdvertisementMonthStatistics findMonthStatisticsByIdAndMonthAndYear(Long id, Integer month, Integer year) {
         Month m = Month.of(month + 1);
         return goodsAdvertisementStatisticsService.getMonthStatisticsByGoodsAdvertisementStatisticsAndMonthAndYear(findById(id).getStatistics(), m, year);
@@ -339,4 +338,30 @@ public class GoodsAdvertisementService {
     }
 
 
+    public List<GoodsAdvertisement> getNewGoodsAdvertisementsForGoodsSellerProfile(GoodsSellerAccount goodsSeller) {
+        return goodsAdvertisementRepository.findFirst5BySellerOrderByIdDesc(goodsSeller);
+    }
+
+    public List<GoodsAdvertisement> getPopularGoodsAdvertisementsForGoodsSellerProfile(GoodsSellerAccount goodsSeller) {
+        List<GoodsAdvertisement> advertisements = goodsAdvertisementRepository.findAllBySeller(goodsSeller);
+        return advertisements
+                .stream()
+                .map(GoodsAdvertisement::getStatistics)
+                .sorted(Comparator.comparing(GoodsAdvertisementStatistics::getViewsSum).reversed())
+                .map(GoodsAdvertisementStatistics::getGoodsAdvertisement)
+                .collect(Collectors.toList())
+                .subList(0, Math.min(advertisements.size(), 5));
+//         advertisements;
+    }
+
+    public List<GoodsAdvertisement> getMostSoldGoodsAdvertisementsForGoodsSellerProfile(GoodsSellerAccount goodsSeller) {
+        List<GoodsAdvertisement> advertisements = goodsAdvertisementRepository.findAllBySeller(goodsSeller);
+        return advertisements
+                .stream()
+                .map(GoodsAdvertisement::getStatistics)
+                .sorted(Comparator.comparing(GoodsAdvertisementStatistics::getSoldSum).reversed())
+                .map(GoodsAdvertisementStatistics::getGoodsAdvertisement)
+                .collect(Collectors.toList())
+                .subList(0, Math.min(advertisements.size(), 5));
+    }
 }

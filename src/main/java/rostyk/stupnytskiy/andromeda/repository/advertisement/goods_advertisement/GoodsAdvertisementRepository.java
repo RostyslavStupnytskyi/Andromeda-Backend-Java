@@ -32,4 +32,9 @@ public interface GoodsAdvertisementRepository extends JpaRepository<GoodsAdverti
 //    Page<GoodsAdvertisement> findR(Category category, Pageable pageable);
 
     Page<GoodsAdvertisement> findAllByUsers_Id(Long id, Pageable pageable);
+
+    List<GoodsAdvertisement> findFirst5BySellerOrderByIdDesc(GoodsSellerAccount goodsSeller);
+
+    List<GoodsAdvertisement> findAllBySeller(GoodsSellerAccount goodsSeller);
+
 }

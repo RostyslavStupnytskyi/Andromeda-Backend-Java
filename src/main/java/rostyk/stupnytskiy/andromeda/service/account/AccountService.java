@@ -28,6 +28,7 @@ import rostyk.stupnytskiy.andromeda.repository.account.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.ConfirmationCodeGenerator;
@@ -69,6 +70,9 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private UserStatisticsService userStatisticsService;
 
+    @Autowired
+    private GoodsShopMarkupService goodsShopMarkupService;
+
 
     public String testAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -90,6 +94,7 @@ public class AccountService implements UserDetailsService {
         GoodsSellerAccount seller = registerGoodsSellerAccount(request);
         fileTool.createUserDir(seller.getId());
         goodsSellerStatisticsService.createStartStatistics(seller);
+        goodsShopMarkupService.createDefaultMarkup(seller);
         return login(request);
     }
 
