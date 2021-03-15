@@ -90,6 +90,7 @@ public class GoodsAdvertisementService {
 
 
     public GoodsAdvertisement findById(Long id) {
+        System.out.println(id);
         return goodsAdvertisementRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
@@ -363,5 +364,21 @@ public class GoodsAdvertisementService {
                 .map(GoodsAdvertisementStatistics::getGoodsAdvertisement)
                 .collect(Collectors.toList())
                 .subList(0, Math.min(advertisements.size(), 5));
+    }
+
+    public List<GoodsAdvertisementForSearchResponse> findSellerAdvertisementsByIdOrTitleContains(String value, Long sellerId) {
+        GoodsSellerAccount seller;
+        if (sellerId != null) {
+            seller = goodsSellerAccountService.findById(sellerId);
+        } else {
+            seller = goodsSellerAccountService.findBySecurityContextHolder();
+        }
+        return goodsAdvertisementRepository.findAllBySeller(seller)
+                .stream()
+                .filter((a) -> a.getTitle().toLowerCase().contains(value.toLowerCase()) ||
+                        a.getTitle().toUpperCase().contains(value.toUpperCase()) ||
+                        a.getId().toString().contains(value))
+                .map(GoodsAdvertisementForSearchResponse::new)
+                .collect(Collectors.toList());
     }
 }

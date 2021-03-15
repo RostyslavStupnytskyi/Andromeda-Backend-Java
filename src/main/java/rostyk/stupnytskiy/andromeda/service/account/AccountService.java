@@ -16,6 +16,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerSettings;
+import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.markup.GoodsShopMarkup;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserSettings;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
@@ -155,6 +156,7 @@ public class AccountService implements UserDetailsService {
         goodsSellerAccount.setPassword(encoder.encode(request.getPassword()));
         goodsSellerAccount.setStatistics(new GoodsSellerStatistics());
         goodsSellerAccount.setSettings(new GoodsSellerSettings());
+        goodsSellerAccount.setMarkup(new GoodsShopMarkup());
 
         return accountRepository.save(goodsSellerAccount);
     }

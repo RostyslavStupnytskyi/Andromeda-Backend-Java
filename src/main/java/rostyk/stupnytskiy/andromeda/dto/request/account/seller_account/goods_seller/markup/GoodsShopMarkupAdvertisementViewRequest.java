@@ -14,6 +14,5 @@ public class GoodsShopMarkupAdvertisementViewRequest {
 
     private Long goodsAdvertisementId;
     private GoodsShopMarkupAdvertisingViewType viewType;
-    private Integer line;
-    private Integer position;
+    private Long elementId;
 }

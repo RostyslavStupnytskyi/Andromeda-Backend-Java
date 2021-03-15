@@ -133,6 +133,11 @@ public class AdvertisementController {
         return new GoodsAdvertisementMonthStatisticsResponse(goodsAdvertisementService.findMonthStatisticsByIdAndMonthAndYear(id, month, year));
     }
 
+    @GetMapping("find-by-value")
+    public List<GoodsAdvertisementForSearchResponse> getAdvertisementsByIdOrTitleContains(String value, Long sellerId) {
+        return goodsAdvertisementService.findSellerAdvertisementsByIdOrTitleContains(value, sellerId);
+    }
+
     @PutMapping("add-to-favorites")
     public void addToFavorites(Long id) {
         goodsAdvertisementService.addToFavorites(id);

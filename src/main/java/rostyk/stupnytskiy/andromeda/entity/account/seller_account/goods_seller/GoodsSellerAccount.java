@@ -47,7 +47,7 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToMany(mappedBy = "goodsSeller")
     private List<GoodsSellerAdvertisementCategory> categories;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private GoodsShopMarkup markup;
 
     @Override

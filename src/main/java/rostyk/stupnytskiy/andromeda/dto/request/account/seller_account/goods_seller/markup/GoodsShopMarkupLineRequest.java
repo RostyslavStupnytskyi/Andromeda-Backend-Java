@@ -3,13 +3,12 @@ package rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_se
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class GoodsShopMarkupAdvertisingBannerRequest {
+public class GoodsShopMarkupLineRequest {
 
-    private List<String> images = new ArrayList<>();
-    private Long elementId;
+    private List<Integer> widths;
+
 }

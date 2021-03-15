@@ -15,6 +15,5 @@ import javax.persistence.OneToOne;
 public class GoodsShopMarkupAdvertisementRowRequest {
 
     private GoodsShopMarkupAdvertisementRowType rowType;
-    private Integer line;
-    private Integer position;
+    private Long elementId;
 }

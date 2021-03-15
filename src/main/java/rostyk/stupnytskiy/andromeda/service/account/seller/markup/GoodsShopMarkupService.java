@@ -25,8 +25,7 @@ public class GoodsShopMarkupService {
     private GoodsShopMarkupElementService goodsShopMarkupElementService;
 
     public void createDefaultMarkup(GoodsSellerAccount seller) {
-        GoodsShopMarkup goodsShopMarkup =  goodsShopMarkupRepository.save(
-                GoodsShopMarkup.builder().goodsSeller(seller).build());
+        GoodsShopMarkup goodsShopMarkup =  seller.getMarkup();
         createDefaultLines(goodsShopMarkup);
         goodsShopMarkupElementService.createDefaultElements(goodsShopMarkup);
     }

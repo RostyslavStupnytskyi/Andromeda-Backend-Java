@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.markup.GoodsShopMarkupElementType.MARKUP_EMPTY_ELEMENT;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +29,14 @@ public class GoodsShopMarkupElement {
 
     @ManyToOne
     private GoodsShopMarkupLine line;
+
+    public GoodsShopMarkupElement(Integer startPosition, Integer width, GoodsShopMarkupLine line) {
+        this.startPosition = startPosition;
+        this.endPosition = startPosition + width - 1;
+        this.line = line;
+        this.width = width;
+        this.elementType = MARKUP_EMPTY_ELEMENT;
+    }
 
     public GoodsShopMarkupElement(GoodsShopMarkupElementType elementType, Integer startPosition) {
         this.elementType = elementType;

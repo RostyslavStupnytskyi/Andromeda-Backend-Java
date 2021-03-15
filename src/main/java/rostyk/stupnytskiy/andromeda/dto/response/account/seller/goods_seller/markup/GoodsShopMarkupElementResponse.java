@@ -17,12 +17,15 @@ public class GoodsShopMarkupElementResponse {
     private Integer startPosition;
     private Integer endPosition;
 
+    private Long sellerId;
+
     public GoodsShopMarkupElementResponse(GoodsShopMarkupElement element) {
         this.id = element.getId();
         this.elementType = element.getElementType();
         this.width = element.getWidth();
         this.startPosition = element.getStartPosition();
         this.endPosition = element.getEndPosition();
+        this.sellerId = element.getLine().getMarkup().getGoodsSeller().getId();
 
     }
 }
