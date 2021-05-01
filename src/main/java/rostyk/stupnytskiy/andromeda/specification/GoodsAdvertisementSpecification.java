@@ -4,7 +4,6 @@ import org.springframework.data.jpa.domain.Specification;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.GoodsAdvertisementSearchRequest;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 
 import javax.persistence.criteria.*;
@@ -73,12 +72,12 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
         Predicate predicate;
 
 
-        if (rating != null && rating) {
-            final Join<GoodsAdvertisement, GoodsAdvertisementStatistics> statisticsJoin  = r.join("statistics");
-            return cb.greaterThanOrEqualTo(statisticsJoin.get("rating"), 4.0);
-        } else {
+//        if (rating != null && rating) {
+//            final Join<GoodsAdvertisement, GoodsAdvertisementStatistics> statisticsJoin  = r.join("statistics");
+//            return cb.greaterThanOrEqualTo(statisticsJoin.get("rating"), 4.0);
+//        } else {
             predicate = cb.conjunction();
-        }
+//        }
         return predicate;
     }
 

@@ -5,9 +5,6 @@ import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.Goo
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.markup.GoodsShopMarkup;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.markup.GoodsShopMarkupLine;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
@@ -38,23 +35,17 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<GoodsOrder> goodsOrders;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private GoodsSellerStatistics statistics;
-
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private GoodsSellerSettings settings;
 
     @OneToMany(mappedBy = "goodsSeller")
     private List<GoodsSellerAdvertisementCategory> categories;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private GoodsShopMarkup markup;
-
     @Override
     public String toString() {
         return "GoodsSellerAccount{" +
                 "Name:" + this.getShopName() +
-                "onlySellerCountryDelivery=" + onlySellerCountryDelivery +
+                ", id:" + this.getId() +
                 '}';
     }
 

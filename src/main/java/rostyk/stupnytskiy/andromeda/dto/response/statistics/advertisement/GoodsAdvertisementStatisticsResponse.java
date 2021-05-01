@@ -3,7 +3,7 @@ package rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 public class GoodsAdvertisementStatisticsResponse {
 
-    private Long id;
     private Double rating;
     private Long views;
 
@@ -23,14 +22,4 @@ public class GoodsAdvertisementStatisticsResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime creationDate;
 
-    public GoodsAdvertisementStatisticsResponse(GoodsAdvertisementStatistics statistics) {
-        this.id = statistics.getId();
-        this.rating = statistics.getRating();
-        this.views = statistics.getViewsSum();
-        this.sold = statistics.getSoldSum();
-        this.creationDate = statistics.getCreationDate();
-        this.feedbacks = statistics.getFeedbacksSum();
-        this.likes = statistics.getInLikeListSum();
-        this.orders = statistics.getOrdersSum();
-    }
 }

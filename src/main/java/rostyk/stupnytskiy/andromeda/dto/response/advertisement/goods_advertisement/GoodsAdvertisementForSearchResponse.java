@@ -38,15 +38,14 @@ public class GoodsAdvertisementForSearchResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime date;
 
-
     public GoodsAdvertisementForSearchResponse(GoodsAdvertisement advertisement) {
         this.id = advertisement.getId();
         this.title = advertisement.getTitle();
         this.image = advertisement.getMainImage();
         this.seller = advertisement.getSeller().getShopName();
         this.sellerId = advertisement.getSeller().getId();
-        this.sold = advertisement.getStatistics().getSoldSum();
-        this.date = advertisement.getStatistics().getCreationDate();
+
+        this.date = advertisement.getCreationDate();
 
         this.maxPrice = advertisement.getMaxPrice();
         this.minPrice = advertisement.getMinPrice();
@@ -56,6 +55,6 @@ public class GoodsAdvertisementForSearchResponse {
         this.maxPriceWithDiscount = advertisement.getMaxPriceWithDiscounts();
         this.minPriceWithDiscount = advertisement.getMinPriceWithDiscounts();
 
-        this.rating = advertisement.getStatistics().getRating();
+
     }
 }

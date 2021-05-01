@@ -130,8 +130,7 @@ public class ParameterService {
     public List<DiscountsForParametersValuesPriceCountResponse> getParametersValuesPriceCountResponseWithDiscount(Long id) {
         return goodsAdvertisementService.findById(id).getValuesPriceCounts()
                 .stream()
-                .filter((p) -> p.getDiscounts().size() > 0)
-//                .sorted(Comparator.comparingLong(ParametersValuesPriceCount::getId).reversed())
+                .filter(ParametersValuesPriceCount::hasFutureDiscounts)
                 .map(DiscountsForParametersValuesPriceCountResponse::new)
                 .collect(Collectors.toList());
     }

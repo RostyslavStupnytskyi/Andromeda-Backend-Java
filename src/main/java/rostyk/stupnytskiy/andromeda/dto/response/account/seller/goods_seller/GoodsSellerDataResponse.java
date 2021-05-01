@@ -14,13 +14,11 @@ public class GoodsSellerDataResponse {
     private String avatar;
 
     private GoodsSellerSettingsResponse settings;
-//    private UserStatisticsResponse statistics;
 
     public GoodsSellerDataResponse(GoodsSellerAccount seller){
         this.id = seller.getId();
         this.shopName = seller.getShopName();
         this.avatar = seller.getAvatar();
         this.settings = new GoodsSellerSettingsResponse(seller.getSettings());
-//        this.statistics = new UserStatisticsResponse(user.getUserStatistics());
     }
 }

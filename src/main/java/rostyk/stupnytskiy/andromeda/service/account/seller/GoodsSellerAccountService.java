@@ -5,14 +5,10 @@ import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.GoodsSellerDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerDataResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerMonthStatistics;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.repository.account.seller.goods_seller.GoodsSellerAccountRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
-import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
@@ -28,16 +24,10 @@ public class GoodsSellerAccountService {
     private AccountService accountService;
 
     @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
-
-    @Autowired
     private CountryService countryService;
 
     @Autowired
     private DeliveryTypeService deliveryTypeService;
-
-    @Autowired
-    private GoodsShopMarkupService goodsShopMarkupService;
 
     @Autowired
     private FileTool fileTool;
@@ -82,29 +72,10 @@ public class GoodsSellerAccountService {
         return goodsSellerRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }
 
-    public void addStatisticsForEach() {
-        for (GoodsSellerAccount sellerAccount : goodsSellerRepository.findAll()) {
-            if (sellerAccount.getStatistics() == null) {
-                sellerAccount.setStatistics(new GoodsSellerStatistics());
-                goodsSellerStatisticsService.createStartStatistics(goodsSellerRepository.save(sellerAccount));
-            }
-        }
-    }
 
     public GoodsSellerDataResponse getGoodsSellerData() {
         GoodsSellerAccount seller = findBySecurityContextHolder();
         return new GoodsSellerDataResponse(seller);
     }
 
-    public GoodsSellerMonthStatistics findMonthStatisticsByIdAndMonthAndYear(Integer month, Integer year) {
-        GoodsSellerAccount sellerAccount = findBySecurityContextHolder();
-        Month m = Month.of(month + 1);
-        return goodsSellerStatisticsService.getBySellerAndMonthAndYear(sellerAccount, m, year);
-    }
-
-    public void createMarkupForAll() {
-        goodsSellerRepository.findAll().forEach((s) -> {
-            if (s.getMarkup() == null) goodsShopMarkupService.createDefaultMarkup(s);
-        });
-    }
 }

@@ -8,7 +8,6 @@ import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisemen
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.PropertyRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.advertisement.AdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementForSearchResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
@@ -17,27 +16,23 @@ import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementMonthStatistics;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 
+import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.GoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.statistics.account.UserAdvertisementViewRepository;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
-import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.discount.DiscountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
-import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
-import java.time.Month;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -74,19 +69,13 @@ public class GoodsAdvertisementService {
     private PropertyService propertyService;
 
     @Autowired
-    private UserStatisticsService userStatisticsService;
-
-    @Autowired
-    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
-
-    @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
-
-    @Autowired
     private ParameterService parameterService;
 
     @Autowired
     private DiscountService discountService;
+
+    @Autowired
+    private UserAdvertisementViewRepository userAdvertisementViewRepository;
 
 
     public GoodsAdvertisement findById(Long id) {
@@ -96,12 +85,6 @@ public class GoodsAdvertisementService {
 
     public GoodsAdvertisement findByIdAndSeller(Long id) {
         return goodsAdvertisementRepository.findByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder()).orElseThrow(IllegalArgumentException::new);
-    }
-
-    public void setAdvertisementView(Long id) {
-        userStatisticsService.saveUserAdvertisementViewRequest(findById(id));
-        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementViews(id);
-        goodsSellerStatisticsService.incrementMonthStatisticsAdvertisementViews(findById(id).getSeller());
     }
 
     public void saveGoodsAdvertisement(GoodsAdvertisementRequest request) {
@@ -251,7 +234,6 @@ public class GoodsAdvertisementService {
             userAccountService.save(user);
         }
 
-        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementInLikeLists(id);
     }
 
     public void removeFromFavorites(Long id) {
@@ -259,7 +241,6 @@ public class GoodsAdvertisementService {
         GoodsAdvertisement goodsAdvertisement = findById(id);
         user.getFavoriteAdvertisements().remove(goodsAdvertisement);
         userAccountService.save(user);
-        goodsAdvertisementStatisticsService.decrementGoodsAdvertisementInLikeLists(id);
     }
 
     public Boolean isInFavorites(Long id) {
@@ -271,18 +252,12 @@ public class GoodsAdvertisementService {
         return false;
     }
 
-
-    public GoodsAdvertisementMonthStatistics findMonthStatisticsByIdAndMonthAndYear(Long id, Integer month, Integer year) {
-        Month m = Month.of(month + 1);
-        return goodsAdvertisementStatisticsService.getMonthStatisticsByGoodsAdvertisementStatisticsAndMonthAndYear(findById(id).getStatistics(), m, year);
-    }
-
     public GoodsAdvertisementsForMainPageResponse getGoodsAdvertisementsForMainPage(PaginationRequest request) {
         UserAccount userAccount = userAccountService.findBySecurityContextHolder();
         GoodsAdvertisementsForMainPageResponse response = new GoodsAdvertisementsForMainPageResponse();
-        Category category;
+        Category category = null;
         if (userAccount != null) {
-            category = userStatisticsService.defineMostCommonCategoryOfLastTwentyViews();
+//            category = userStatisticsService.defineMostCommonCategoryOfLastTwentyViews();
             if (category == null) category = categoryService.getRandomCategory();
         } else {
             category = categoryService.getRandomCategory();
@@ -306,9 +281,9 @@ public class GoodsAdvertisementService {
 
         advertisement.setSeller(goodsSellerAccountService.findBySecurityContextHolder());
 
-        advertisement.setStatistics(new GoodsAdvertisementStatistics());
-
         advertisement.setHasParameters(request.getHasParameters());
+
+        advertisement.setCreationDate(LocalDateTime.now());
 
         if (request.getHasParameters())
             advertisement.setPriceToSort(request.getValuesPriceCounts().stream().mapToDouble(ParametersValuesPriceCountRequest::getPrice).min().getAsDouble());
@@ -343,28 +318,6 @@ public class GoodsAdvertisementService {
         return goodsAdvertisementRepository.findFirst5BySellerOrderByIdDesc(goodsSeller);
     }
 
-    public List<GoodsAdvertisement> getPopularGoodsAdvertisementsForGoodsSellerProfile(GoodsSellerAccount goodsSeller) {
-        List<GoodsAdvertisement> advertisements = goodsAdvertisementRepository.findAllBySeller(goodsSeller);
-        return advertisements
-                .stream()
-                .map(GoodsAdvertisement::getStatistics)
-                .sorted(Comparator.comparing(GoodsAdvertisementStatistics::getViewsSum).reversed())
-                .map(GoodsAdvertisementStatistics::getGoodsAdvertisement)
-                .collect(Collectors.toList())
-                .subList(0, Math.min(advertisements.size(), 5));
-//         advertisements;
-    }
-
-    public List<GoodsAdvertisement> getMostSoldGoodsAdvertisementsForGoodsSellerProfile(GoodsSellerAccount goodsSeller) {
-        List<GoodsAdvertisement> advertisements = goodsAdvertisementRepository.findAllBySeller(goodsSeller);
-        return advertisements
-                .stream()
-                .map(GoodsAdvertisement::getStatistics)
-                .sorted(Comparator.comparing(GoodsAdvertisementStatistics::getSoldSum).reversed())
-                .map(GoodsAdvertisementStatistics::getGoodsAdvertisement)
-                .collect(Collectors.toList())
-                .subList(0, Math.min(advertisements.size(), 5));
-    }
 
     public List<GoodsAdvertisementForSearchResponse> findSellerAdvertisementsByIdOrTitleContains(String value, Long sellerId) {
         GoodsSellerAccount seller;
@@ -380,5 +333,18 @@ public class GoodsAdvertisementService {
                         a.getId().toString().contains(value))
                 .map(GoodsAdvertisementForSearchResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public void rewriteDates() {
+        List<GoodsAdvertisement> advertisements = goodsAdvertisementRepository.findAll();
+
+    }
+
+    public void setAdvertisementView(Long id) {
+        UserAdvertisementView view = new UserAdvertisementView();
+        view.setUser(userAccountService.findBySecurityContextHolder());
+        view.setDateTime(LocalDateTime.now());
+        view.setGoodsAdvertisement(findById(id));
+        userAdvertisementViewRepository.save(view);
     }
 }

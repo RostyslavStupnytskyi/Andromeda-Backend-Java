@@ -21,6 +21,6 @@ public class UserDataResponse {
         this.username = user.getUsername();
         this.avatar = user.getAvatar();
         this.settings = new UserSettingsResponse(user.getSettings());
-        this.statistics = new UserStatisticsResponse(user.getUserStatistics());
+        this.statistics = new UserStatisticsResponse();
     }
 }

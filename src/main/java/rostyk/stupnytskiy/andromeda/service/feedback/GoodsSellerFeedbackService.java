@@ -8,7 +8,6 @@ import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
 import rostyk.stupnytskiy.andromeda.repository.feedback.GoodsSellerFeedbackRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,13 +24,10 @@ public class GoodsSellerFeedbackService {
     @Autowired
     private GoodsOrderService goodsOrderService;
 
-    @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
 
     public void save(GoodsSellerFeedbackRequest request){
         GoodsSellerFeedback feedback = goodsSellerFeedbackRequestToGoodsSellerFeedback(request);
         goodsSellerFeedbackRepository.save(feedback);
-        goodsSellerStatisticsService.incrementMonthStatisticsSellerFeedbacks(feedback.getSeller());
     }
 
     public List<GoodsSellerFeedback> findAllBySeller(GoodsSellerAccount seller) {

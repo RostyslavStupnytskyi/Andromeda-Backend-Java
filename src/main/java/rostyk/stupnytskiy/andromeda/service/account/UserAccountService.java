@@ -6,12 +6,10 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserDataReq
 import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSettingsRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.repository.account.user.UserAccountRepository;
 import rostyk.stupnytskiy.andromeda.repository.account.user.UserSettingsRepository;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
@@ -33,9 +31,6 @@ public class UserAccountService {
 
     @Autowired
     private CurrencyService currencyService;
-
-    @Autowired
-    private UserStatisticsService userStatisticsService;
 
     @Autowired
     private FileTool fileTool;
@@ -71,13 +66,6 @@ public class UserAccountService {
         if (request.getGetSendOrdersNotifications() != null)
             user.getSettings().setGetSendOrderNotifications(request.getGetSendOrdersNotifications());
         userSettingsRepository.save(user.getSettings());
-    }
-
-    public void addStatisticsToAll() {
-        userRepository.findAll().forEach((u) -> {
-            u.setUserStatistics(new UserStatistics());
-            userStatisticsService.createStartStatistics(u);
-        });
     }
 
     public void changeUserData(UserDataRequest request) {

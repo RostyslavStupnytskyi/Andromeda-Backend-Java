@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
+import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -43,10 +43,12 @@ public class UserAccount extends Account {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private UserSettings settings;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private UserStatistics userStatistics;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<UserAdvertisementView> views;
 
     public UserAccount() {
         super.setUserRole(UserRole.ROLE_USER);
     }
+
+
 }

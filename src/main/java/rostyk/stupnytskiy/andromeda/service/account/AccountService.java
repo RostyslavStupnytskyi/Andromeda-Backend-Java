@@ -16,22 +16,16 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerSettings;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.markup.GoodsShopMarkup;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.goods_seller.GoodsSellerStatistics;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserSettings;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserStatistics;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
 import rostyk.stupnytskiy.andromeda.repository.account.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
-import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.ConfirmationCodeGenerator;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
@@ -65,15 +59,6 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private MailService mailService;
 
-    @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
-
-    @Autowired
-    private UserStatisticsService userStatisticsService;
-
-    @Autowired
-    private GoodsShopMarkupService goodsShopMarkupService;
-
 
     public String testAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -86,7 +71,6 @@ public class AccountService implements UserDetailsService {
     public AuthenticationResponse registerUser(AccountLoginRequest request) throws IOException {
         UserAccount userAccount = registerUserAccount(request);
         fileTool.createUserDir(userAccount.getId());
-        userStatisticsService.createStartStatistics(userAccount);
         return login(request);
     }
 
@@ -94,8 +78,6 @@ public class AccountService implements UserDetailsService {
     public AuthenticationResponse registerGoodsSeller(AccountLoginRequest request) throws IOException {
         GoodsSellerAccount seller = registerGoodsSellerAccount(request);
         fileTool.createUserDir(seller.getId());
-        goodsSellerStatisticsService.createStartStatistics(seller);
-        goodsShopMarkupService.createDefaultMarkup(seller);
         return login(request);
     }
 
@@ -154,9 +136,7 @@ public class AccountService implements UserDetailsService {
         GoodsSellerAccount goodsSellerAccount = new GoodsSellerAccount();
         goodsSellerAccount.setLogin(request.getLogin());
         goodsSellerAccount.setPassword(encoder.encode(request.getPassword()));
-        goodsSellerAccount.setStatistics(new GoodsSellerStatistics());
         goodsSellerAccount.setSettings(new GoodsSellerSettings());
-        goodsSellerAccount.setMarkup(new GoodsShopMarkup());
 
         return accountRepository.save(goodsSellerAccount);
     }
@@ -172,7 +152,6 @@ public class AccountService implements UserDetailsService {
         userAccount.setPassword(encoder.encode(request.getPassword()));
         userAccount.setCart(new Cart());
         userAccount.setSettings(new UserSettings());
-        userAccount.setUserStatistics(new UserStatistics());
         return accountRepository.save(userAccount);
     }
 

@@ -9,13 +9,10 @@ import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
 @Setter
 public class SellerResponse extends AccountResponse {
 
-    private String taxpayerNumber;
-
     private String shopName;
 
     public SellerResponse(SellerAccount sellerAccount){
         super(sellerAccount);
-        this.taxpayerNumber = sellerAccount.getTaxpayerNumber();
         this.shopName = sellerAccount.getShopName();
     }
 }

@@ -11,7 +11,6 @@ import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.Goods
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.GoodsSellerStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAdvertisementCategoryService;
-import rostyk.stupnytskiy.andromeda.service.account.seller.markup.GoodsShopMarkupService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,9 +26,6 @@ public class GoodsSellerAccountController {
     @Autowired
     private GoodsSellerAdvertisementCategoryService goodsSellerAdvertisementCategoryService;
 
-    @Autowired
-    private GoodsShopMarkupService goodsShopMarkupService;
-
 
     @PutMapping("/update")
     public void updateGoodsSellerData(@Valid @RequestBody GoodsSellerDataRequest request) {
@@ -43,12 +39,12 @@ public class GoodsSellerAccountController {
 
     @GetMapping("statistics")
     public GoodsSellerStatisticsResponse getGoodsSellerStatistics() {
-        return new GoodsSellerStatisticsResponse(goodsSellerAccountService.findBySecurityContextHolder());
+        return new GoodsSellerStatisticsResponse();
     }
 
     @GetMapping("month-statistics")
     public GoodsSellerMonthStatisticsResponse getGoodsSellerMonthStatistics(Integer month, Integer year) {
-        return new GoodsSellerMonthStatisticsResponse(goodsSellerAccountService.findMonthStatisticsByIdAndMonthAndYear(month, year));
+        return new GoodsSellerMonthStatisticsResponse();
     }
 
     @GetMapping("profile")
@@ -59,11 +55,6 @@ public class GoodsSellerAccountController {
     @GetMapping("data")
     public GoodsSellerDataResponse getGoodsSellerData() {
         return goodsSellerAccountService.getGoodsSellerData();
-    }
-
-    @GetMapping("stat")
-    public void get() {
-        goodsSellerAccountService.addStatisticsForEach();
     }
 
     @PostMapping("create-category")
@@ -81,8 +72,4 @@ public class GoodsSellerAccountController {
         return goodsSellerAdvertisementCategoryService.getSellerCategoriesTree(id);
     }
 
-    @PutMapping("create-markup")
-    public void createFollAllSellers() {
-        goodsSellerAccountService.createMarkupForAll();
-    }
 }

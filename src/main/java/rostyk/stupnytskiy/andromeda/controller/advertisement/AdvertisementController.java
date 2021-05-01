@@ -16,7 +16,6 @@ import rostyk.stupnytskiy.andromeda.dto.response.statistics.advertisement.GoodsA
 import rostyk.stupnytskiy.andromeda.service.advertisement.AdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
-import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 
 import java.util.List;
 
@@ -30,9 +29,6 @@ public class AdvertisementController {
 
     @Autowired
     private GoodsAdvertisementService goodsAdvertisementService;
-
-    @Autowired
-    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
 
     @Autowired
     private ParameterService parameterService;
@@ -123,15 +119,15 @@ public class AdvertisementController {
         goodsAdvertisementService.makeMainImageToGoodsAdvertisement(id, image);
     }
 
-    @GetMapping("statistics")
-    public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id) {
-        return new GoodsAdvertisementStatisticsResponse(goodsAdvertisementStatisticsService.findOneByGoodsAdvertisementId(id));
-    }
+//    @GetMapping("statistics")
+//    public GoodsAdvertisementStatisticsResponse getGoodsAdvertisementStatistics(Long id) {
+//        return new GoodsAdvertisementStatisticsResponse(goodsAdvertisementStatisticsService.findOneByGoodsAdvertisementId(id));
+//    }
 
-    @GetMapping("month-statistics")
-    public GoodsAdvertisementMonthStatisticsResponse getGoodsAdvertisementStatistics(Long id, Integer month, Integer year) {
-        return new GoodsAdvertisementMonthStatisticsResponse(goodsAdvertisementService.findMonthStatisticsByIdAndMonthAndYear(id, month, year));
-    }
+//    @GetMapping("month-statistics")
+//    public GoodsAdvertisementMonthStatisticsResponse getGoodsAdvertisementStatistics(Long id, Integer month, Integer year) {
+//        return new GoodsAdvertisementMonthStatisticsResponse(goodsAdvertisementService.findMonthStatisticsByIdAndMonthAndYear(id, month, year));
+//    }
 
     @GetMapping("find-by-value")
     public List<GoodsAdvertisementForSearchResponse> getAdvertisementsByIdOrTitleContains(String value, Long sellerId) {
@@ -156,6 +152,11 @@ public class AdvertisementController {
     @PutMapping("view")
     public void setAdvertisementView(Long id) {
         goodsAdvertisementService.setAdvertisementView(id);
+    }
+
+    @PutMapping("rewrite-dates")
+    public void rewriteDates() {
+        goodsAdvertisementService.rewriteDates();
     }
 
 

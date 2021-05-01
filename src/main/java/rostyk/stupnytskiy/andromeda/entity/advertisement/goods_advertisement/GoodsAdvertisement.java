@@ -11,9 +11,11 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.dis
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
-import rostyk.stupnytskiy.andromeda.entity.statistics.advertisement.GoodsAdvertisementStatistics;
+import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class GoodsAdvertisement extends Advertisement {
     private Double priceToSort;
 
     private Boolean hasParameters;
+
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<Parameter> parameters;
@@ -53,27 +57,24 @@ public class GoodsAdvertisement extends Advertisement {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<DeliveryType> deliveryTypes = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private GoodsAdvertisementStatistics statistics;
-
     @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<GoodsAdvertisementFeedback> feedbacks;
 
     @ManyToMany(mappedBy = "favoriteAdvertisements", fetch = FetchType.LAZY)
     private List<UserAccount> users;
 
-    @OneToMany(mappedBy = "goodsAdvertisement")
+    @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<Discount> discounts;
 
     @ManyToOne
     private GoodsSellerAdvertisementCategory sellerCategory;
 
+    @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
+    private List<GoodsOrderItem> orderItems = new ArrayList<>();
+
     @Override
     public String toString() {
-        return "GoodsAdvertisement{" +
-                "onlySellerCountry=" + onlySellerCountry +
-                ", priceToSort=" + priceToSort +
-                '}';
+        return "GoodsAdvertisement{ id = " + this.getId() + ", seller = " + this.getSeller().toString() + "}";
     }
 
     public Double getMaxPrice() {
@@ -112,6 +113,15 @@ public class GoodsAdvertisement extends Advertisement {
         for (ParametersValuesPriceCount valuesPriceCount : valuesPriceCounts)
             if (valuesPriceCount.hasDiscount()) return true;
         return false;
+    }
+
+    public int getCountOrdersByYearAndMonth(int year, Month month) {
+        int count = 0;
+        for (GoodsOrderItem orderItem : orderItems) {
+            if (orderItem.getGoodsOrder().getCreationDate().getMonth() == month &&
+                    orderItem.getGoodsOrder().getCreationDate().getYear() == year) count++;
+        }
+        return count;
     }
 
 }

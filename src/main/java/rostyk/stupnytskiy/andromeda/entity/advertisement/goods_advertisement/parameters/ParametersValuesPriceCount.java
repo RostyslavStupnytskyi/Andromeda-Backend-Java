@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -54,6 +55,10 @@ public class ParametersValuesPriceCount {
             }
         }
         return discount;
+    }
+
+    public boolean hasFutureDiscounts() {
+        return this.discounts.stream().anyMatch((d) -> d.getEndDate().isAfter(LocalDateTime.now()));
     }
 
     public boolean hasDiscount() {

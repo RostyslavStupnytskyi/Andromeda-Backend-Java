@@ -13,9 +13,7 @@ import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.repository.feedback.GoodsAdvertisementFeedbackRepository;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
-import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderItemService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
 import java.io.IOException;
@@ -38,11 +36,6 @@ public class GoodsAdvertisementFeedbackService {
     @Autowired
     private GoodsAdvertisementService goodsAdvertisementService;
 
-    @Autowired
-    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
-
-    @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
 
     @Autowired
     private FileTool fileTool;
@@ -51,8 +44,6 @@ public class GoodsAdvertisementFeedbackService {
     public void save(GoodsAdvertisementFeedbackRequest request) {
         GoodsAdvertisementFeedback feedback = goodsAdvertisementFeedbackRequestToGoodsAdvertisementFeedback(request);
         goodsAdvertisementFeedbackRepository.save(feedback);
-        goodsAdvertisementStatisticsService.incrementGoodsAdvertisementFeedbacksNumber(feedback.getGoodsAdvertisement().getId());
-        goodsSellerStatisticsService.incrementMonthStatisticsOrderFeedbacks(feedback.getGoodsAdvertisement().getSeller());
     }
 
     public PageResponse<GoodsAdvertisementFeedbackResponse> getGoodsAdvertisementFeedbacksPage(Long id, PaginationRequest request) {

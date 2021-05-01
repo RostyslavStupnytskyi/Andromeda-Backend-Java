@@ -1,6 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.statistics.account.user;
 
 import lombok.*;
+import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;
@@ -27,9 +28,9 @@ public class UserAdvertisementView {
 
     private LocalDateTime dateTime;
 
-
     @ManyToOne
-    private UserMonthStatistics monthStatistics;
+    private UserAccount user;
+
 
     public UserAdvertisementView() {
         this.dateTime = LocalDateTime.now();

@@ -8,7 +8,6 @@ import rostyk.stupnytskiy.andromeda.dto.request.account.user_account.UserSetting
 import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserDataResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.adviertisement_views.UserAdvertisementsViewsResponse;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.user.UserStatisticsService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,9 +19,6 @@ public class UserAccountController {
 
     @Autowired
     private UserAccountService userAccountService;
-
-    @Autowired
-    private UserStatisticsService userStatisticsService;
 
     @GetMapping("/data")
     public UserDataResponse getUserDataResponse() {
@@ -44,17 +40,13 @@ public class UserAccountController {
         userAccountService.deleteUserAvatar();
     }
 
-    @PostMapping
-    private void add() {
-        userAccountService.addStatisticsToAll();
-    }
-
     @GetMapping("views")
     public UserAdvertisementsViewsResponse getViewsResponse(String dateFrom, String dateTo, PaginationRequest request) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         LocalDate startDate = dateFrom != null ? LocalDate.parse(dateFrom, df) : null;
         LocalDate endDate = dateTo != null ? LocalDate.parse(dateTo, df) : null;
 
-        return userStatisticsService.getViews(startDate, endDate, request);
+//        return userStatisticsService.getViews(startDate, endDate, request);
+        return null;
     }
 }

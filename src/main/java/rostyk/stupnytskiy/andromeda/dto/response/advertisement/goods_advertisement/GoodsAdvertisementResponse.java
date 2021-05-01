@@ -12,6 +12,7 @@ import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +46,8 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
     private Double minPrice;
     private Double maxPrice;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDateTime creationDate;
 
     public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
         super(advertisement);
@@ -56,6 +59,7 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         this.sellerId = advertisement.getSeller().getId();
         this.hasParameters = advertisement.getHasParameters();
         this.countryCode = advertisement.getSeller().getCountry().getCountryCode();
+        this.creationDate = advertisement.getCreationDate();
 
         this.totalCount = advertisement.getValuesPriceCounts().stream().mapToInt(ParametersValuesPriceCount::getCount).sum();
 

@@ -24,8 +24,6 @@ import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.notification.NotificationService;
-import rostyk.stupnytskiy.andromeda.service.statistics.advertisement.GoodsAdvertisementStatisticsService;
-import rostyk.stupnytskiy.andromeda.service.statistics.account.goods_seller.GoodsSellerStatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -63,12 +61,6 @@ public class GoodsOrderService {
     private GoodsSellerAccountService goodsSellerAccountService;
 
     @Autowired
-    private GoodsSellerStatisticsService goodsSellerStatisticsService;
-
-    @Autowired
-    private GoodsAdvertisementStatisticsService goodsAdvertisementStatisticsService;
-
-    @Autowired
     private NotificationService notificationService;
 
 
@@ -86,7 +78,6 @@ public class GoodsOrderService {
         validateGoodsOrderRequest(request);
         GoodsOrder goodsOrder = goodsOrderRequestToGoodsOrderAndSave(request);
         request.getItems().forEach((i) -> goodsOrderItemService.save(i, goodsOrder));
-        goodsSellerStatisticsService.incrementMonthStatisticsOrders(goodsOrder.getSeller());
         notificationService.createNewOrderNotification(goodsOrder);
     }
 
