@@ -2,7 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response.cart;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 

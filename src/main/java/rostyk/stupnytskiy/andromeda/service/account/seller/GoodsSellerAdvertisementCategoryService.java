@@ -2,11 +2,11 @@ package rostyk.stupnytskiy.andromeda.service.account.seller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.seller_categories.GoodsSellerAdvertisementCategoryRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.category.GoodsSellerAdvertisementCategoryResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.category.GoodsSellerAdvertisementCategoryWithChildrenResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
-import rostyk.stupnytskiy.andromeda.repository.account.seller.goods_seller.GoodsSellerAdvertisementCategoryRepository;
+import rostyk.stupnytskiy.andromeda.dto.request.account.goods_seller.seller_categories.GoodsSellerAdvertisementCategoryRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.category.GoodsSellerAdvertisementCategoryResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.category.GoodsSellerAdvertisementCategoryWithChildrenResponse;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
+import rostyk.stupnytskiy.andromeda.repository.account.goods_seller.GoodsSellerAdvertisementCategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;

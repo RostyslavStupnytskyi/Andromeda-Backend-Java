@@ -10,9 +10,12 @@ import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.GoodsOrderResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.SellerGoodsOrdersDataResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.UserGoodsOrdersDataResponse;
+import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
 import rostyk.stupnytskiy.andromeda.service.order.GoodsOrderService;
 
 import javax.validation.Valid;
+
+import java.util.Arrays;
 
 import static rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus.WAITING_FOR_DELIVERY;
 import static rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus.WAITING_FOR_SENDING;
@@ -44,6 +47,11 @@ public class GoodsOrderController {
     @PutMapping("/confirm")
     private void confirmGoodsOrderDelivery( @RequestBody ConfirmGoodsOrderDeliveryRequest request) {
         goodsOrderService.confirmGoodsOrderDelivery(request);
+    }
+
+    @GetMapping("/seller")
+    private PageResponse<GoodsOrderResponse> getSellerOrdersByStatus(PaginationRequest request, GoodsOrderStatus[] status) {
+        return goodsOrderService.getOrdersPageForSellerByOrderStatus(request, status);
     }
 
     @GetMapping("/seller/all")

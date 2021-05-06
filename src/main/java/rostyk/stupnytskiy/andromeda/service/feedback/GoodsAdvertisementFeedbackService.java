@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.feedback.GoodsAdvertisementFeedbackRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.feedback.GoodsAdvertisementFeedbackResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 import rostyk.stupnytskiy.andromeda.repository.feedback.GoodsAdvertisementFeedbackRepository;

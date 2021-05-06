@@ -1,10 +1,10 @@
-package rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories;
+package rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 
 import javax.persistence.*;

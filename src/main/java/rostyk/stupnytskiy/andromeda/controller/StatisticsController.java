@@ -52,10 +52,10 @@ public class StatisticsController {
         return statisticsService.getAdvertisementCreationDate(id);
     }
 
-    @GetMapping("test")
-    public double getTest() {
-        return goodsAdvertisementFeedbackRepository.getAverageRatingForLast30DaysByGoodsAdvertisement( 1L);
-    }
+//    @GetMapping("test")
+//    public double getTest() {
+//        return goodsAdvertisementFeedbackRepository.getAverageRatingForLast30DaysByGoodsAdvertisement( 1L);
+//    }
 
     @GetMapping("feedbacks-last-month")
     public ColumnDiagramDataResponse getFeedbacksStatisticsByLastMonth(Long id) {

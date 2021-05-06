@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller;
+package rostyk.stupnytskiy.andromeda.entity.account.goods_seller;
 
 import lombok.*;
 
@@ -24,4 +24,8 @@ public class GoodsSellerSettings {
 
     @OneToOne(mappedBy = "settings")
     private GoodsSellerAccount goodsSellerAccount;
+
+    private Boolean onlySellerCountryDelivery = false;
+
+    private String bannerImage;
 }

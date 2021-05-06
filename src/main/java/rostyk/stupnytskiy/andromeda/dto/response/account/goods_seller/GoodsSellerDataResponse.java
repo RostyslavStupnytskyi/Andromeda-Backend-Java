@@ -1,10 +1,8 @@
-package rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller;
+package rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.dto.response.account.user.UserSettingsResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.user.UserStatisticsResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 
 @Getter
 @Setter

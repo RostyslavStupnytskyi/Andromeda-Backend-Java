@@ -13,16 +13,19 @@ import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertiseme
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementsForMainPageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.category.CategoryResponse;
 import rostyk.stupnytskiy.andromeda.entity.Category;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.Property;
 
+import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.AdvertisementRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.GoodsAdvertisementRepository;
+import rostyk.stupnytskiy.andromeda.repository.feedback.GoodsAdvertisementFeedbackRepository;
 import rostyk.stupnytskiy.andromeda.repository.statistics.account.UserAdvertisementViewRepository;
 import rostyk.stupnytskiy.andromeda.service.CategoryService;
+import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.SubcategoryService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
@@ -34,7 +37,6 @@ import rostyk.stupnytskiy.andromeda.tools.FileTool;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +79,12 @@ public class GoodsAdvertisementService {
     @Autowired
     private UserAdvertisementViewRepository userAdvertisementViewRepository;
 
+    @Autowired
+    private GoodsAdvertisementFeedbackRepository goodsAdvertisementFeedbackRepository;
+
+    @Autowired
+    private CurrencyService currencyService;
+
 
     public GoodsAdvertisement findById(Long id) {
         System.out.println(id);
@@ -108,7 +116,7 @@ public class GoodsAdvertisementService {
         Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findPageBySellerId(id, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisementForSearchResponse::new)
+                .map(this::convertGoodsAdvertisementsToSearchResponse)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
@@ -133,7 +141,7 @@ public class GoodsAdvertisementService {
 
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisementForSearchResponse::new)
+                .map(this::convertGoodsAdvertisementsToSearchResponse)
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
                 page.getTotalPages()
@@ -143,7 +151,7 @@ public class GoodsAdvertisementService {
     private PageResponse<GoodsAdvertisementForSearchResponse> mapPageToSearchPageResponse(Page<GoodsAdvertisement> page) {
         return new PageResponse<>(page
                 .get()
-                .map(GoodsAdvertisementForSearchResponse::new)
+                .map(this::convertGoodsAdvertisementsToSearchResponse)
 //                .peek((d) -> d.setHasDiscount())
                 .collect(Collectors.toList()),
                 page.getTotalElements(),
@@ -331,7 +339,7 @@ public class GoodsAdvertisementService {
                 .filter((a) -> a.getTitle().toLowerCase().contains(value.toLowerCase()) ||
                         a.getTitle().toUpperCase().contains(value.toUpperCase()) ||
                         a.getId().toString().contains(value))
-                .map(GoodsAdvertisementForSearchResponse::new)
+                .map(this::convertGoodsAdvertisementsToSearchResponse)
                 .collect(Collectors.toList());
     }
 
@@ -347,4 +355,44 @@ public class GoodsAdvertisementService {
         view.setGoodsAdvertisement(findById(id));
         userAdvertisementViewRepository.save(view);
     }
+
+
+
+    public GoodsAdvertisementForSearchResponse convertGoodsAdvertisementsToSearchResponse(GoodsAdvertisement advertisement) {
+        return goodsAdvertisementsToSearchResponse(advertisement);
+    }
+
+    public GoodsAdvertisementForSearchResponse convertGoodsAdvertisementsToSearchResponse(GoodsAdvertisement advertisement, String currency) {
+        GoodsAdvertisementForSearchResponse response = goodsAdvertisementsToSearchResponse(advertisement);
+        response.setMinPrice(currencyService.exchangeCurrencyFromDollar(response.getMinPrice(), currency));
+        response.setMaxPrice(currencyService.exchangeCurrencyFromDollar(response.getMaxPrice(), currency));
+        response.setMaxPriceWithDiscount(currencyService.exchangeCurrencyFromDollar(response.getMaxPriceWithDiscount(), currency));
+        response.setMinPriceWithDiscount(currencyService.exchangeCurrencyFromDollar(response.getMinPriceWithDiscount(), currency));
+        response.setCurrencyCode(currency);
+        return response;
+    }
+
+
+
+    public GoodsAdvertisementForSearchResponse goodsAdvertisementsToSearchResponse(GoodsAdvertisement advertisement) {
+        GoodsAdvertisementForSearchResponse response = new GoodsAdvertisementForSearchResponse();
+        response.setId(advertisement.getId());
+        response.setTitle(advertisement.getTitle());
+        response.setImage(advertisement.getMainImage());
+        response.setSeller(advertisement.getSeller().getShopName());
+        response.setSellerId(advertisement.getSeller().getId());
+        response.setDate(advertisement.getCreationDate());
+        response.setMaxPrice(advertisement.getMaxPrice());
+        response.setMinPrice(advertisement.getMinPrice());
+        response.setHasDiscount(advertisement.hasDiscount());
+        response.setMaxPriceWithDiscount(advertisement.getMaxPriceWithDiscounts());
+        response.setMinPriceWithDiscount(advertisement.getMinPriceWithDiscounts());
+        response.setSold((long) advertisement.getOrderItems().stream().mapToInt(GoodsOrderItem::getCount).sum());
+        response.setRating(goodsAdvertisementFeedbackRepository.getAverageRatingByGoodsAdvertisement(advertisement.getId()).orElse(null));
+//        response.setRating(advertisement.getRating());
+
+        return response;
+    }
+
+
 }

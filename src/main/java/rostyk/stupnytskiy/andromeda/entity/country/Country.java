@@ -1,14 +1,8 @@
 package rostyk.stupnytskiy.andromeda.entity.country;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
-import rostyk.stupnytskiy.andromeda.entity.account.Account;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter

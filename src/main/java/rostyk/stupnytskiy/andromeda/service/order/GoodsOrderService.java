@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.service.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.order.ConfirmGoodsOrderDeliveryRequest;
@@ -12,8 +13,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.GoodsOrderResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.SellerGoodsOrdersDataResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.UserGoodsOrdersDataResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
@@ -106,7 +106,7 @@ public class GoodsOrderService {
     }
 
     private void validateGoodsOrderRequest(GoodsOrderRequest request) {
-        SellerAccount sellerAccount = getSellerAccountFromGoodsItemRequest(request.getItems().get(0));
+        GoodsSellerAccount sellerAccount = getSellerAccountFromGoodsItemRequest(request.getItems().get(0));
         request.getItems().forEach((i) -> {
             if (sellerAccount != getSellerAccountFromGoodsItemRequest(i))
                 throw new IllegalArgumentException("Non one seller in order request");
@@ -202,7 +202,7 @@ public class GoodsOrderService {
     }
 
     public PageResponse<GoodsOrderResponse> getAllClosedOrdersPageForUser(PaginationRequest request) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageByUserAndOrderStatusOrOrderStatus(userAccountService.findBySecurityContextHolder(),WAITING_FOR_FEEDBACK, CLOSED, request.mapToPageable());
+        Page<GoodsOrder> page = goodsOrderRepository.findPageByUserAndOrderStatusOrOrderStatus(userAccountService.findBySecurityContextHolder(), WAITING_FOR_FEEDBACK, CLOSED, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
                 .map(GoodsOrderResponse::new)
@@ -213,7 +213,7 @@ public class GoodsOrderService {
 
     public PageResponse<GoodsOrderResponse> getAllClosedOrdersPageForSeller(PaginationRequest request) {
         Set<GoodsOrderStatus> statusSet = new HashSet<>(Arrays.asList(WAITING_FOR_FEEDBACK, CLOSED));
-        Page<GoodsOrder> page = goodsOrderRepository.findAllBySellerAndOrderStatusIn(goodsSellerAccountService.findBySecurityContextHolder(),statusSet, request.mapToPageable());
+        Page<GoodsOrder> page = goodsOrderRepository.findAllBySellerAndOrderStatusIn(goodsSellerAccountService.findBySecurityContextHolder(), statusSet, request.mapToPageable());
         return new PageResponse<>(page
                 .get()
                 .map(GoodsOrderResponse::new)
@@ -242,5 +242,13 @@ public class GoodsOrderService {
                 .allItems((long) goodsOrderRepository.findAllBySeller(seller).size())
                 .newItems((long) goodsOrderRepository.findAllBySellerAndIsViewedIsFalse(seller).size())
                 .build();
+    }
+
+    public PageResponse<GoodsOrderResponse> getOrdersPageForSellerByOrderStatus(PaginationRequest request, GoodsOrderStatus[] statuses) {
+        GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
+        Page<GoodsOrder> page;
+        if (statuses == null || statuses.length == 0) page = goodsOrderRepository.findPageBySeller(seller, request.mapToPageable());
+        else page = goodsOrderRepository.findPageBySellerAndOrderStatusIn(seller, statuses, request.mapToPageable());
+        return new PageResponse<>(page.get().map(GoodsOrderResponse::new).collect(Collectors.toList()), page.getTotalElements(), page.getTotalPages());
     }
 }

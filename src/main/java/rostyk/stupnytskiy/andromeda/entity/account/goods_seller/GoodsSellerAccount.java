@@ -1,10 +1,9 @@
-package rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller;
+package rostyk.stupnytskiy.andromeda.entity.account.goods_seller;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerResponse;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
+import rostyk.stupnytskiy.andromeda.entity.account.Account;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
@@ -19,9 +18,8 @@ import java.util.Set;
 @AllArgsConstructor
 
 @Entity
-public class GoodsSellerAccount extends SellerAccount {
-
-    private Boolean onlySellerCountryDelivery = false;
+//@DiscriminatorValue("goods_seller")
+public class GoodsSellerAccount extends Account {
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<GoodsAdvertisement> advertisements;
@@ -41,6 +39,11 @@ public class GoodsSellerAccount extends SellerAccount {
     @OneToMany(mappedBy = "goodsSeller")
     private List<GoodsSellerAdvertisementCategory> categories;
 
+    private String shopName;
+
+    @Lob
+    private String description;
+
     @Override
     public String toString() {
         return "GoodsSellerAccount{" +
@@ -49,7 +52,4 @@ public class GoodsSellerAccount extends SellerAccount {
                 '}';
     }
 
-    public GoodsSellerResponse mapToResponse() {
-        return new GoodsSellerResponse(this);
-    }
 }

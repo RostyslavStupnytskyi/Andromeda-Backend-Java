@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsAdvertisementFeedback;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +32,7 @@ public interface GoodsAdvertisementFeedbackRepository extends JpaRepository<Good
     @Query(value = "select round(avg(f.rating), 1) from goods_advertisement_feedback f " +
             "where f.goods_advertisement_id = :adv and f.creation_date >= DATE_SUB(curdate(), INTERVAL 30 DAY)",
             nativeQuery = true)
-    double getAverageRatingForLast30DaysByGoodsAdvertisement(@Param("adv") long advertisementId);
+    Optional<Double> getAverageRatingForLast30DaysByGoodsAdvertisement(@Param("adv") long advertisementId);
 
     @Query(value = "select count(*) from goods_advertisement_feedback f " +
             "where f.goods_advertisement_id = :adv and f.rating = :rating and month(f.creation_date) = :_month and year(f.creation_date) = :_year",
@@ -49,7 +47,7 @@ public interface GoodsAdvertisementFeedbackRepository extends JpaRepository<Good
     @Query(value = "select round(avg(f.rating), 1) from goods_advertisement_feedback f " +
             "where f.goods_advertisement_id = :adv and month(f.creation_date) = :_month and year(f.creation_date) = :_year",
             nativeQuery = true)
-    double getAverageRatingByGoodsAdvertisementAndRatingAndMonthAndYear(
+    Optional<Double> getAverageRatingByGoodsAdvertisementAndRatingAndMonthAndYear(
             @Param("adv") long advertisementId,
             @Param("_month") int month,
             @Param("_year") int year
@@ -84,5 +82,5 @@ public interface GoodsAdvertisementFeedbackRepository extends JpaRepository<Good
     @Query(value = "select round(avg(f.rating), 1) from goods_advertisement_feedback f " +
             "where f.goods_advertisement_id = :adv",
             nativeQuery = true)
-    double getAverageRatingByGoodsAdvertisement(@Param("adv") long advertisementId);
+    Optional<Double> getAverageRatingByGoodsAdvertisement(@Param("adv") long advertisementId);
 }

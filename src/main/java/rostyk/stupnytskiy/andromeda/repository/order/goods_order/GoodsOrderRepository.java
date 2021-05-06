@@ -2,14 +2,15 @@ package rostyk.stupnytskiy.andromeda.repository.order.goods_order;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
-import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,4 +52,9 @@ public interface GoodsOrderRepository extends JpaRepository<GoodsOrder, Long> {
     List<GoodsOrder> findAllBySeller(GoodsSellerAccount seller);
 
 
+    @Query("Select distinct o from GoodsOrder o where o.seller = :seller and o.orderStatus in :statuses")
+    Page<GoodsOrder> findPageBySellerAndOrderStatusIn(
+            @Param("seller") GoodsSellerAccount seller,
+            @Param("statuses") GoodsOrderStatus[] statuses,
+            Pageable pageable);
 }

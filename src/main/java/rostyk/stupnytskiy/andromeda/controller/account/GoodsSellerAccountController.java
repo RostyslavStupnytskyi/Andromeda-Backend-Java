@@ -2,11 +2,13 @@ package rostyk.stupnytskiy.andromeda.controller.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.GoodsSellerDataRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.account.seller_account.goods_seller.seller_categories.GoodsSellerAdvertisementCategoryRequest;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerDataResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.GoodsSellerProfileResponse;
-import rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.category.GoodsSellerAdvertisementCategoryWithChildrenResponse;
+import rostyk.stupnytskiy.andromeda.dto.request.account.ImageRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.goods_seller.GoodsSellerDataRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.goods_seller.GoodsSellerMainDaraRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.account.goods_seller.seller_categories.GoodsSellerAdvertisementCategoryRequest;
+import rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.GoodsSellerDataResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.GoodsSellerProfileResponse;
+import rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.category.GoodsSellerAdvertisementCategoryWithChildrenResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.GoodsSellerMonthStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.statistics.account.seller.GoodsSellerStatisticsResponse;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
@@ -32,7 +34,12 @@ public class GoodsSellerAccountController {
         goodsSellerAccountService.updateGoodsSellerData(request);
     }
 
-    @GetMapping
+    @PutMapping("/main-data")
+    public void updateGoodsSellerMainData(@Valid @RequestBody GoodsSellerMainDaraRequest request) {
+        goodsSellerAccountService.updateGoodsSellerMainData(request);
+    }
+
+    @GetMapping("profile-data")
     public GoodsSellerProfileResponse getGoodsSellerAccount() {
         return new GoodsSellerProfileResponse(goodsSellerAccountService.findBySecurityContextHolder());
     }
@@ -70,6 +77,11 @@ public class GoodsSellerAccountController {
     @GetMapping("category-tree")
     public List<GoodsSellerAdvertisementCategoryWithChildrenResponse> getCategoriesTree(Long id) {
         return goodsSellerAdvertisementCategoryService.getSellerCategoriesTree(id);
+    }
+
+    @PutMapping("banner")
+    public void changeGoodsSellerBanner(@RequestBody ImageRequest request) {
+        goodsSellerAccountService.changeGoodsSellerBanner(request);
     }
 
 }

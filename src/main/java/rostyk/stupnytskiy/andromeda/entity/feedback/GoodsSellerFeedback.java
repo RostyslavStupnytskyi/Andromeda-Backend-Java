@@ -1,8 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.feedback;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.SellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 

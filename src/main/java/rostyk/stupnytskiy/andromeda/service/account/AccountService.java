@@ -11,15 +11,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import rostyk.stupnytskiy.andromeda.dto.request.account.ImageRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.AuthenticationResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerSettings;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerSettings;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserSettings;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.mail.MailService;
 import rostyk.stupnytskiy.andromeda.repository.account.AccountRepository;
@@ -165,5 +166,21 @@ public class AccountService implements UserDetailsService {
 
     public void save(UserAccount userAccount) {
         accountRepository.save(userAccount);
+    }
+
+    public void changeAvatar(ImageRequest request) {
+        Account account = getAccountBySecurityContextHolder();
+        if (request.getImage() != null) {
+            try {
+                account.setAvatar(fileTool.saveUserImage(request.getImage(), account.getId()));
+                accountRepository.save(account);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            account.setAvatar(null);
+            accountRepository.save(account);
+        }
+
     }
 }

@@ -144,7 +144,7 @@ public class StatisticsService {
         for (DiagramColumnResponse column : columns) {
             column.setPercent(getPercent(column.getValue(), sum));
         }
-        return new ColumnDiagramDataResponse(sum, 0, goodsAdvertisementFeedbackRepository.getAverageRatingByGoodsAdvertisement(id), columns);
+        return new ColumnDiagramDataResponse(sum, 0, goodsAdvertisementFeedbackRepository.getAverageRatingByGoodsAdvertisement(id).orElse(0.0), columns);
     }
 
     private boolean canShowStatistics(int year, int month, GoodsAdvertisement advertisement) {

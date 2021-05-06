@@ -74,7 +74,7 @@ public class UserAccountService {
 
         if (request.getAvatar() != null) {
             try {
-                userAccount.setAvatar(fileTool.saveUserAvatarImage(request.getAvatar(), userAccount.getId()));
+                userAccount.setAvatar(fileTool.saveUserImage(request.getAvatar(), userAccount.getId()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

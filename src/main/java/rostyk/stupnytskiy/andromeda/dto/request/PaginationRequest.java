@@ -48,7 +48,6 @@ public class PaginationRequest {
             return PageRequest.of(page, size, Sort.Direction.ASC, field, "id");
         } else {
             return PageRequest.of(page, size);
-
         }
     }
 }

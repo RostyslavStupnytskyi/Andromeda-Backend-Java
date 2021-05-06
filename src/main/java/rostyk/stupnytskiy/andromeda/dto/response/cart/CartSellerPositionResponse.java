@@ -1,12 +1,10 @@
 package rostyk.stupnytskiy.andromeda.dto.response.cart;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 

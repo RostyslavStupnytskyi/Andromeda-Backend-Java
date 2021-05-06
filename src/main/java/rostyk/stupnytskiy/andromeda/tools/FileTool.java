@@ -29,7 +29,7 @@ public class FileTool {
         createDir(userDir);
     }
 
-    public String saveUserAvatarImage(String img, Long userId) throws IOException {
+    public String saveUserImage(String img, Long userId) throws IOException {
         String userDir = PROJECT_DIR + "user_" + userId + File.separator;
         return saveImage(img,userDir);
     }

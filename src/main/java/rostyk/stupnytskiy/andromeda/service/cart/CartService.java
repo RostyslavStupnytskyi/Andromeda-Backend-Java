@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.cart.CartResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.cart.CartSellerPositionResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.cart.ChangeGoodsCartItemCountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.cart.GoodsCartItemResponse;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.cart.Cart;

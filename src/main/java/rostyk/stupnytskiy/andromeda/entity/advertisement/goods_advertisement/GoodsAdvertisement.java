@@ -1,10 +1,11 @@
 package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.GoodsSellerAccount;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
@@ -71,6 +72,13 @@ public class GoodsAdvertisement extends Advertisement {
 
     @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<GoodsOrderItem> orderItems = new ArrayList<>();
+
+//    select round(avg(f.rating), 1) from goods_advertisement_feedback f " +
+//            "where f.goods_advertisement_id = :adv
+//    @Formula("Select avg(f.rating) from goods_advertisement_feedback f")
+//    @Formula("Select round(avg(f.rating),1) from GoodsAdvertisementFeedback f where f.goodsAdvertisementId = id")
+//    @Formula("Select round(avg(f.rating),1) from goods_advertisement_feedback f where f.goods_advertisement_id = :id")
+//    private Double rating;
 
     @Override
     public String toString() {

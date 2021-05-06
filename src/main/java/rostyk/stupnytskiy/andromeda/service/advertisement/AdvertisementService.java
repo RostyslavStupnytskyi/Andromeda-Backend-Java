@@ -63,17 +63,18 @@ public class AdvertisementService {
         );
 
         request.setCurrencyCode(currencyService.auditUserCurrency(request.getCurrencyCode()));
+        return null;
 
-        return new PageResponse<>(page.get()
-                .map(GoodsAdvertisementForSearchResponse::new)
-                .peek((r) -> {
-                    r.setMinPrice(currencyService.exchangeCurrencyFromDollar(r.getMinPrice(), request.getCurrencyCode()));
-                    r.setMaxPrice(currencyService.exchangeCurrencyFromDollar(r.getMaxPrice(), request.getCurrencyCode()));
-                    r.setCurrencyCode(request.getCurrencyCode());
-                })
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
+//        return new PageResponse<>(page.get()
+//                .map(GoodsAdvertisementForSearchResponse::new)
+//                .peek((r) -> {
+//                    r.setMinPrice(currencyService.exchangeCurrencyFromDollar(r.getMinPrice(), request.getCurrencyCode()));
+//                    r.setMaxPrice(currencyService.exchangeCurrencyFromDollar(r.getMaxPrice(), request.getCurrencyCode()));
+//                    r.setCurrencyCode(request.getCurrencyCode());
+//                })
+//                .collect(Collectors.toList()),
+//                page.getTotalElements(),
+//                page.getTotalPages());
     }
 
 }

@@ -48,7 +48,7 @@ public class GoodsOrderResponse {
         this.sellerId = goodsOrder.getSeller().getId();
         this.items = goodsOrder.getOrderItems().stream().map(GoodsOrderItemResponse::new).collect(Collectors.toList());
 
-        this.price = goodsOrder.getOrderItems().stream().mapToDouble((i) -> i.getPrice() * i.getCount()).sum();
+        this.price = Math.round(goodsOrder.getOrderItems().stream().mapToDouble((i) -> i.getPrice() * i.getCount()).sum() * 100.0) / 100.0;
 
         this.closingDate = goodsOrder.getClosingDate();
     }

@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.controller.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import rostyk.stupnytskiy.andromeda.dto.request.account.ImageRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountDataRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.account.AccountLoginRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
@@ -18,12 +19,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
-
-//    @GetMapping
-//    private String test() {
-//        return accountService.testAuth();
-//    }
 
     @PostMapping("/login")
     public AuthenticationResponse login(@Valid @RequestBody AccountLoginRequest request) {
@@ -44,6 +39,11 @@ public class AccountController {
     @PutMapping("/update")
     public void updateAccountData(@Valid @RequestBody AccountDataRequest request){
         accountService.updateAccountData(request);
+    }
+
+    @PutMapping("avatar")
+    public void changeAvatar(@RequestBody ImageRequest request) {
+        accountService.changeAvatar(request);
     }
 
 //    @PutMapping("/confirm")

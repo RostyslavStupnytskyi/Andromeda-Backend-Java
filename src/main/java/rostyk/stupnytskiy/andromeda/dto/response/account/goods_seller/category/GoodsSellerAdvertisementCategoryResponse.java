@@ -1,8 +1,8 @@
-package rostyk.stupnytskiy.andromeda.dto.response.account.seller.goods_seller.category;
+package rostyk.stupnytskiy.andromeda.dto.response.account.goods_seller.category;
 
 import lombok.Getter;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.account.seller_account.goods_seller.categories.GoodsSellerAdvertisementCategory;
+import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 
 @Getter
 @Setter
