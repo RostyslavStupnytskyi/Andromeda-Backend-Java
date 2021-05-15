@@ -38,10 +38,10 @@ public class GoodsSellerFeedbackService {
         GoodsSellerFeedback feedback = new GoodsSellerFeedback();
         feedback.setGoodsOrder(
                 goodsOrderService.findOneByIdAndUser(
-                        request.getOrderId(),userAccountService.findBySecurityContextHolder()
+                        request.getOrderId(),userAccountService.findBySecurityContextHolderOrReturnNull()
                 ));
         feedback.setSeller(feedback.getGoodsOrder().getSeller());
-        feedback.setUser(userAccountService.findBySecurityContextHolder());
+        feedback.setUser(userAccountService.findBySecurityContextHolderOrReturnNull());
         feedback.setCommunicationRating(request.getCommunicationRating());
         feedback.setServiceRating(request.getServiceRating());
         feedback.setDateTime(LocalDateTime.now());

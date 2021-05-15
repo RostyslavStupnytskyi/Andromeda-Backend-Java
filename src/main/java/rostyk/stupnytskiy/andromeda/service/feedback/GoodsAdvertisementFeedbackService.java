@@ -68,7 +68,7 @@ public class GoodsAdvertisementFeedbackService {
 
     private GoodsAdvertisementFeedback goodsAdvertisementFeedbackRequestToGoodsAdvertisementFeedback(GoodsAdvertisementFeedbackRequest request) {
         GoodsAdvertisementFeedback feedback = new GoodsAdvertisementFeedback();
-        UserAccount userAccount = userAccountService.findBySecurityContextHolder();
+        UserAccount userAccount = userAccountService.findBySecurityContextHolderOrReturnNull();
         feedback.setText(request.getText());
         feedback.setRating(request.getRating());
         feedback.setGoodsOrderItem(

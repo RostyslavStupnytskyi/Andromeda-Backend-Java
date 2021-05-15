@@ -2,7 +2,11 @@ package rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement;
 
 import lombok.*;
 import org.hibernate.annotations.Formula;
-import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
+import org.hibernate.annotations.JoinFormula;
+import rostyk.stupnytskiy.andromeda.entity.country.Currency;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.Subcategory;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
@@ -73,46 +77,41 @@ public class GoodsAdvertisement extends Advertisement {
     @OneToMany(mappedBy = "goodsAdvertisement", fetch = FetchType.LAZY)
     private List<GoodsOrderItem> orderItems = new ArrayList<>();
 
-//    select round(avg(f.rating), 1) from goods_advertisement_feedback f " +
-//            "where f.goods_advertisement_id = :adv
-//    @Formula("Select avg(f.rating) from goods_advertisement_feedback f")
-//    @Formula("Select round(avg(f.rating),1) from GoodsAdvertisementFeedback f where f.goodsAdvertisementId = id")
-//    @Formula("Select round(avg(f.rating),1) from goods_advertisement_feedback f where f.goods_advertisement_id = :id")
-//    private Double rating;
+// Formula("Select round(avg(f.rating),1) from goods_advertisement_feedback f where f.goods_advertisement_id = id")
 
     @Override
     public String toString() {
         return "GoodsAdvertisement{ id = " + this.getId() + ", seller = " + this.getSeller().toString() + "}";
     }
 
-    public Double getMaxPrice() {
+    public Double getMaxPrice(Currency currency) {
         return valuesPriceCounts
                 .stream()
-                .mapToDouble(ParametersValuesPriceCount::getPrice)
+                .mapToDouble((p) -> p.getPriceByCurrency(currency))
                 .max()
                 .getAsDouble();
     }
 
-    public Double getMinPrice() {
+    public Double getMinPrice(Currency currency) {
         return valuesPriceCounts
                 .stream()
-                .mapToDouble(ParametersValuesPriceCount::getPrice)
+                .mapToDouble((p) -> p.getPriceByCurrency(currency))
                 .min()
                 .getAsDouble();
     }
 
-    public Double getMaxPriceWithDiscounts() {
+    public Double getMaxPriceWithDiscounts(Currency currency) {
         return valuesPriceCounts
                 .stream()
-                .mapToDouble(ParametersValuesPriceCount::getPriceWithCurrentDiscount)
+                .mapToDouble((p) -> p.getPriceWithCurrentDiscount(currency))
                 .max()
                 .getAsDouble();
     }
 
-    public Double getMinPriceWithDiscounts() {
+    public Double getMinPriceWithDiscounts(Currency currency) {
         return valuesPriceCounts
                 .stream()
-                .mapToDouble(ParametersValuesPriceCount::getPriceWithCurrentDiscount)
+                .mapToDouble((p) -> p.getPriceWithCurrentDiscount(currency))
                 .min()
                 .getAsDouble();
     }
@@ -120,6 +119,18 @@ public class GoodsAdvertisement extends Advertisement {
     public boolean hasDiscount() {
         for (ParametersValuesPriceCount valuesPriceCount : valuesPriceCounts)
             if (valuesPriceCount.hasDiscount()) return true;
+        return false;
+    }
+
+    public boolean hasCurrency(Currency currency) {
+        for (ParametersValuesPriceCount valuesPriceCount : valuesPriceCounts)
+            if (valuesPriceCount.hasCurrency(currency)) return true;
+        return false;
+    }
+
+    public boolean hasCurrency(String code) {
+        for (ParametersValuesPriceCount valuesPriceCount : valuesPriceCounts)
+            if (valuesPriceCount.hasCurrency(code)) return true;
         return false;
     }
 

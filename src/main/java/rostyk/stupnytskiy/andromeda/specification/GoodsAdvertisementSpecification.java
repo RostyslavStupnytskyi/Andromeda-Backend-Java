@@ -18,7 +18,6 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
     private Boolean rating;
 
 
-
     public GoodsAdvertisementSpecification(GoodsAdvertisementSearchRequest request) {
         this.title = request.getTitle();
         this.fromCountryCode = request.getFromCountryCode();
@@ -29,11 +28,11 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
     @Override
     public Predicate toPredicate(Root<GoodsAdvertisement> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
         final List<Predicate> predicates = new ArrayList<>();
-        predicates.add(findByTitleLike(root, cb));
+//        predicates.add(findByTitleLike(root, cb));
 //        predicates.add(findByDescriptionLike(root, cb));
         predicates.add(findByCountry(root, cb));
-        predicates.add(findByRating(root, cb));
-        predicates.add(findByImage(root, cb));
+//        predicates.add(findByRating(root, cb));
+//        predicates.add(findByImage(root, cb));
         return cb.and(predicates.toArray(new Predicate[0]));
     }
 
@@ -70,14 +69,11 @@ public class GoodsAdvertisementSpecification implements Specification<GoodsAdver
 
     private Predicate findByRating(Root<GoodsAdvertisement> r, CriteriaBuilder cb) {
         Predicate predicate;
-
-
 //        if (rating != null && rating) {
 //            final Join<GoodsAdvertisement, GoodsAdvertisementStatistics> statisticsJoin  = r.join("statistics");
 //            return cb.greaterThanOrEqualTo(statisticsJoin.get("rating"), 4.0);
 //        } else {
             predicate = cb.conjunction();
-//        }
         return predicate;
     }
 

@@ -11,6 +11,7 @@ import rostyk.stupnytskiy.andromeda.dto.response.country.CurrencyResponse;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.Advertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
+import rostyk.stupnytskiy.andromeda.entity.country.Currency;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,9 +50,10 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime creationDate;
 
-    public GoodsAdvertisementResponse(GoodsAdvertisement advertisement) {
+    public GoodsAdvertisementResponse(GoodsAdvertisement advertisement, Currency currency) {
         super(advertisement);
         this.onlySellerCountry = advertisement.getOnlySellerCountry();
+        if (advertisement.getSubcategory() != null)
         this.subcategory = new SubcategoryResponse(advertisement.getSubcategory());
         this.images = advertisement.getImages();
         this.properties = advertisement.getProperties().stream().map(PropertyResponse::new).collect(Collectors.toList());
@@ -66,18 +68,18 @@ public class GoodsAdvertisementResponse extends AdvertisementResponse {
         if (advertisement.getHasParameters()) {
             this.maxPrice = advertisement.getValuesPriceCounts()
                     .stream()
-                    .mapToDouble(ParametersValuesPriceCount::getPrice)
+                    .mapToDouble((p) -> p.getPriceByCurrency(currency))
                     .max()
                     .getAsDouble();
 
             this.minPrice = advertisement.getValuesPriceCounts()
                     .stream()
-                    .mapToDouble(ParametersValuesPriceCount::getPrice)
+                    .mapToDouble((p) -> p.getPriceByCurrency(currency))
                     .min()
                     .getAsDouble();
         } else {
-            this.maxPrice = advertisement.getValuesPriceCounts().get(0).getPrice();
-            this.minPrice = advertisement.getValuesPriceCounts().get(0).getPrice();
+            this.maxPrice = advertisement.getValuesPriceCounts().get(0).getPriceByCurrency(currency);
+            this.minPrice = advertisement.getValuesPriceCounts().get(0).getPriceByCurrency(currency);
         }
 
         this.parameters = advertisement.getParameters().stream().map(ParameterResponse::new).collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package rostyk.stupnytskiy.andromeda.entity;
+package rostyk.stupnytskiy.andromeda.entity.country;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
@@ -22,9 +22,11 @@ public class DeliveryType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;  // назва поштової служби чи способу доставки
+    private String title;
 
-    private Boolean international; // визначає чи доставка лише у межах власної країни чи ні
+    private Boolean international;
+
+    private Boolean cashOnDelivery;
 
     @ManyToOne
     private Country country;
@@ -33,5 +35,5 @@ public class DeliveryType {
     private List<GoodsAdvertisement> goodsAdvertisements;
 
     @ManyToMany(mappedBy = "deliveryTypes")
-    private Set<GoodsSellerAccount> sellerList;
+    private Set<GoodsSellerAccount> sellers;
 }

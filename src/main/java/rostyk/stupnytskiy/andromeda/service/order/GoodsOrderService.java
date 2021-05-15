@@ -2,13 +2,9 @@ package rostyk.stupnytskiy.andromeda.service.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.order.ConfirmGoodsOrderDeliveryRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderDeliveryDetailsForShipmentRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderItemRequest;
-import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.order.*;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.GoodsOrderResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.SellerGoodsOrdersDataResponse;
@@ -16,13 +12,17 @@ import rostyk.stupnytskiy.andromeda.dto.response.order.UserGoodsOrdersDataRespon
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
+import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderPaymentDetails;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
+import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderPaymentDetailsRepository;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderRepository;
+import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
 import rostyk.stupnytskiy.andromeda.service.account.UserAccountService;
 import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
+import rostyk.stupnytskiy.andromeda.service.cart.CartService;
 import rostyk.stupnytskiy.andromeda.service.notification.NotificationService;
 
 import java.time.LocalDateTime;
@@ -63,16 +63,14 @@ public class GoodsOrderService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private GoodsOrderPaymentDetailsRepository goodsOrderPaymentDetailsRepository;
 
-    public PageResponse<GoodsOrderResponse> getAllOrdersPageForSeller(PaginationRequest paginationRequest) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageBySeller(goodsSellerAccountService.findBySecurityContextHolder(), paginationRequest.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
+    @Autowired
+    private CurrencyService currencyService;
+
+
+
 
     public void createGoodsOrder(GoodsOrderRequest request) {
         validateGoodsOrderRequest(request);
@@ -84,11 +82,13 @@ public class GoodsOrderService {
     private GoodsOrder goodsOrderRequestToGoodsOrderAndSave(GoodsOrderRequest request) {
         GoodsOrder goodsOrder = new GoodsOrder();
         goodsOrder.setCreationDate(LocalDateTime.now());
-        goodsOrder.setOrderStatus(GoodsOrderStatus.WAITING_FOR_SENDING);
-        goodsOrder.setUser(userAccountService.findBySecurityContextHolder());
+        goodsOrder.setOrderStatus(WAITING_FOR_SELLER_CONFIRMATION);
+        goodsOrder.setUser(userAccountService.findBySecurityContextHolderOrReturnNull());
         goodsOrder.setSeller(getSellerAccountFromGoodsItemRequest(request.getItems().get(0)));
         goodsOrder.setIsViewed(false);
-        goodsOrder.setDeliveryDetails(goodsOrderDeliveryDetailsService.userDeliveryAddressToDeliveryDetails(userDeliveryAddressService.findById(request.getAddressId())));
+        goodsOrder.setSum(Math.round(request.getSum() * 100.0) / 100.0);
+        goodsOrder.setPaymentDetails(requestToGoodsOrderPaymentRequest(request.getPayment()));
+        goodsOrder.setDeliveryDetails(goodsOrderDeliveryDetailsService.userDeliveryAddressToDeliveryDetails(userDeliveryAddressService.findById(request.getAddressId()), deliveryTypeService.findById(request.getDeliveryTypeId())));
         return goodsOrderRepository.save(goodsOrder);
     }
 
@@ -125,14 +125,13 @@ public class GoodsOrderService {
     }
 
     public void confirmGoodsOrderDelivery(ConfirmGoodsOrderDeliveryRequest request) {
-        GoodsOrder goodsOrder = findOneByIdAndUser(request.getOrderId(), userAccountService.findBySecurityContextHolder());
+        GoodsOrder goodsOrder = findOneByIdAndUser(request.getOrderId(), userAccountService.findBySecurityContextHolderOrReturnNull());
         goodsOrder.setClosingDate(LocalDateTime.now());
         request.getOrderItems().forEach(
                 (i) -> goodsOrderItemService.confirmGoodsOrderItemDelivery(goodsOrderItemService.findById(i))
         );
-        if (goodsOrder.didAllGoodsOrderItemsDelivered()) {
+        if (goodsOrder.isAllGoodsOrderItemsDelivered()) {
             goodsOrder.setOrderStatus(WAITING_FOR_FEEDBACK);
-//            goodsOrder.setClosingDate(LocalDateTime.now());
             goodsOrderRepository.save(goodsOrder);
         }
         notificationService.createOrderReceivedNotification(goodsOrder);
@@ -144,30 +143,9 @@ public class GoodsOrderService {
         goodsOrderRepository.save(order);
     }
 
-    public PageResponse<GoodsOrderResponse> getAllOrdersPageForSellerByOrderStatus(PaginationRequest request, GoodsOrderStatus status) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageBySellerAndOrderStatus
-                (goodsSellerAccountService.findBySecurityContextHolder(), status, request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
-
-    public PageResponse<GoodsOrderResponse> getAllOrdersPageForUserByOrderStatus(PaginationRequest request, GoodsOrderStatus status) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageByUserAndOrderStatus
-                (userAccountService.findBySecurityContextHolder(), status, request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
 
     public GoodsOrderResponse getUserGoodsOrderById(Long id) {
-        return new GoodsOrderResponse(findOneByIdAndUser(id, userAccountService.findBySecurityContextHolder()));
+        return new GoodsOrderResponse(findOneByIdAndUser(id, userAccountService.findBySecurityContextHolderOrReturnNull()));
     }
 
     public GoodsOrderResponse getSellerGoodsOrderById(Long id) {
@@ -180,18 +158,8 @@ public class GoodsOrderService {
         goodsOrderRepository.save(order);
     }
 
-    public PageResponse<GoodsOrderResponse> getAllOrdersPageForUser(PaginationRequest request) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageByUser(userAccountService.findBySecurityContextHolder(), request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
-
     public UserGoodsOrdersDataResponse getUserGoodsOrderData() {
-        UserAccount user = userAccountService.findBySecurityContextHolder();
+        UserAccount user = userAccountService.findBySecurityContextHolderOrReturnNull();
         return UserGoodsOrdersDataResponse
                 .builder()
                 .closedOrders((long) (goodsOrderRepository.findAllByUserAndOrderStatus(user, CLOSED).size() + goodsOrderRepository.findAllByUserAndOrderStatus(user, WAITING_FOR_FEEDBACK).size()))
@@ -201,36 +169,6 @@ public class GoodsOrderService {
                 .build();
     }
 
-    public PageResponse<GoodsOrderResponse> getAllClosedOrdersPageForUser(PaginationRequest request) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageByUserAndOrderStatusOrOrderStatus(userAccountService.findBySecurityContextHolder(), WAITING_FOR_FEEDBACK, CLOSED, request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
-
-    public PageResponse<GoodsOrderResponse> getAllClosedOrdersPageForSeller(PaginationRequest request) {
-        Set<GoodsOrderStatus> statusSet = new HashSet<>(Arrays.asList(WAITING_FOR_FEEDBACK, CLOSED));
-        Page<GoodsOrder> page = goodsOrderRepository.findAllBySellerAndOrderStatusIn(goodsSellerAccountService.findBySecurityContextHolder(), statusSet, request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
-
-    public PageResponse<GoodsOrderResponse> getAllNewOrdersPageForSeller(PaginationRequest request) {
-        Page<GoodsOrder> page = goodsOrderRepository.findPageBySellerAndIsViewedIsFalse(goodsSellerAccountService.findBySecurityContextHolder(), request.mapToPageable());
-        return new PageResponse<>(page
-                .get()
-                .map(GoodsOrderResponse::new)
-                .collect(Collectors.toList()),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
 
     public SellerGoodsOrdersDataResponse getSellerGoodsOrderData() {
         GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
@@ -250,5 +188,12 @@ public class GoodsOrderService {
         if (statuses == null || statuses.length == 0) page = goodsOrderRepository.findPageBySeller(seller, request.mapToPageable());
         else page = goodsOrderRepository.findPageBySellerAndOrderStatusIn(seller, statuses, request.mapToPageable());
         return new PageResponse<>(page.get().map(GoodsOrderResponse::new).collect(Collectors.toList()), page.getTotalElements(), page.getTotalPages());
+    }
+
+    public GoodsOrderPaymentDetails requestToGoodsOrderPaymentRequest(GoodsOrderPaymentRequest request) {
+        GoodsOrderPaymentDetails paymentDetails = new GoodsOrderPaymentDetails();
+        paymentDetails.setPaymentMethod(request.getMethod());
+        paymentDetails.setCurrency(currencyService.findCurrencyByCurrencyCode(request.getCurrency()));
+        return goodsOrderPaymentDetailsRepository.save(paymentDetails);
     }
 }

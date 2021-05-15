@@ -33,6 +33,11 @@ public class CartController {
         return cartService.checkGoodsCartItemCount(id, count);
     }
 
+    @GetMapping("exchange")
+    private CartSellerPositionResponse changeSellerPositionCurrency(Long[] ids, String currency) {
+        return cartService.changeSellerPositionCurrency(ids, currency);
+    }
+
     @DeleteMapping
     private void delete(Long id) {
         cartService.deleteGoodsItemFromCart(id);
@@ -46,15 +51,5 @@ public class CartController {
     @GetMapping("/items")
     private List<CartSellerPositionResponse> getItemsForOrder(Long[] id) {
         return cartService.getItemsForOrder(id);
-    }
-
-    @GetMapping("/form-position")
-    private CartSellerPositionResponse formSellerPosition(Long advertisementId, Long deliveryId, Integer count) {
-        return cartService.formSellerPosition(advertisementId, deliveryId, count);
-    }
-
-    @PutMapping("/price")
-    private Double countPrice(@RequestBody List<GoodsCartItemForCountingPriceRequest> items) {
-        return cartService.countCartPrice(items);
     }
 }

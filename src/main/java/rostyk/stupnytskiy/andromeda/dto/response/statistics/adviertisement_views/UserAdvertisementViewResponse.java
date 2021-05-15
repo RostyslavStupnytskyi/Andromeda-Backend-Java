@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.GoodsAdvertisementResponse;
-import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
+import rostyk.stupnytskiy.andromeda.entity.statistics.UserAdvertisementView;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,7 +22,7 @@ public class UserAdvertisementViewResponse {
     private LocalTime time;
 
     public UserAdvertisementViewResponse(UserAdvertisementView view) {
-        this.advertisement = new GoodsAdvertisementResponse(view.getGoodsAdvertisement());
+//        this.advertisement = new GoodsAdvertisementResponse(view.getGoodsAdvertisement());
         this.date = view.getDateTime().toLocalDate();
         this.time = view.getDateTime().toLocalTime();
     }

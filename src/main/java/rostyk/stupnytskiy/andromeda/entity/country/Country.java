@@ -19,7 +19,7 @@ public class Country {
 
     @Id
     @Column(unique = true)
-    private String countryCode; // один з парметрів збереження країн
+    private String countryCode; // один з параметрів збереження країн
 
     @Column(unique = true)
     private Long apiId; // id з вибраного API

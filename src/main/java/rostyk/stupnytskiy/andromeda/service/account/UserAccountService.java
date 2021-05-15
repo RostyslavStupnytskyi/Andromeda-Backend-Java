@@ -36,7 +36,7 @@ public class UserAccountService {
     private FileTool fileTool;
 
 
-    public UserAccount findBySecurityContextHolder() {
+    public UserAccount findBySecurityContextHolderOrReturnNull() {
         try {
             return findById(accountService.getIdBySecurityContextHolder());
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class UserAccountService {
     }
 
     public UserDataResponse getDataResponseForUser() {
-        return new UserDataResponse(findBySecurityContextHolder());
+        return new UserDataResponse(findBySecurityContextHolderOrReturnNull());
     }
 
     public void save(UserAccount userAccount) {
@@ -57,8 +57,12 @@ public class UserAccountService {
         return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
+    public UserAccount findByIdOrReturnNull(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public void changeUserSettings(UserSettingsRequest request) {
-        UserAccount user = findBySecurityContextHolder();
+        UserAccount user = findBySecurityContextHolderOrReturnNull();
         if (request.getCountryCode() != null)
             user.getSettings().setCountry(countryService.findCountryByCountryCode(request.getCountryCode()));
         if (request.getCurrencyCode() != null)
@@ -69,7 +73,7 @@ public class UserAccountService {
     }
 
     public void changeUserData(UserDataRequest request) {
-        UserAccount userAccount = findBySecurityContextHolder();
+        UserAccount userAccount = findBySecurityContextHolderOrReturnNull();
         if (request.getUsername() != null && !request.getUsername().isEmpty()) userAccount.setUsername(request.getUsername());
 
         if (request.getAvatar() != null) {
@@ -84,7 +88,7 @@ public class UserAccountService {
     }
 
     public void deleteUserAvatar() {
-        UserAccount userAccount = findBySecurityContextHolder();
+        UserAccount userAccount = findBySecurityContextHolderOrReturnNull();
 
         userAccount.setAvatar(null);
 

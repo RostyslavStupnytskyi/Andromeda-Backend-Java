@@ -41,13 +41,6 @@ public class GoodsCartItemService {
         return goodsCartItemRepository.existsByCartAndGoodsAdvertisementIdAndAndValuesPriceCountId(cart, id, paramsValuesId);
     }
 
-    public void auditIfItemCountLessOrEqualThanGoodsCountAndChangeIfBigger(GoodsCartItem item){
-//        if (item.getCount() > item.getGoodsAdvertisement().getCount()){
-//            item.setCount(item.getGoodsAdvertisement().getCount());
-//            goodsCartItemRepository.save(item);
-//        }
-    }
-
     public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long deliveryId, Long paramsValuesId) {
         GoodsCartItem goodsCartItem = new GoodsCartItem();
         goodsCartItem.setCart(cart);

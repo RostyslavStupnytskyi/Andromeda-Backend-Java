@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.omg.CORBA.Current;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.discount.Discount;
 import rostyk.stupnytskiy.andromeda.entity.cart.goods_cart_item.GoodsCartItem;
-import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
+import rostyk.stupnytskiy.andromeda.entity.country.Currency;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Collector;
 
 @Setter
 @Getter
@@ -34,7 +35,8 @@ public class ParametersValuesPriceCount {
     private Map<Parameter, ParameterValue> values = new HashMap<>();
 
     @OneToMany(mappedBy = "valuesPriceCount")
-    private List<GoodsCartItem> goodsCartItems = new ArrayList<>();;
+    private List<GoodsCartItem> goodsCartItems = new ArrayList<>();
+    ;
 
     @OneToMany(mappedBy = "valuesPriceCount")
     private List<Discount> discounts = new ArrayList<>();
@@ -42,11 +44,37 @@ public class ParametersValuesPriceCount {
     @ManyToOne
     private GoodsAdvertisement goodsAdvertisement;
 
-    private Double price;
+    @OneToMany(mappedBy = "parametersValuesPriceCount")
+    private List<ParameterValuesCurrencyPrice> prices;
 
     private Integer count;
 
-    public Discount getCurrentDiscount() {
+    public Double getPriceByCurrency(String code) {
+        return this.prices.stream().filter((p) -> p.getCurrency().getCode().equals(code)).findFirst().get().getPrice();
+    }
+
+    public Double getPriceByCurrency(Currency currency) {
+        if (currency != null)
+            return this.prices.stream().filter((p) -> p.getCurrency() == currency).findFirst().get().getPrice();
+        else return getPriceByCurrency("USD");
+    }
+
+    public Double getPriceWithCurrentDiscount(Currency currency) {
+        if (!hasDiscount()) return getPriceByCurrency(currency);
+        else return getCurrentDiscountOrReturnNull().getPriceWithDiscount(getPriceByCurrency(currency));
+    }
+
+    public Double getPriceWithCurrentDiscount(String code) {
+        if (!hasDiscount()) return getPriceByCurrency(code);
+        else return getCurrentDiscountOrReturnNull().getPriceWithDiscount(getPriceByCurrency(code));
+    }
+
+
+    public boolean hasFutureDiscounts() {
+        return this.discounts.stream().anyMatch((d) -> d.getEndDate().isAfter(LocalDateTime.now()));
+    }
+
+    public Discount getCurrentDiscountOrReturnNull() {
         Discount discount = null;
         LocalDateTime date = LocalDateTime.now();
         for (Discount d : discounts) {
@@ -57,17 +85,16 @@ public class ParametersValuesPriceCount {
         return discount;
     }
 
-    public boolean hasFutureDiscounts() {
-        return this.discounts.stream().anyMatch((d) -> d.getEndDate().isAfter(LocalDateTime.now()));
-    }
-
     public boolean hasDiscount() {
-        return getCurrentDiscount() != null;
+        return getCurrentDiscountOrReturnNull() != null;
     }
 
-    public Double getPriceWithCurrentDiscount() {
-        if (!hasDiscount()) return price;
-        else return getCurrentDiscount().getPriceWithDiscount(price);
+    public boolean hasCurrency(Currency currency) {
+        return this.prices.stream().anyMatch((p) -> p.getCurrency() == currency);
+    }
+
+    public boolean hasCurrency(String code) {
+        return this.prices.stream().anyMatch((p) -> p.getCurrency().getCode().equals(code));
     }
 
     @Override
@@ -75,7 +102,6 @@ public class ParametersValuesPriceCount {
         return "ParametersValuesPriceCount{" +
                 "id=" + id +
                 ", goodsAdvertisement=" + goodsAdvertisement.getId() +
-                ", price=" + price +
                 ", count=" + count +
                 '}';
     }

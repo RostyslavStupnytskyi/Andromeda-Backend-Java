@@ -25,13 +25,15 @@ public class GoodsOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private LocalDateTime creationDate;
+
     private LocalDateTime closingDate;
 
     private GoodsOrderStatus orderStatus;
 
     private Boolean isViewed;
+
+    private Double sum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserAccount user;
@@ -42,13 +44,16 @@ public class GoodsOrder {
     @OneToMany(mappedBy = "goodsOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GoodsOrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private GoodsOrderDeliveryDetails deliveryDetails;
 
     @OneToOne(mappedBy = "goodsOrder", fetch = FetchType.LAZY)
     private GoodsSellerFeedback goodsSellerFeedback;
 
-    public boolean didAllGoodsOrderItemsDelivered() {
+    @OneToOne(cascade = CascadeType.ALL)
+    private GoodsOrderPaymentDetails paymentDetails;
+
+    public boolean isAllGoodsOrderItemsDelivered() {
         for (GoodsOrderItem orderItem : orderItems) {
             if (!orderItem.getStatus().equals(GoodsOrderItemStatus.WAITING_FOR_FEEDBACK)) return false;
         }

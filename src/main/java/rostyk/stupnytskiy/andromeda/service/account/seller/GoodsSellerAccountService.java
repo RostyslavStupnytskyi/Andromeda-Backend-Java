@@ -69,6 +69,10 @@ public class GoodsSellerAccountService {
         return goodsSellerRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }
 
+    public GoodsSellerAccount findByIdOrReturnNull(Long id) {
+        return goodsSellerRepository.findById(id).orElse(null);
+    }
+
 
     public GoodsSellerDataResponse getGoodsSellerData() {
         GoodsSellerAccount seller = findBySecurityContextHolder();

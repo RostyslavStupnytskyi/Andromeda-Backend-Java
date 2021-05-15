@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.entity.order;
 
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 
 import javax.persistence.*;
 
@@ -20,6 +21,12 @@ public class GoodsOrderDeliveryDetails {
 
     @ManyToOne
     private Country country;
+
+    @ManyToOne
+    private DeliveryType deliveryType;
+
+    @OneToOne(mappedBy = "deliveryDetails", fetch = FetchType.LAZY)
+    private GoodsOrder goodsOrder;
 
     private String recipient;
 
@@ -40,6 +47,5 @@ public class GoodsOrderDeliveryDetails {
     @Lob
     private String sellerMessage;
 
-    @OneToOne(mappedBy = "deliveryDetails", fetch = FetchType.LAZY)
-    private GoodsOrder goodsOrder;
+
 }

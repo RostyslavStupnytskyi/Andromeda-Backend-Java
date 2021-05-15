@@ -40,7 +40,7 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
-    public AccountResponse mapToResponse(){
+    public AccountResponse mapToResponse() {
         return new AccountResponse(this);
     }
 }

@@ -12,16 +12,8 @@ import java.util.List;
 public class ConfirmGoodsOrderDeliveryRequest {
 
     @NotNull
-//    @JsonProperty("order")
     private Long orderId;
 
     private List<Long> orderItems;
 
-    @Override
-    public String toString() {
-        return "ConfirmGoodsOrderDeliveryRequest{" +
-                "orderId=" + orderId +
-                ", orderItems=" + orderItems +
-                '}';
-    }
 }

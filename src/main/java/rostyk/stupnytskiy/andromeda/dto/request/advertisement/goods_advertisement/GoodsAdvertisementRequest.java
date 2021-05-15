@@ -27,8 +27,4 @@ public class GoodsAdvertisementRequest extends AdvertisementRequest {
     private List<ParametersValuesPriceCountRequest> valuesPriceCounts;
 
     private List<Long> deliveryTypes;
-
-    public Double defineMinPriceForSorting() {
-        return this.valuesPriceCounts.stream().mapToDouble(ParametersValuesPriceCountRequest::getPrice).min().getAsDouble();
-    }
 }

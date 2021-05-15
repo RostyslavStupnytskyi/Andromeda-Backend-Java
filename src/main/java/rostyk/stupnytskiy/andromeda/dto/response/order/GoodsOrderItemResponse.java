@@ -36,7 +36,7 @@ public class GoodsOrderItemResponse {
      this.status = item.getStatus();
      this.goodsAdvertisementId = item.getGoodsAdvertisement().getId();
      this.descriptionFromUser = item.getDescriptionFromUser();
-     this.delivery = new DeliveryTypeResponse(item.getDeliveryType());
+//     this.delivery = new DeliveryTypeResponse(item.getDeliveryType());
      this.title = item.getGoodsAdvertisement().getTitle();
      this.image = item.getGoodsAdvertisement().getMainImage();
      this.price = item.getPrice();

@@ -27,6 +27,7 @@ import rostyk.stupnytskiy.andromeda.repository.account.AccountRepository;
 import rostyk.stupnytskiy.andromeda.security.JwtTokenTool;
 import rostyk.stupnytskiy.andromeda.security.JwtUser;
 import rostyk.stupnytskiy.andromeda.service.CountryService;
+import rostyk.stupnytskiy.andromeda.service.account.seller.GoodsSellerAccountService;
 import rostyk.stupnytskiy.andromeda.tools.ConfirmationCodeGenerator;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
@@ -59,6 +60,12 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private UserAccountService userAccountService;
+
+    @Autowired
+    private GoodsSellerAccountService goodsSellerAccountService;
 
 
     public String testAuth() {
@@ -120,12 +127,10 @@ public class AccountService implements UserDetailsService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, request.getPassword()));
         String token = jwtTokenTool.createToken(login, account.getUserRole());
+        String username = goodsSellerAccountService.findByIdOrReturnNull(account.getId()) != null ?
+                        goodsSellerAccountService.findByIdOrReturnNull(account.getId()).getShopName() : userAccountService.findByIdOrReturnNull(account.getId()).getUsername();
 
-        String name = "ВИПРАВИТИ";
-        Long id = account.getId();
-
-
-        return new AuthenticationResponse(token, id, account.getUserRole());
+        return new AuthenticationResponse(token, account.getId(), account.getUserRole(), username , account.getAvatar());
     }
 
 
@@ -153,6 +158,7 @@ public class AccountService implements UserDetailsService {
         userAccount.setPassword(encoder.encode(request.getPassword()));
         userAccount.setCart(new Cart());
         userAccount.setSettings(new UserSettings());
+        userAccount.setUsername(request.getLogin().substring(0, request.getLogin().indexOf('@') - 1));
         return accountRepository.save(userAccount);
     }
 

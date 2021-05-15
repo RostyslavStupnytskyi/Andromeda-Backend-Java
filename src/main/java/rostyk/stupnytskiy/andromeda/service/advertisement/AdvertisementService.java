@@ -47,34 +47,4 @@ public class AdvertisementService {
         return goodsAdvertisementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No advertisement with id " + id));
     }
 
-
-    public List<AdvertisementResponse> findAll() {
-        goodsAdvertisementRepository.findAll().forEach((a) -> System.out.println(a.getClass().getName()));
-        return goodsAdvertisementRepository.findAll()
-                .stream()
-                .map(GoodsAdvertisementResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    public PageResponse<GoodsAdvertisementForSearchResponse> findPageBySearchRequest(GoodsAdvertisementSearchRequest request) {
-        final Page<GoodsAdvertisement> page = goodsAdvertisementRepository.findAll(
-                new GoodsAdvertisementSpecification(request),
-                request.getPaginationRequest().mapToPageable()
-        );
-
-        request.setCurrencyCode(currencyService.auditUserCurrency(request.getCurrencyCode()));
-        return null;
-
-//        return new PageResponse<>(page.get()
-//                .map(GoodsAdvertisementForSearchResponse::new)
-//                .peek((r) -> {
-//                    r.setMinPrice(currencyService.exchangeCurrencyFromDollar(r.getMinPrice(), request.getCurrencyCode()));
-//                    r.setMaxPrice(currencyService.exchangeCurrencyFromDollar(r.getMaxPrice(), request.getCurrencyCode()));
-//                    r.setCurrencyCode(request.getCurrencyCode());
-//                })
-//                .collect(Collectors.toList()),
-//                page.getTotalElements(),
-//                page.getTotalPages());
-    }
-
 }

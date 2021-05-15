@@ -1,7 +1,7 @@
 package rostyk.stupnytskiy.andromeda.entity.account.goods_seller;
 
 import lombok.*;
-import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.categories.GoodsSellerAdvertisementCategory;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
@@ -9,6 +9,7 @@ import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 

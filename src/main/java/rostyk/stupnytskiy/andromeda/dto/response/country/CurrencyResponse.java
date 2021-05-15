@@ -8,8 +8,6 @@ import rostyk.stupnytskiy.andromeda.entity.country.Currency;
 @Setter
 public class CurrencyResponse {
 
-    private Long id;
-
     private String name;
 
     private String code;
@@ -17,7 +15,6 @@ public class CurrencyResponse {
     private String symbol;
 
     public CurrencyResponse(Currency currency) {
-        this.id = currency.getId();
         this.name = currency.getName();
         this.code = currency.getCode();
         this.symbol = currency.getSymbol();

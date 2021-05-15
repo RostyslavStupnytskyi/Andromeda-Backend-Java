@@ -2,6 +2,8 @@ package rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertiseme
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -10,7 +12,7 @@ public class ParametersValuesPriceCountRequest {
 
     private Map<String, String> valueParam;
 
-    private Double price;
+    private List<ParameterValuesCurrencyPriceRequest> prices;
 
     private Integer count;
 }

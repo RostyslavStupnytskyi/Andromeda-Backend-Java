@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.entity.cart.CartItem;

@@ -1,14 +1,11 @@
-package rostyk.stupnytskiy.andromeda.repository.statistics.account;
+package rostyk.stupnytskiy.andromeda.repository.statistics;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
-
-import java.time.Month;
+import rostyk.stupnytskiy.andromeda.entity.statistics.UserAdvertisementView;
 
 @Repository
 public interface UserAdvertisementViewRepository extends JpaRepository<UserAdvertisementView,Long> {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.order.GoodsOrderDeliveryDetailsForShipmentRequest;
 import rostyk.stupnytskiy.andromeda.entity.UserDeliveryAddress;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderDeliveryDetails;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderDeliveryDetailsRepository;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
@@ -17,7 +18,7 @@ public class GoodsOrderDeliveryDetailsService {
     @Autowired
     private DeliveryTypeService deliveryTypeService;
 
-    public GoodsOrderDeliveryDetails userDeliveryAddressToDeliveryDetails(UserDeliveryAddress address) {
+    public GoodsOrderDeliveryDetails userDeliveryAddressToDeliveryDetails(UserDeliveryAddress address, DeliveryType deliveryType) {
         GoodsOrderDeliveryDetails goodsOrderDeliveryDetails = new GoodsOrderDeliveryDetails();
         goodsOrderDeliveryDetails.setCity(address.getCity());
         goodsOrderDeliveryDetails.setRecipient(address.getRecipient());
@@ -26,6 +27,7 @@ public class GoodsOrderDeliveryDetailsService {
         goodsOrderDeliveryDetails.setStreet(address.getStreet());
         goodsOrderDeliveryDetails.setCountry(address.getCountry());
         goodsOrderDeliveryDetails.setHouse(address.getHouse());
+        goodsOrderDeliveryDetails.setDeliveryType(deliveryType);
         return save(goodsOrderDeliveryDetails);
     }
 

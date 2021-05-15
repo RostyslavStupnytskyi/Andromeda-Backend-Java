@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.delivery.DeliveryTypeRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
-import rostyk.stupnytskiy.andromeda.entity.DeliveryType;
+import rostyk.stupnytskiy.andromeda.entity.country.DeliveryType;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.repository.country.DeliveryTypeRepository;
 import rostyk.stupnytskiy.andromeda.service.account.AccountService;
@@ -79,6 +79,13 @@ public class DeliveryTypeService {
 
     public List<DeliveryTypeResponse> getAllByAdvertisementId(Long id) {
         return deliveryTypeRepository.getAllByAdvertisementId(id)
+                .stream()
+                .map(DeliveryTypeResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<DeliveryTypeResponse> getAllBySellerId(Long id) {
+        return deliveryTypeRepository.getAllBySellerId(id)
                 .stream()
                 .map(DeliveryTypeResponse::new)
                 .collect(Collectors.toList());

@@ -22,9 +22,10 @@ public class GoodsOrderItemRequest {
 
     private Long paramsValuesId;
 
-    @JsonProperty("delivery")
-    private Long deliveryTypeId;
+    private Double price;
 
     private String description;
+
+    private Long cartItemId;
 
 }

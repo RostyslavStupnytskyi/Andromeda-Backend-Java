@@ -30,7 +30,7 @@ public class UserDeliveryAddressService {
 
     public UserDeliveryAddress saveAddressToUser(UserDeliveryAddressRequest request) {
         UserDeliveryAddress address = save(addressRequestToAddress(request, null));
-        UserAccount user = userAccountService.findBySecurityContextHolder();
+        UserAccount user = userAccountService.findBySecurityContextHolderOrReturnNull();
         if (user.getAddresses().size() == 1) {
             user.setDefaultAddress(address);
             userAccountService.save(user);
@@ -51,7 +51,7 @@ public class UserDeliveryAddressService {
         if (address == null) address = new UserDeliveryAddress();
         address.setRegion(request.getRegion());
         address.setCity(request.getCity());
-        address.setUser(userAccountService.findBySecurityContextHolder());
+        address.setUser(userAccountService.findBySecurityContextHolderOrReturnNull());
         address.setPhoneNumber(request.getPhoneNumber());
         address.setRecipient(request.getRecipient());
         address.setStreet(request.getStreet());
@@ -61,27 +61,27 @@ public class UserDeliveryAddressService {
     }
 
     public UserDeliveryAddressResponse getDefaultUserDeliveryAddress() {
-        UserAccount userAccount = userAccountService.findBySecurityContextHolder();
+        UserAccount userAccount = userAccountService.findBySecurityContextHolderOrReturnNull();
         if (userAccount.getDefaultAddress() == null) return null;
         else
             return new UserDeliveryAddressResponse(userAccount.getDefaultAddress());
     }
 
     public List<UserDeliveryAddressResponse> getUserAddresses() {
-        return addressRepository.findAllByUser(userAccountService.findBySecurityContextHolder())
+        return addressRepository.findAllByUser(userAccountService.findBySecurityContextHolderOrReturnNull())
                 .stream()
                 .map(UserDeliveryAddressResponse::new)
                 .collect(Collectors.toList());
     }
 
     public UserDeliveryAddress findByUserAndId(Long id) {
-        return addressRepository.findByUserAndId(userAccountService.findBySecurityContextHolder(), id).orElseThrow(IllegalArgumentException::new);
+        return addressRepository.findByUserAndId(userAccountService.findBySecurityContextHolderOrReturnNull(), id).orElseThrow(IllegalArgumentException::new);
     }
 
 
     public void makeAddressDefault(Long id) {
         UserDeliveryAddress address = findByUserAndId(id);
-        UserAccount user = userAccountService.findBySecurityContextHolder();
+        UserAccount user = userAccountService.findBySecurityContextHolderOrReturnNull();
         user.setDefaultAddress(address);
         userAccountService.save(user);
     }

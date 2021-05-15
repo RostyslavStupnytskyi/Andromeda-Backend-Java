@@ -7,7 +7,7 @@ import rostyk.stupnytskiy.andromeda.entity.cart.Cart;
 import rostyk.stupnytskiy.andromeda.entity.account.Account;
 import rostyk.stupnytskiy.andromeda.entity.account.UserRole;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
-import rostyk.stupnytskiy.andromeda.entity.statistics.account.user.UserAdvertisementView;
+import rostyk.stupnytskiy.andromeda.entity.statistics.UserAdvertisementView;
 
 import javax.persistence.*;
 import java.util.ArrayList;

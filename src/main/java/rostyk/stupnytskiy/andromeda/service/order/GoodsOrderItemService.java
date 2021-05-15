@@ -8,9 +8,11 @@ import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderItemRepository;
+import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.parameter.ParameterService;
+import rostyk.stupnytskiy.andromeda.service.cart.CartService;
 
 @Service
 public class GoodsOrderItemService {
@@ -24,14 +26,20 @@ public class GoodsOrderItemService {
     @Autowired
     private DeliveryTypeService deliveryTypeService;
 
-
     @Autowired
     private ParameterService parameterService;
+
+    @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private CartService cartService;
 
 
     public void save(GoodsOrderItemRequest request, GoodsOrder goodsOrder) {
         goodsOrderItemRepository.save(goodsOrderItemRequestToGoodsOrderItem(request, goodsOrder));
         parameterService.minusParamsValuesCount(request.getParamsValuesId(), request.getCount());
+        cartService.deleteGoodsItemFromCart(request.getCartItemId());
     }
 
     public void confirmGoodsOrderItemSending(GoodsOrderItem orderItem) {
@@ -48,11 +56,10 @@ public class GoodsOrderItemService {
         GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
         goodsOrderItem.setCount(request.getCount());
         goodsOrderItem.setDescriptionFromUser(request.getDescription());
-        goodsOrderItem.setDeliveryType(deliveryTypeService.findById(request.getDeliveryTypeId()));
         goodsOrderItem.setStatus(GoodsOrderItemStatus.WAITING_FOR_SENDING);
         goodsOrderItem.setGoodsAdvertisement(goodsAdvertisementService.findById(request.getGoodsAdvertisementId()));
         goodsOrderItem.setParametersValuesPriceCount(parameterService.findParametersValuesPriceCountById(request.getParamsValuesId()));
-        goodsOrderItem.setPrice(goodsOrderItem.getParametersValuesPriceCount().getPrice());
+        goodsOrderItem.setPrice(request.getPrice());
         goodsOrderItem.setGoodsOrder(goodsOrder);
         return goodsOrderItem;
     }

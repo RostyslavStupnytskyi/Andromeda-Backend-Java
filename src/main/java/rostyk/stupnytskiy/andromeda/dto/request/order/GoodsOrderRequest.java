@@ -14,6 +14,11 @@ public class GoodsOrderRequest {
 
     private Long addressId;
 
+    private Double sum;
 
+    @JsonProperty("delivery")
+    private Long deliveryTypeId;
+
+    private GoodsOrderPaymentRequest payment;
 
 }

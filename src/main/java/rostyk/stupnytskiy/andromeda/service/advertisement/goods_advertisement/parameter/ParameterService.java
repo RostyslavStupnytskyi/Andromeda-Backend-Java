@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParameterRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParameterValueRequest;
+import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParameterValuesCurrencyPriceRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.discounts.DiscountsForParametersValuesPriceCountResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.advertisement.goods_advertisement.parameter.ParametersValuesPriceCountResponse;
@@ -11,10 +12,13 @@ import rostyk.stupnytskiy.andromeda.entity.Category;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.GoodsAdvertisement;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.Parameter;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParameterValue;
+import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParameterValuesCurrencyPrice;
 import rostyk.stupnytskiy.andromeda.entity.advertisement.goods_advertisement.parameters.ParametersValuesPriceCount;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParameterRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParameterValueRepository;
+import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParametersValueCurrencyPriceRepository;
 import rostyk.stupnytskiy.andromeda.repository.advertisement.goods_advertisement.parameter.ParametersValuePriceCountRepository;
+import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.advertisement.goods_advertisement.GoodsAdvertisementService;
 import rostyk.stupnytskiy.andromeda.tools.FileTool;
 
@@ -35,10 +39,16 @@ public class ParameterService {
     private ParametersValuePriceCountRepository parametersValuePriceCountRepository;
 
     @Autowired
+    private ParametersValueCurrencyPriceRepository parametersValueCurrencyPriceRepository;
+
+    @Autowired
     private GoodsAdvertisementService goodsAdvertisementService;
 
     @Autowired
     private FileTool fileTool;
+
+    @Autowired
+    private CurrencyService currencyService;
 
 
     public void saveParameter(ParameterRequest request, GoodsAdvertisement goodsAdvertisement) {
@@ -46,14 +56,36 @@ public class ParameterService {
         request.getValues().forEach((pv) -> saveParameterValue(pv, parameter));
     }
 
+    public ParametersValuesPriceCount saveParametersValuePriceCountWithoutParameters(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
+        ParametersValuesPriceCount parametersValuesPriceCount = new ParametersValuesPriceCount();
+        parametersValuesPriceCount.setCount(request.getCount());
+        parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
+        parametersValuesPriceCount = parametersValuePriceCountRepository.save(parametersValuesPriceCount);
+        for (ParameterValuesCurrencyPriceRequest price : request.getPrices()) {
+            saveParameterValuesCurrencyPrice(price, parametersValuesPriceCount);
+        }
+        return parametersValuesPriceCount;
+    }
+
     public void saveParametersValuePriceCount(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
-        parametersValuePriceCountRepository.save(parametersValuePriceCountRequestToParametersValuePriceCount(request, goodsAdvertisement));
+        ParametersValuesPriceCount parametersValuesPriceCount = parametersValuePriceCountRepository
+                .save(parametersValuePriceCountRequestToParametersValuePriceCount(request, goodsAdvertisement));
+        for (ParameterValuesCurrencyPriceRequest price : request.getPrices()) {
+            saveParameterValuesCurrencyPrice(price, parametersValuesPriceCount);
+        }
+    }
+
+    public void saveParameterValuesCurrencyPrice(ParameterValuesCurrencyPriceRequest request, ParametersValuesPriceCount valuesPriceCount) {
+        ParameterValuesCurrencyPrice currencyPrice = new ParameterValuesCurrencyPrice();
+        currencyPrice.setCurrency(currencyService.findCurrencyByCurrencyCode(request.getCurrencyCode()));
+        currencyPrice.setPrice(request.getPrice());
+        currencyPrice.setParametersValuesPriceCount(valuesPriceCount);
+        parametersValueCurrencyPriceRepository.save(currencyPrice);
     }
 
     private ParametersValuesPriceCount parametersValuePriceCountRequestToParametersValuePriceCount(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
         ParametersValuesPriceCount parametersValuesPriceCount = new ParametersValuesPriceCount();
         parametersValuesPriceCount.setCount(request.getCount());
-        parametersValuesPriceCount.setPrice(request.getPrice());
         parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
 
         Map<Parameter, ParameterValue> parameterValueMap = new HashMap<>();
@@ -113,13 +145,7 @@ public class ParameterService {
         return parametersValuePriceCountRepository.findById(paramsValuesId).orElseThrow(IllegalArgumentException::new);
     }
 
-    public ParametersValuesPriceCount saveParametersValuePriceCountWithoutParameters(ParametersValuesPriceCountRequest request, GoodsAdvertisement goodsAdvertisement) {
-        ParametersValuesPriceCount parametersValuesPriceCount = new ParametersValuesPriceCount();
-        parametersValuesPriceCount.setCount(request.getCount());
-        parametersValuesPriceCount.setPrice(request.getPrice());
-        parametersValuesPriceCount.setGoodsAdvertisement(goodsAdvertisement);
-        return parametersValuePriceCountRepository.save(parametersValuesPriceCount);
-    }
+
 
     public void minusParamsValuesCount(Long paramsValuesId, Integer count) {
         ParametersValuesPriceCount parametersValuesPriceCount = findParametersValuesPriceCountById(paramsValuesId);

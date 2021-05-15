@@ -57,10 +57,6 @@ public class DiscountService {
                         discountRepository.existsByParamsValueIdAndStartDateOrEndDateBetweenDates(valuesPriceCount.getId(), discount.getStartDate(), discount.getEndDate())
         ) throw new IllegalArgumentException();
         if (
-                discount.getDiscountType() == DiscountType.DISCOUNT_NEW_PRICE &&
-                        (valuesPriceCount.getPrice() <= discount.getDiscountValue())
-        ) throw new IllegalArgumentException();
-        if (
                 discount.getDiscountType() == DiscountType.DISCOUNT_PERCENT &&
                         (discount.getDiscountValue() > 99)
         ) throw new IllegalArgumentException();
