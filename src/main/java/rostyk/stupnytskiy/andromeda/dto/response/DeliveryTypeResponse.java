@@ -21,7 +21,10 @@ public class DeliveryTypeResponse {
         this.id = deliveryType.getId();
         this.title = deliveryType.getTitle();
         this.isInternational = deliveryType.getInternational();
-        this.countryCode = deliveryType.getCountry().getCountryCode();
+        if (deliveryType.getCountry() != null) {
+            this.countryCode = deliveryType.getCountry().getCountryCode();
+
+        }
         this.cashOnDelivery = deliveryType.getCashOnDelivery();
     }
 }

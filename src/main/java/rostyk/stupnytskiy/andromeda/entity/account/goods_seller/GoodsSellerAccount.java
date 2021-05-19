@@ -45,6 +45,12 @@ public class GoodsSellerAccount extends Account {
     @Lob
     private String description;
 
+
+    @Override
+    public String getUserName() {
+        return this.shopName;
+    }
+
     @Override
     public String toString() {
         return "GoodsSellerAccount{" +

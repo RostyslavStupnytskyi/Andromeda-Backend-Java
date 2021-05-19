@@ -2,6 +2,7 @@ package rostyk.stupnytskiy.andromeda.dto.response.order;
 
 import lombok.Getter;
 import lombok.Setter;
+import rostyk.stupnytskiy.andromeda.dto.response.DeliveryTypeResponse;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderDeliveryDetails;
 
@@ -22,6 +23,7 @@ public class GoodsOrderDeliveryDetailsResponse {
     private String shipment;
     private String sellerMessage;
     private String house;
+    private DeliveryTypeResponse delivery;
 
     public GoodsOrderDeliveryDetailsResponse(GoodsOrderDeliveryDetails details){
         this.id = details.getId();
@@ -35,5 +37,6 @@ public class GoodsOrderDeliveryDetailsResponse {
         this.shipment = details.getShipment();
         this.sellerMessage = details.getSellerMessage();
         this.house = details.getHouse();
+        this.delivery = new DeliveryTypeResponse(details.getDeliveryType());
     }
 }

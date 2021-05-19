@@ -3,8 +3,10 @@ package rostyk.stupnytskiy.andromeda.entity.account;
 import lombok.*;
 import rostyk.stupnytskiy.andromeda.dto.response.account.AccountResponse;
 import rostyk.stupnytskiy.andromeda.entity.country.Country;
+import rostyk.stupnytskiy.andromeda.entity.message.Chat;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,8 +42,15 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
 
+    @ManyToMany
+    private List<Chat> chats;
+
     public AccountResponse mapToResponse() {
         return new AccountResponse(this);
+    }
+
+    public String getUserName() {
+        return "user_" + this.id;
     }
 }
 

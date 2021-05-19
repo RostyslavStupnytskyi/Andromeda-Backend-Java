@@ -57,4 +57,10 @@ public interface GoodsOrderRepository extends JpaRepository<GoodsOrder, Long> {
             @Param("seller") GoodsSellerAccount seller,
             @Param("statuses") GoodsOrderStatus[] statuses,
             Pageable pageable);
+
+    @Query("Select distinct o from GoodsOrder o where o.user = :user and o.orderStatus in :statuses")
+    Page<GoodsOrder> findPageByUserAndOrderStatusIn(
+            @Param("user") UserAccount user,
+            @Param("statuses") GoodsOrderStatus[] statuses,
+            Pageable mapToPageable);
 }

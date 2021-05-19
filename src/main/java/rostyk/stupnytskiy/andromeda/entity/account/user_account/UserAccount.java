@@ -50,5 +50,8 @@ public class UserAccount extends Account {
         super.setUserRole(UserRole.ROLE_USER);
     }
 
-
+    @Override
+    public String getUserName() {
+        return this.username;
+    }
 }

@@ -26,9 +26,9 @@ public class GoodsCartItemService {
     @Autowired
     private ParameterService parameterService;
 
-    public void addGoodsItemToCart(Cart cart, Long id, Long deliveryId, Long paramsValuesId) {
+    public void addGoodsItemToCart(Cart cart, Long id, Long paramsValuesId) {
         if (!isExits(cart, id, paramsValuesId)) {
-            GoodsCartItem goodsCartItem = createNewGoodsCartItem(cart, id, deliveryId, paramsValuesId);
+            GoodsCartItem goodsCartItem = createNewGoodsCartItem(cart, id, paramsValuesId);
             save(goodsCartItem);
         }
     }
@@ -41,13 +41,12 @@ public class GoodsCartItemService {
         return goodsCartItemRepository.existsByCartAndGoodsAdvertisementIdAndAndValuesPriceCountId(cart, id, paramsValuesId);
     }
 
-    public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long deliveryId, Long paramsValuesId) {
+    public GoodsCartItem createNewGoodsCartItem(Cart cart, Long advertisementId, Long paramsValuesId) {
         GoodsCartItem goodsCartItem = new GoodsCartItem();
         goodsCartItem.setCart(cart);
         goodsCartItem.setDate(LocalDateTime.now());
         goodsCartItem.setGoodsAdvertisement(advertisementService.findGoodsAdvertisementById(advertisementId));
         goodsCartItem.setValuesPriceCount(parameterService.findParametersValuesPriceCountById(paramsValuesId));
-        goodsCartItem.setDeliveryType(deliveryTypeService.findById(deliveryId));
         return goodsCartItem;
     }
 

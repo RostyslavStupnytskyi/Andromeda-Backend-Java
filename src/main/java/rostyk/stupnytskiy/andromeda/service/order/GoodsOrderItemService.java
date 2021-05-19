@@ -72,4 +72,17 @@ public class GoodsOrderItemService {
         return goodsOrderItemRepository.findByIdAndGoodsOrderUser(id, user).orElseThrow(IllegalArgumentException::new);
     }
 
+    public Double exchangeItemPrice(Long id, String currency) {
+        GoodsOrderItem item = findById(id);
+        if (item.getParametersValuesPriceCount().hasCurrency(currency)) {
+            return item.getParametersValuesPriceCount().getPriceByCurrency(currency);
+        } else {
+            return currencyService.exchangeCurrencyFromDollar(item.getParametersValuesPriceCount().getPriceByCurrency("USD"), currency);
+        }
+    }
+
+    public void exchangeItemPriceAndSave(GoodsOrderItem i, String currency) {
+        i.setPrice(exchangeItemPrice(i.getId(), currency));
+        goodsOrderItemRepository.save(i);
+    }
 }

@@ -31,15 +31,13 @@ public class GoodsOrderDeliveryDetailsService {
         return save(goodsOrderDeliveryDetails);
     }
 
-    public GoodsOrderDeliveryDetails save(GoodsOrderDeliveryDetails orderDeliveryDetails){
+    public GoodsOrderDeliveryDetails save(GoodsOrderDeliveryDetails orderDeliveryDetails) {
         return goodsOrderDeliveryDetailsRepository.save(orderDeliveryDetails);
     }
 
-    public void updateGoodsOrderDeliveryDetailsToShipment(GoodsOrderDeliveryDetailsForShipmentRequest request, GoodsOrderDeliveryDetails details){
-        details.setShipment(deliveryTypeService.findById(request.getDeliveryTypeId()).getTitle());
+    public void updateGoodsOrderDeliveryDetailsToShipment(GoodsOrderDeliveryDetailsForShipmentRequest request, GoodsOrderDeliveryDetails details) {
         details.setTrackingNumber(request.getTrackingNumber());
-        if (!request.getSellerMessage().equals(""))
-        details.setSellerMessage(request.getSellerMessage());
+        if (!request.getSellerMessage().equals("")) details.setSellerMessage(request.getSellerMessage());
         goodsOrderDeliveryDetailsRepository.save(details);
     }
 }

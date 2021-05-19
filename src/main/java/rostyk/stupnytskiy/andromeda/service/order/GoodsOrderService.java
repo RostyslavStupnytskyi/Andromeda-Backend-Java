@@ -5,17 +5,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import rostyk.stupnytskiy.andromeda.dto.request.PaginationRequest;
 import rostyk.stupnytskiy.andromeda.dto.request.order.*;
+import rostyk.stupnytskiy.andromeda.dto.request.order.confirm.GoodsOrderSellerConfirmRequest;
 import rostyk.stupnytskiy.andromeda.dto.response.PageResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.GoodsOrderResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.SellerGoodsOrdersDataResponse;
 import rostyk.stupnytskiy.andromeda.dto.response.order.UserGoodsOrdersDataResponse;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
+import rostyk.stupnytskiy.andromeda.entity.message.Chat;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrder;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderPaymentDetails;
+import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderPaymentMethod;
 import rostyk.stupnytskiy.andromeda.entity.order.GoodsOrderStatus;
+import rostyk.stupnytskiy.andromeda.entity.order.changes.GoodsOrderSellerChange;
+import rostyk.stupnytskiy.andromeda.entity.order.changes.GoodsOrderSellerChangeType;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderPaymentDetailsRepository;
 import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderRepository;
+import rostyk.stupnytskiy.andromeda.repository.order.goods_order.GoodsOrderSellerChangeRepository;
 import rostyk.stupnytskiy.andromeda.service.CurrencyService;
 import rostyk.stupnytskiy.andromeda.service.DeliveryTypeService;
 import rostyk.stupnytskiy.andromeda.service.UserDeliveryAddressService;
@@ -69,7 +75,8 @@ public class GoodsOrderService {
     @Autowired
     private CurrencyService currencyService;
 
-
+    @Autowired
+    private GoodsOrderSellerChangeRepository goodsOrderSellerChangeRepository;
 
 
     public void createGoodsOrder(GoodsOrderRequest request) {
@@ -86,16 +93,19 @@ public class GoodsOrderService {
         goodsOrder.setUser(userAccountService.findBySecurityContextHolderOrReturnNull());
         goodsOrder.setSeller(getSellerAccountFromGoodsItemRequest(request.getItems().get(0)));
         goodsOrder.setIsViewed(false);
+        goodsOrder.setChat(new Chat(Arrays.asList(goodsOrder.getUser(), goodsOrder.getSeller())));
         goodsOrder.setSum(Math.round(request.getSum() * 100.0) / 100.0);
         goodsOrder.setPaymentDetails(requestToGoodsOrderPaymentRequest(request.getPayment()));
         goodsOrder.setDeliveryDetails(goodsOrderDeliveryDetailsService.userDeliveryAddressToDeliveryDetails(userDeliveryAddressService.findById(request.getAddressId()), deliveryTypeService.findById(request.getDeliveryTypeId())));
         return goodsOrderRepository.save(goodsOrder);
     }
 
-    public void confirmGoodsOrderSending(GoodsOrderDeliveryDetailsForShipmentRequest request) {
-        GoodsOrder goodsOrder = findOneByIdAndSeller(request.getOrderId(), goodsSellerAccountService.findBySecurityContextHolder());
+    public void confirmGoodsOrderSending(Long id, GoodsOrderDeliveryDetailsForShipmentRequest request) {
+        GoodsOrder goodsOrder = findOneByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder());
         goodsOrder.setOrderStatus(GoodsOrderStatus.WAITING_FOR_DELIVERY);
+
         goodsOrder.getOrderItems().forEach((i) -> goodsOrderItemService.confirmGoodsOrderItemSending(i));
+
         goodsOrderDeliveryDetailsService.updateGoodsOrderDeliveryDetailsToShipment(request, goodsOrder.getDeliveryDetails());
         goodsOrderRepository.save(goodsOrder);
         notificationService.createOrderSendNotification(goodsOrder);
@@ -124,18 +134,10 @@ public class GoodsOrderService {
         return goodsOrderRepository.findOneByIdAndUser(id, user).orElseThrow(IllegalArgumentException::new);
     }
 
-    public void confirmGoodsOrderDelivery(ConfirmGoodsOrderDeliveryRequest request) {
-        GoodsOrder goodsOrder = findOneByIdAndUser(request.getOrderId(), userAccountService.findBySecurityContextHolderOrReturnNull());
-        goodsOrder.setClosingDate(LocalDateTime.now());
-        request.getOrderItems().forEach(
-                (i) -> goodsOrderItemService.confirmGoodsOrderItemDelivery(goodsOrderItemService.findById(i))
-        );
-        if (goodsOrder.isAllGoodsOrderItemsDelivered()) {
-            goodsOrder.setOrderStatus(WAITING_FOR_FEEDBACK);
-            goodsOrderRepository.save(goodsOrder);
-        }
+    public void confirmGoodsOrderDelivery(Long id) {
+        GoodsOrder goodsOrder = findOneByIdAndUser(id, userAccountService.findBySecurityContextHolderOrReturnNull());
+        goodsOrder.setOrderStatus(WAITING_FOR_FEEDBACK);
         notificationService.createOrderReceivedNotification(goodsOrder);
-
     }
 
     public void makeGoodsOrderClosed(GoodsOrder order) {
@@ -185,9 +187,20 @@ public class GoodsOrderService {
     public PageResponse<GoodsOrderResponse> getOrdersPageForSellerByOrderStatus(PaginationRequest request, GoodsOrderStatus[] statuses) {
         GoodsSellerAccount seller = goodsSellerAccountService.findBySecurityContextHolder();
         Page<GoodsOrder> page;
-        if (statuses == null || statuses.length == 0) page = goodsOrderRepository.findPageBySeller(seller, request.mapToPageable());
+        if (statuses == null || statuses.length == 0)
+            page = goodsOrderRepository.findPageBySeller(seller, request.mapToPageable());
         else page = goodsOrderRepository.findPageBySellerAndOrderStatusIn(seller, statuses, request.mapToPageable());
         return new PageResponse<>(page.get().map(GoodsOrderResponse::new).collect(Collectors.toList()), page.getTotalElements(), page.getTotalPages());
+    }
+
+    public PageResponse<GoodsOrderResponse> getOrdersPageForUserByOrderStatus(PaginationRequest request, GoodsOrderStatus[] statuses) {
+        UserAccount user = userAccountService.findBySecurityContextHolderOrReturnNull();
+        Page<GoodsOrder> page;
+        if (statuses == null || statuses.length == 0)
+            page = goodsOrderRepository.findPageByUser(user, request.mapToPageable());
+        else page = goodsOrderRepository.findPageByUserAndOrderStatusIn(user, statuses, request.mapToPageable());
+        return new PageResponse<>(page.get().map(GoodsOrderResponse::new).collect(Collectors.toList()), page.getTotalElements(), page.getTotalPages());
+
     }
 
     public GoodsOrderPaymentDetails requestToGoodsOrderPaymentRequest(GoodsOrderPaymentRequest request) {
@@ -195,5 +208,68 @@ public class GoodsOrderService {
         paymentDetails.setPaymentMethod(request.getMethod());
         paymentDetails.setCurrency(currencyService.findCurrencyByCurrencyCode(request.getCurrency()));
         return goodsOrderPaymentDetailsRepository.save(paymentDetails);
+    }
+
+    public void confirmGoodsOrderFromSeller(Long id, GoodsOrderSellerConfirmRequest request) {
+        GoodsOrder order = findOneByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder());
+        if ((Math.round(request.getSum() * 100.0) / 100.0) != order.getSum()) {
+            GoodsOrderSellerChange change = new GoodsOrderSellerChange();
+            change.setOrder(order);
+            change.setType(GoodsOrderSellerChangeType.CHANGE_SUM);
+            change.setValueFrom(order.getSum().toString());
+            change.setValueTo((Math.round(request.getSum() * 100.0) / 100.0) + "");
+            goodsOrderSellerChangeRepository.save(change);
+            order.setSum((Math.round(request.getSum() * 100.0) / 100.0));
+        }
+        if (!request.getPayment().getCurrency().equals(order.getPaymentDetails().getCurrency().getCode())) {
+            GoodsOrderSellerChange change = new GoodsOrderSellerChange();
+            change.setOrder(order);
+            change.setType(GoodsOrderSellerChangeType.CHANGE_CURRENCY);
+            change.setValueFrom(order.getPaymentDetails().getCurrency().getCode());
+            change.setValueTo(request.getPayment().getCurrency());
+            goodsOrderSellerChangeRepository.save(change);
+            order.getOrderItems().forEach((i) -> {
+                goodsOrderItemService.exchangeItemPriceAndSave(i, request.getPayment().getCurrency());
+            });
+            order.getPaymentDetails().setCurrency(currencyService.findCurrencyByCurrencyCode(request.getPayment().getCurrency()));
+        }
+        if (request.getPayment().getMethod() != order.getPaymentDetails().getPaymentMethod()) {
+            GoodsOrderSellerChange change = new GoodsOrderSellerChange();
+            change.setOrder(order);
+            change.setType(GoodsOrderSellerChangeType.CHANGE_PAYMENT);
+            change.setValueFrom(order.getPaymentDetails().getPaymentMethod().toString());
+            change.setValueTo(request.getPayment().getMethod().toString());
+            goodsOrderSellerChangeRepository.save(change);
+            order.getPaymentDetails().setPaymentMethod(request.getPayment().getMethod());
+        }
+        if (!request.getDeliveryTypeId().equals(order.getDeliveryDetails().getDeliveryType().getId())) {
+            GoodsOrderSellerChange change = new GoodsOrderSellerChange();
+            change.setOrder(order);
+            change.setType(GoodsOrderSellerChangeType.CHANGE_DELIVERY);
+            change.setValueFrom(order.getDeliveryDetails().getDeliveryType().getTitle());
+            change.setValueTo(deliveryTypeService.findById(request.getDeliveryTypeId()).getTitle());
+            goodsOrderSellerChangeRepository.save(change);
+            order.getDeliveryDetails().setDeliveryType(deliveryTypeService.findById(request.getDeliveryTypeId()));
+        }
+        if (order.getPaymentDetails().getPaymentMethod() == GoodsOrderPaymentMethod.CASH_ON_DELIVERY) {
+            order.setOrderStatus(WAITING_FOR_SENDING);
+        } else {
+            order.setOrderStatus(WAITING_FOR_USER_PAYMENT);
+        }
+
+        goodsOrderRepository.save(order);
+    }
+
+
+    public void confirmGoodsOrderPayment(Long id) {
+        GoodsOrder order = findOneByIdAndUser(id, userAccountService.findBySecurityContextHolderOrReturnNull());
+        order.setOrderStatus(WAITING_FOR_PAYMENT_VERIFY);
+        goodsOrderRepository.save(order);
+    }
+
+    public void confirmGoodsOrderPaymentFromSeller(Long id) {
+        GoodsOrder order = findOneByIdAndSeller(id, goodsSellerAccountService.findBySecurityContextHolder());
+        order.setOrderStatus(WAITING_FOR_SENDING);
+        goodsOrderRepository.save(order);
     }
 }

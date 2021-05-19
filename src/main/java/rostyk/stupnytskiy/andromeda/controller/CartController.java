@@ -19,8 +19,8 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    private void addGoodsItemToCart(Long id, Long deliveryId, Long paramsValuesId) {
-        cartService.addGoodsItemToCart(id, deliveryId, paramsValuesId);
+    private void addGoodsItemToCart(Long id, Long paramsValuesId) {
+        cartService.addGoodsItemToCart(id, paramsValuesId);
     }
 
     @PutMapping

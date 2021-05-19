@@ -33,9 +33,6 @@ public class GoodsCartItem extends CartItem {
     @ManyToOne
     private ParametersValuesPriceCount valuesPriceCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DeliveryType deliveryType;
-
     @NotNull
     private Integer count = 1;
 

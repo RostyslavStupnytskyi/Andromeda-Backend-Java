@@ -42,7 +42,7 @@ public class GoodsAdvertisementFeedbackResponse {
         this.rating = feedback.getRating();
         this.text = feedback.getText();
         this.userId = feedback.getUserAccount().getId();
-        this.username = feedback.getUserAccount().getUsername();
+        this.username = feedback.getUserAccount().getUserName();
         this.images = feedback.getImages();
         this.countryCode = feedback.getCountry().getCountryCode();
         this.creationDate = feedback.getCreationDate();

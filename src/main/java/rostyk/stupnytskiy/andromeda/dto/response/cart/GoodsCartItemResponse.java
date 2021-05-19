@@ -15,8 +15,6 @@ public class GoodsCartItemResponse {
     private Long id;
     private String image;
     private String title;
-    private String deliveryName;
-    private Long deliveryId;
     private Integer count;
     private Long sellerId;
     private Long advertisementId;
@@ -39,8 +37,6 @@ public class GoodsCartItemResponse {
         this.id = item.getId();
         this.sellerId = item.getGoodsAdvertisement().getSeller().getId();
         this.title = item.getGoodsAdvertisement().getTitle();
-        this.deliveryName = item.getDeliveryType().getTitle();
-        this.deliveryId = item.getDeliveryType().getId();
         this.count = item.getCount();
         this.image = item.getGoodsAdvertisement().getMainImage();
         this.advertisementId = item.getGoodsAdvertisement().getId();

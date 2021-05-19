@@ -11,16 +11,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class GoodsOrderDeliveryDetailsForShipmentRequest {
 
-    @JsonProperty("delivery")
-    @NotNull
-    private Long deliveryTypeId;
 
     @NotNull
     @NotBlank
     private String trackingNumber;
 
     private String sellerMessage;
-
-    @NotNull
-    private Long orderId;
 }

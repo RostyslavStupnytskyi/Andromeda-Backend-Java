@@ -127,8 +127,7 @@ public class AccountService implements UserDetailsService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, request.getPassword()));
         String token = jwtTokenTool.createToken(login, account.getUserRole());
-        String username = goodsSellerAccountService.findByIdOrReturnNull(account.getId()) != null ?
-                        goodsSellerAccountService.findByIdOrReturnNull(account.getId()).getShopName() : userAccountService.findByIdOrReturnNull(account.getId()).getUsername();
+        String username = account.getUserName();
 
         return new AuthenticationResponse(token, account.getId(), account.getUserRole(), username , account.getAvatar());
     }

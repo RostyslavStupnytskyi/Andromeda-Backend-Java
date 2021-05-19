@@ -4,6 +4,8 @@ import lombok.*;
 import rostyk.stupnytskiy.andromeda.entity.account.goods_seller.GoodsSellerAccount;
 import rostyk.stupnytskiy.andromeda.entity.account.user_account.UserAccount;
 import rostyk.stupnytskiy.andromeda.entity.feedback.GoodsSellerFeedback;
+import rostyk.stupnytskiy.andromeda.entity.message.Chat;
+import rostyk.stupnytskiy.andromeda.entity.order.changes.GoodsOrderSellerChange;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItem;
 import rostyk.stupnytskiy.andromeda.entity.order.order_item.GoodsOrderItemStatus;
 
@@ -34,6 +36,12 @@ public class GoodsOrder {
     private Boolean isViewed;
 
     private Double sum;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Chat chat;
+
+    @OneToMany(mappedBy = "order")
+    private List<GoodsOrderSellerChange> changes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserAccount user;

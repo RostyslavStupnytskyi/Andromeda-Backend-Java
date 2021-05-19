@@ -62,6 +62,7 @@ public class GoodsSellerAccountService {
 
 
     public GoodsSellerAccount findBySecurityContextHolder() {
+        System.out.println(accountService.getIdBySecurityContextHolder());
         return findById(accountService.getIdBySecurityContextHolder());
     }
 

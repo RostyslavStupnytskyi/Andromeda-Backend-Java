@@ -47,10 +47,10 @@ public class CartService {
     @Autowired
     private CurrencyService currencyService;
 
-    public void addGoodsItemToCart(Long advertisementId, Long deliveryTypeId, Long paramsValuesId) {
+    public void addGoodsItemToCart(Long advertisementId, Long paramsValuesId) {
         UserAccount user = userAccountService.findBySecurityContextHolderOrReturnNull();
-        if (advertisementId != null && deliveryTypeId != null && paramsValuesId != null)
-            goodsCartItemService.addGoodsItemToCart(user.getCart(), advertisementId, deliveryTypeId, paramsValuesId);
+        if (advertisementId != null && paramsValuesId != null)
+            goodsCartItemService.addGoodsItemToCart(user.getCart(), advertisementId, paramsValuesId);
     }
 
     public void deleteGoodsItemFromCart(Long cartItemId) {
